@@ -37,14 +37,14 @@
             // 
             // _usernameBox
             // 
-            this._usernameBox.Location = new System.Drawing.Point(108, 38);
+            this._usernameBox.Location = new System.Drawing.Point(73, 12);
             this._usernameBox.Name = "_usernameBox";
             this._usernameBox.Size = new System.Drawing.Size(127, 20);
             this._usernameBox.TabIndex = 0;
             // 
             // _passwordBox
             // 
-            this._passwordBox.Location = new System.Drawing.Point(108, 81);
+            this._passwordBox.Location = new System.Drawing.Point(73, 39);
             this._passwordBox.Name = "_passwordBox";
             this._passwordBox.Size = new System.Drawing.Size(127, 20);
             this._passwordBox.TabIndex = 1;
@@ -52,7 +52,7 @@
             // 
             // _loginButton
             // 
-            this._loginButton.Location = new System.Drawing.Point(98, 145);
+            this._loginButton.Location = new System.Drawing.Point(125, 65);
             this._loginButton.Name = "_loginButton";
             this._loginButton.Size = new System.Drawing.Size(75, 23);
             this._loginButton.TabIndex = 2;
@@ -63,7 +63,7 @@
             // _usernameLabel
             // 
             this._usernameLabel.AutoSize = true;
-            this._usernameLabel.Location = new System.Drawing.Point(47, 41);
+            this._usernameLabel.Location = new System.Drawing.Point(12, 15);
             this._usernameLabel.Name = "_usernameLabel";
             this._usernameLabel.Size = new System.Drawing.Size(55, 13);
             this._usernameLabel.TabIndex = 3;
@@ -72,7 +72,7 @@
             // _passwordLabel
             // 
             this._passwordLabel.AutoSize = true;
-            this._passwordLabel.Location = new System.Drawing.Point(49, 84);
+            this._passwordLabel.Location = new System.Drawing.Point(12, 39);
             this._passwordLabel.Name = "_passwordLabel";
             this._passwordLabel.Size = new System.Drawing.Size(53, 13);
             this._passwordLabel.TabIndex = 4;
@@ -82,7 +82,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(263, 213);
+            this.ClientSize = new System.Drawing.Size(219, 99);
             this.Controls.Add(this._passwordLabel);
             this.Controls.Add(this._usernameLabel);
             this.Controls.Add(this._loginButton);
