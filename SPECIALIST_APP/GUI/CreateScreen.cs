@@ -29,9 +29,9 @@ namespace SQL_Tutorial.GUI
         {
             _connection = new DBConnect();
             if (clientRadioButton.Checked)
-                _connection.saveClient(_nameBox.Text, _surnameBox.Text, _genderBox.Text);
+                _connection.saveClient(_nameBox.Text, _surnameBox.Text, _genderBox.Text.ToLower());
             else
-                _connection.saveSpecials(_nameBox.Text, _surnameBox.Text, _genderBox.Text, Usernamebox.Text, passwordBox.Text);
+                _connection.saveSpecials(_nameBox.Text, _surnameBox.Text, _genderBox.Text.ToLower(), Usernamebox.Text, passwordBox.Text);
             this.Close();
         }
 
