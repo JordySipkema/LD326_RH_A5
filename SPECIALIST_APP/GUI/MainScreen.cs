@@ -32,5 +32,10 @@ namespace SQL_Tutorial.GUI
             CreateScreen _createScreen = new CreateScreen();
             _createScreen.ShowDialog();
         }
+
+        private void MainScreen_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

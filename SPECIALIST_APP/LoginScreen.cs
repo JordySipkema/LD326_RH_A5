@@ -35,5 +35,10 @@ namespace SQL_Tutorial
                 MessageBox.Show("Invalid username/password!");
             }
         }
+
+        private void LoginScreen_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }
