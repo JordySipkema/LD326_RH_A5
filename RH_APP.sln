@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RH_APP", "RH_APP\RH_APP.csproj", "{7B8617DB-470D-424A-843A-8B2AEDBB3369}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application Specialist", "..\..\..\Documents\Visual Studio 2013\Projects\SQL Tutorial\SQL Tutorial\Application Specialist.csproj", "{4BAD6243-C4F0-47E8-AE87-9EA0542218FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{7B8617DB-470D-424A-843A-8B2AEDBB3369}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B8617DB-470D-424A-843A-8B2AEDBB3369}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B8617DB-470D-424A-843A-8B2AEDBB3369}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BAD6243-C4F0-47E8-AE87-9EA0542218FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BAD6243-C4F0-47E8-AE87-9EA0542218FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BAD6243-C4F0-47E8-AE87-9EA0542218FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BAD6243-C4F0-47E8-AE87-9EA0542218FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
