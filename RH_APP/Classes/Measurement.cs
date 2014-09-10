@@ -109,6 +109,45 @@ namespace RH_APP.Classes
         {
         }
 
+        public Measurement(String protocolString)
+        {
+            String[] values = protocolString.Split('\t');
+
+            if (values.Length == 8)
+            {
+                int pulse = -1;
+                int rpm = -1;
+                int speed = -1;
+                int distance = -1;
+                int despwr = -1;
+                int energy = -1;
+                int actpwer = -1;
+
+                Int32.TryParse(values[0], out pulse);
+                Int32.TryParse(values[1], out rpm);
+                Int32.TryParse(values[2], out speed);
+                Int32.TryParse(values[3], out distance);
+                Int32.TryParse(values[4], out actpwer);
+                Int32.TryParse(values[5], out energy);
+                String time = values[6];
+                Int32.TryParse(values[7], out despwr);
+
+                this.PULSE = pulse;
+                this.RPM = rpm;
+                this.SPEED = speed;
+                this.DISTANCE = distance;
+                this.POWER = despwr;
+                this.ACT_POWER = actpwer;
+                this.ENERGY = energy;
+                this.TIME = time;
+
+            }
+            else
+            {
+                throw new ArgumentException("Invalid protocoldata given, Expected 8 parameters instead of " + values.Length);
+            }
+        }
+
         public void copy(Measurement m)
         {
             this.PULSE = m.PULSE;
@@ -117,8 +156,16 @@ namespace RH_APP.Classes
             this.DISTANCE = m.DISTANCE;
             this.POWER = m.POWER;
             this.POWERPCT = m.POWERPCT;
+            this.ACT_POWER = m.ACT_POWER;
             this.ENERGY = m.ENERGY;
             this.TIME = m.TIME;
+        }
+
+        public String toProtocolString()
+        {
+            String protocol = String.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}",
+                PULSE, RPM, SPEED, DISTANCE, ACT_POWER, ENERGY, TIME, POWER);
+            return protocol;
         }
     }
 

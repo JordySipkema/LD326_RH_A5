@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace RH_APP.Controller
     {
         private Classes.IBike bike = null;
         private BackgroundWorker bw = new BackgroundWorker();
-        private ObservableCollection<Classes.Measurement> data = new ObservableCollection<Classes.Measurement>();
+        private List<Classes.Measurement> data = new List<Classes.Measurement>();
 
         public Classes.Measurement LatestMeasurement
         {
@@ -30,8 +31,9 @@ namespace RH_APP.Controller
 
         public RH_Controller()
         {
-            bike = new Classes.COM_Bike("COM3");
+            //bike = new Classes.COM_Bike("COM3");
             //bike = new Classes.STUB_Bike();
+            bike = new Classes.TXT_Bike();
             InitializeBackgroundWorker();
             bw.RunWorkerAsync();
 
@@ -54,8 +56,24 @@ namespace RH_APP.Controller
             }
         }
 
+        public void WriteDataToFile()
+        {
+            bw.CancelAsync();
+            String filepath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            StreamWriter writer = new StreamWriter(filepath + "\\RH_DATA.txt", append: false);
+
+            foreach (var measurement in data)
+            {
+                writer.WriteLine(measurement.toProtocolString());
+            }
+            writer.Flush();
+            writer.Dispose();
+            writer.Close();
+        }
+
         private void InitializeBackgroundWorker()
         {
+            bw.WorkerSupportsCancellation = true;
             // Attach event handlers to the BackgroundWorker object.
             bw.DoWork +=
                 new System.ComponentModel.DoWorkEventHandler(BackgroundWorker_DoWork);
@@ -80,7 +98,10 @@ namespace RH_APP.Controller
                 this.data.Add(m);
                 OnUpdatedList(EventArgs.Empty);
             }
-            bw.RunWorkerAsync();
+            if (!((BackgroundWorker)sender).CancellationPending)
+            {
+                bw.RunWorkerAsync();
+            }
         }
 
     }

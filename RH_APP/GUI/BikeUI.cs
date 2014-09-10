@@ -24,6 +24,8 @@ namespace RH_APP
 
         private void RH_BIKE_GUI_FormClosing(object sender, FormClosingEventArgs e)
         {
+
+            controller.WriteDataToFile();
             Application.Exit();
         }
 
@@ -42,6 +44,7 @@ namespace RH_APP
             this.dataPOWERPCT.Text = controller.LatestMeasurement.POWERPCT + "%";
             this.dataENERGY.Text = controller.LatestMeasurement.ENERGY + "";
             this.dataTIME.Text = controller.LatestMeasurement.TIME;
+            this.dataPULSE.Text = controller.LatestMeasurement.PULSE + "";
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
