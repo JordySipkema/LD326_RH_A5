@@ -100,7 +100,7 @@ namespace SQL_Tutorial
         }
 
 
-        public void saveUser(String name, String surname, String gender)
+        public void saveClient(String name, String surname, String gender)
         {
             String _query = "INSERT into " + _database + ".users (name,surname,gender) values('" + name + "','" + surname + "','" + gender + "') ;";
             initialize();
@@ -111,10 +111,7 @@ namespace SQL_Tutorial
                 _connection.Open();
                 _reader = _selectCommand.ExecuteReader();
                 MessageBox.Show("User added!");
-                while (_reader.Read())
-                {
 
-                }
             }
             catch (MySqlException ex)
             {
@@ -122,6 +119,27 @@ namespace SQL_Tutorial
             }
 
  
+        }
+
+        public void saveSpecials(String name, String surname, String gender, string username, string pass)
+        {
+            String _query = "INSERT into " + _database + ".users (name,surname,gender, username, password, isSpecialist) values('" + name + "','" + surname + "','" + gender + "','" + username + "','" + pass + "', 1) ;";
+            initialize();
+            _selectCommand = new MySqlCommand(_query, _connection);
+
+            try
+            {
+                _connection.Open();
+                _reader = _selectCommand.ExecuteReader();
+                MessageBox.Show("User added!");
+
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+
         }
     }
 }

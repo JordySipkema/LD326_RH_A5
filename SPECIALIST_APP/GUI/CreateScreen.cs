@@ -28,8 +28,42 @@ namespace SQL_Tutorial.GUI
         private void _createButton_Click(object sender, EventArgs e)
         {
             _connection = new DBConnect();
-            _connection.saveUser(_nameBox.Text, _surnameBox.Text, _genderBox.Text);
+            if (clientRadioButton.Checked)
+                _connection.saveClient(_nameBox.Text, _surnameBox.Text, _genderBox.Text);
+            else
+                _connection.saveSpecials(_nameBox.Text, _surnameBox.Text, _genderBox.Text, Usernamebox.Text, passwordBox.Text);
             this.Close();
+        }
+
+        private void _genderBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void _nameBox_Leave(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrWhiteSpace(_nameBox.Text)) {
+                Usernamebox.Text = _nameBox.Text;
+            }
+        }
+
+        private void CreateScreen_Load(object sender, EventArgs e)
+        {
+            Usernamebox.Enabled = false;
+            passwordBox.Enabled = false;
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (specialistRadioButton.Checked)
+            {
+                Usernamebox.Enabled = true;
+                passwordBox.Enabled = true;
+            }
+            else {
+                Usernamebox.Enabled = false;
+                passwordBox.Enabled = false;
+            }
         }
 
     }
