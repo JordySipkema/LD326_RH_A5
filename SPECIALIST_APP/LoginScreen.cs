@@ -35,5 +35,12 @@ namespace SQL_Tutorial
                 MessageBox.Show("Invalid username/password!");
             }
         }
+
+
+        private void _passwordBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+           if(e.KeyChar == (Char)Keys.Return)
+                _loginButton_Click(this, null);
+        }
     }
 }
