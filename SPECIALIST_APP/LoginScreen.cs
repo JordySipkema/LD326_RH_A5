@@ -36,6 +36,11 @@ namespace SQL_Tutorial
             }
         }
 
+        private void LoginScreen_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
+
 
         private void _passwordBox_KeyPress(object sender, KeyPressEventArgs e)
         {

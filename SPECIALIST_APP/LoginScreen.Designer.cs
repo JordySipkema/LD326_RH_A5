@@ -90,6 +90,7 @@
             this.Controls.Add(this._usernameBox);
             this.Name = "LoginScreen";
             this.Text = "Login";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LoginScreen_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 
