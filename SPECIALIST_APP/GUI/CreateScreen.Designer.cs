@@ -43,11 +43,13 @@
             this.label5 = new System.Windows.Forms.Label();
             this.Usernamebox = new System.Windows.Forms.TextBox();
             this.passwordBox = new System.Windows.Forms.TextBox();
+            this.dateOfBirthPicker = new System.Windows.Forms.DateTimePicker();
+            this.label6 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // _createButton
             // 
-            this._createButton.Location = new System.Drawing.Point(78, 216);
+            this._createButton.Location = new System.Drawing.Point(203, 239);
             this._createButton.Name = "_createButton";
             this._createButton.Size = new System.Drawing.Size(75, 23);
             this._createButton.TabIndex = 0;
@@ -57,7 +59,7 @@
             // 
             // _cancelButton
             // 
-            this._cancelButton.Location = new System.Drawing.Point(159, 216);
+            this._cancelButton.Location = new System.Drawing.Point(12, 239);
             this._cancelButton.Name = "_cancelButton";
             this._cancelButton.Size = new System.Drawing.Size(75, 23);
             this._cancelButton.TabIndex = 1;
@@ -69,7 +71,7 @@
             // 
             this._nameBox.Location = new System.Drawing.Point(78, 60);
             this._nameBox.Name = "_nameBox";
-            this._nameBox.Size = new System.Drawing.Size(183, 20);
+            this._nameBox.Size = new System.Drawing.Size(200, 20);
             this._nameBox.TabIndex = 2;
             this._nameBox.Leave += new System.EventHandler(this._nameBox_Leave);
             // 
@@ -77,7 +79,7 @@
             // 
             this._surnameBox.Location = new System.Drawing.Point(78, 86);
             this._surnameBox.Name = "_surnameBox";
-            this._surnameBox.Size = new System.Drawing.Size(183, 20);
+            this._surnameBox.Size = new System.Drawing.Size(200, 20);
             this._surnameBox.TabIndex = 3;
             // 
             // _nameLabel
@@ -101,7 +103,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 115);
+            this.label2.Location = new System.Drawing.Point(14, 140);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(42, 13);
             this.label2.TabIndex = 7;
@@ -113,7 +115,7 @@
             this._genderBox.Items.AddRange(new object[] {
             "M",
             "F"});
-            this._genderBox.Location = new System.Drawing.Point(78, 112);
+            this._genderBox.Location = new System.Drawing.Point(78, 137);
             this._genderBox.Name = "_genderBox";
             this._genderBox.Size = new System.Drawing.Size(44, 21);
             this._genderBox.TabIndex = 8;
@@ -134,7 +136,7 @@
             this.clientRadioButton.AutoSize = true;
             this.clientRadioButton.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.clientRadioButton.Checked = true;
-            this.clientRadioButton.Location = new System.Drawing.Point(78, 139);
+            this.clientRadioButton.Location = new System.Drawing.Point(76, 164);
             this.clientRadioButton.Name = "clientRadioButton";
             this.clientRadioButton.Size = new System.Drawing.Size(51, 17);
             this.clientRadioButton.TabIndex = 11;
@@ -146,7 +148,7 @@
             // specialistRadioButton
             // 
             this.specialistRadioButton.AutoSize = true;
-            this.specialistRadioButton.Location = new System.Drawing.Point(135, 139);
+            this.specialistRadioButton.Location = new System.Drawing.Point(133, 164);
             this.specialistRadioButton.Name = "specialistRadioButton";
             this.specialistRadioButton.Size = new System.Drawing.Size(70, 17);
             this.specialistRadioButton.TabIndex = 12;
@@ -157,7 +159,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 161);
+            this.label4.Location = new System.Drawing.Point(12, 190);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(55, 13);
             this.label4.TabIndex = 13;
@@ -166,7 +168,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(14, 187);
+            this.label5.Location = new System.Drawing.Point(12, 216);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(53, 13);
             this.label5.TabIndex = 14;
@@ -174,24 +176,42 @@
             // 
             // Usernamebox
             // 
-            this.Usernamebox.Location = new System.Drawing.Point(78, 162);
+            this.Usernamebox.Location = new System.Drawing.Point(76, 187);
             this.Usernamebox.Name = "Usernamebox";
-            this.Usernamebox.Size = new System.Drawing.Size(183, 20);
+            this.Usernamebox.Size = new System.Drawing.Size(202, 20);
             this.Usernamebox.TabIndex = 15;
             // 
             // passwordBox
             // 
-            this.passwordBox.Location = new System.Drawing.Point(78, 184);
+            this.passwordBox.Location = new System.Drawing.Point(76, 213);
             this.passwordBox.Name = "passwordBox";
             this.passwordBox.PasswordChar = '*';
-            this.passwordBox.Size = new System.Drawing.Size(183, 20);
+            this.passwordBox.Size = new System.Drawing.Size(202, 20);
             this.passwordBox.TabIndex = 16;
+            // 
+            // dateOfBirthPicker
+            // 
+            this.dateOfBirthPicker.Location = new System.Drawing.Point(78, 111);
+            this.dateOfBirthPicker.Name = "dateOfBirthPicker";
+            this.dateOfBirthPicker.Size = new System.Drawing.Size(200, 20);
+            this.dateOfBirthPicker.TabIndex = 17;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(12, 117);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(65, 13);
+            this.label6.TabIndex = 18;
+            this.label6.Text = "Date of birth";
             // 
             // CreateScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(314, 268);
+            this.ClientSize = new System.Drawing.Size(295, 272);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.dateOfBirthPicker);
             this.Controls.Add(this.passwordBox);
             this.Controls.Add(this.Usernamebox);
             this.Controls.Add(this.label5);
@@ -232,5 +252,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox Usernamebox;
         private System.Windows.Forms.TextBox passwordBox;
+        private System.Windows.Forms.DateTimePicker dateOfBirthPicker;
+        private System.Windows.Forms.Label label6;
     }
 }

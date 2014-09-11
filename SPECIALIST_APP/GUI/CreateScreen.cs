@@ -22,16 +22,25 @@ namespace SQL_Tutorial.GUI
         private void _cancelButton_Click(object sender, EventArgs e)
         {
             this.Close();
-
         }
 
         private void _createButton_Click(object sender, EventArgs e)
         {
             _connection = new DBConnect();
+
+            if(string.IsNullOrEmpty(_nameBox.Text) || string.IsNullOrEmpty(_surnameBox.Text) || string.IsNullOrEmpty(_genderBox.Text)){ 
+                if(clientRadioButton.Checked)
+                    MessageBox.Show("Please fill in all fields");
+            }
+            else if(string.IsNullOrEmpty(Usernamebox.Text) || string.IsNullOrEmpty(passwordBox.Text))
+                MessageBox.Show("Please fill in all fields");
+
+            
+
             if (clientRadioButton.Checked)
-                _connection.saveClient(_nameBox.Text, _surnameBox.Text, _genderBox.Text.ToLower());
+                _connection.saveClient(_nameBox.Text, _surnameBox.Text, _genderBox.Text.ToLower(), dateOfBirthPicker.Value);
             else
-                _connection.saveSpecials(_nameBox.Text, _surnameBox.Text, _genderBox.Text.ToLower(), Usernamebox.Text, passwordBox.Text);
+                _connection.saveSpecialist(_nameBox.Text, _surnameBox.Text, _genderBox.Text.ToLower(), Usernamebox.Text, passwordBox.Text, dateOfBirthPicker.Value);
             this.Close();
         }
 
