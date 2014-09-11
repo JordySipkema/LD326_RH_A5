@@ -18,6 +18,7 @@ namespace SQL_Tutorial
         {
             InitializeComponent();
             _passwordBox.UseSystemPasswordChar = true;
+            
         }
 
         private void _loginButton_Click(object sender, EventArgs e)
