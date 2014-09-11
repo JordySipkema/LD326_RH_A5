@@ -60,15 +60,15 @@ namespace RH_APP.Controller
         {
             bw.CancelAsync();
             String filepath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            StreamWriter writer = new StreamWriter(filepath + "\\RH_DATA.txt", append: false);
-
-            foreach (var measurement in data)
+            using (StreamWriter writer = new StreamWriter(filepath + "\\RH_DATA.txt", append: false))
             {
-                writer.WriteLine(measurement.toProtocolString());
+                foreach (var measurement in data)
+                {
+                    writer.WriteLine(measurement.toProtocolString());
+                }
+                writer.Flush();
             }
-            writer.Flush();
-            writer.Dispose();
-            writer.Close();
+
         }
 
         private void InitializeBackgroundWorker()
