@@ -28,12 +28,16 @@ namespace SQL_Tutorial.GUI
         {
             _connection = new DBConnect();
 
-            if(string.IsNullOrEmpty(_nameBox.Text) || string.IsNullOrEmpty(_surnameBox.Text) || string.IsNullOrEmpty(_genderBox.Text)){ 
-                if(clientRadioButton.Checked)
-                    MessageBox.Show("Please fill in all fields");
+            string pleaseFillIntext = "Please fill in all fields";
+            if(string.IsNullOrEmpty(_nameBox.Text) || string.IsNullOrEmpty(_surnameBox.Text) || string.IsNullOrEmpty(_genderBox.Text)){
+                MessageBox.Show(pleaseFillIntext);
+                return;
             }
-            else if(string.IsNullOrEmpty(Usernamebox.Text) || string.IsNullOrEmpty(passwordBox.Text))
-                MessageBox.Show("Please fill in all fields");
+            else if (string.IsNullOrEmpty(Usernamebox.Text) || string.IsNullOrEmpty(passwordBox.Text))
+            {
+                MessageBox.Show(pleaseFillIntext);
+                return;
+            }
 
             
 
