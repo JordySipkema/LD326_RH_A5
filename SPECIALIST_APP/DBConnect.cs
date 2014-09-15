@@ -100,11 +100,14 @@ namespace SQL_Tutorial
         }
 
 
-        public void saveClient(String name, String surname, String gender)
+        public bool saveClient(String name, String surname, String gender, DateTime dob)
         {
-            String _query = "INSERT into " + _database + ".users (name,surname,gender) values('" + name + "','" + surname + "','" + gender + "') ;";
+            string query = String.Format("INSERT into {0}.users (name,surname,gender, ) values('{1}','{2}','{3}','{4}', '{5}') ;",
+                _database, name, surname, gender, dob.Date.ToString("yyyy-MM-dd"));
+
+            
             initialize();
-            _selectCommand = new MySqlCommand(_query, _connection);
+            _selectCommand = new MySqlCommand(query, _connection);
 
             try
             {
@@ -115,30 +118,31 @@ namespace SQL_Tutorial
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show(ex.Message);
+                Console.WriteLine("Exception: DBConnect.saveClient(): " + ex.Message);
+                return false;
             }
-
+            return true;
  
         }
 
-        public void saveSpecials(String name, String surname, String gender, string username, string pass)
+        public bool saveSpecialist(String name, String surname, String gender, string username, string pass, DateTime dob)
         {
-            String _query = "INSERT into " + _database + ".users (name,surname,gender, username, password, isSpecialist) values('" + name + "','" + surname + "','" + gender + "','" + username + "','" + pass + "', 1) ;";
+            String query = string.Format("INSERT into {0}.users (name,surname,gender, username, password, dateOfBirth, isSpecialist) values('{1}','{2}','{3}','{4}','{5}','{6}', 1)",
+                _database, name, surname, gender,  username, pass, dob.Date.ToString("yyyy-MM-dd")) ;
             initialize();
-            _selectCommand = new MySqlCommand(_query, _connection);
+            _selectCommand = new MySqlCommand(query, _connection);
 
             try
             {
                 _connection.Open();
                 _reader = _selectCommand.ExecuteReader();
-                MessageBox.Show("User added!");
-
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show(ex.Message);
+                Console.WriteLine("Exception: DBConnect.saveSpecialist(): " + ex.Message);
+                return false;
             }
-
+            return true;
 
         }
     }

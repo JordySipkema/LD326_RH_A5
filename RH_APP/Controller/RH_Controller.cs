@@ -29,11 +29,11 @@ namespace RH_APP.Controller
             }
         }
 
-        public RH_Controller()
+        public RH_Controller(Classes.IBike b)
         {
             //bike = new Classes.COM_Bike("COM3");
             //bike = new Classes.STUB_Bike();
-            bike = new Classes.TXT_Bike();
+            bike = b;
             InitializeBackgroundWorker();
             bw.RunWorkerAsync();
 
@@ -56,7 +56,8 @@ namespace RH_APP.Controller
             }
         }
 
-        public void WriteDataToFile()
+
+        public void WriteAllDataToFile()
         {
             bw.CancelAsync();
             String filepath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);

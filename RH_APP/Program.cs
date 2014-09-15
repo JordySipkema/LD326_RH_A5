@@ -16,7 +16,7 @@ namespace RH_APP
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new RH_BIKE_GUI());
+            Application.Run(new GUI.chooseYourBikeUI());
         }
     }
 }

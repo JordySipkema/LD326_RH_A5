@@ -12,14 +12,12 @@ namespace RH_APP.Classes
         private int datacounter = 0;
         private List<Measurement> txtdata = new List<Measurement>();
 
-        public TXT_Bike() : base()
+        public TXT_Bike(string path) : base()
         {
-            String filepath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            foreach (string line in File.ReadLines(filepath + @"\RH_DATA_DUMMY.txt"))
+            foreach (string line in File.ReadLines(path))
             {
                 txtdata.Add(new Measurement(line));
             }
-            
         }
         public override Measurement RecieveData()
         {

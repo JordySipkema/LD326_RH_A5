@@ -35,6 +35,7 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._welcomeLabel = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -94,11 +95,21 @@
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
+            // _welcomeLabel
+            // 
+            this._welcomeLabel.AutoSize = true;
+            this._welcomeLabel.Location = new System.Drawing.Point(22, 41);
+            this._welcomeLabel.Name = "_welcomeLabel";
+            this._welcomeLabel.Size = new System.Drawing.Size(55, 13);
+            this._welcomeLabel.TabIndex = 1;
+            this._welcomeLabel.Text = "Welcome!";
+            // 
             // MainScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(439, 339);
+            this.Controls.Add(this._welcomeLabel);
             this.Controls.Add(this.menuStrip1);
             this.Name = "MainScreen";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainScreen_FormClosing);
@@ -118,6 +129,7 @@
         private System.Windows.Forms.ToolStripMenuItem loadClientsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.Label _welcomeLabel;
 
     }
 }
