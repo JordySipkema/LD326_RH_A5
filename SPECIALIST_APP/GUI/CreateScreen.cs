@@ -33,7 +33,7 @@ namespace SQL_Tutorial.GUI
                 MessageBox.Show(pleaseFillIntext);
                 return;
             }
-            else if (string.IsNullOrEmpty(Usernamebox.Text) || string.IsNullOrEmpty(passwordBox.Text))
+            else if (specialistRadioButton.Checked && String.IsNullOrEmpty(Usernamebox.Text) || specialistRadioButton.Checked && string.IsNullOrEmpty(passwordBox.Text))
             {
                 MessageBox.Show(pleaseFillIntext);
                 return;

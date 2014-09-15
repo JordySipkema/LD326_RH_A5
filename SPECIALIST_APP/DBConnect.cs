@@ -66,7 +66,7 @@ namespace SQL_Tutorial
             try
             {
                 _connection.Open();
-                _selectCommand = new MySqlCommand("SELECT * FROM " + _database + ".users WHERE isSpecialist=1 AND username=\"" + _username + "\" AND password=\"" + _password + "\";", _connection);
+                _selectCommand = new MySqlCommand("SELECT * FROM " + _database + ".users WHERE user_type > 0 AND username=\"" + _username + "\" AND password=\"" + _password + "\";", _connection);
                 
                 _reader = _selectCommand.ExecuteReader();
 
@@ -102,7 +102,7 @@ namespace SQL_Tutorial
 
         public bool saveClient(String name, String surname, String gender, DateTime dob)
         {
-            string query = String.Format("INSERT into {0}.users (name,surname,gender, ) values('{1}','{2}','{3}','{4}', '{5}') ;",
+            string query = String.Format("INSERT into {0}.users (name,surname,gender, username, dateOfBirth) values('{1}','{2}','{3}','{4}', '{5}') ;",
                 _database, name, surname, gender, dob.Date.ToString("yyyy-MM-dd"));
 
             
@@ -127,7 +127,7 @@ namespace SQL_Tutorial
 
         public bool saveSpecialist(String name, String surname, String gender, string username, string pass, DateTime dob)
         {
-            String query = string.Format("INSERT into {0}.users (name,surname,gender, username, password, dateOfBirth, isSpecialist) values('{1}','{2}','{3}','{4}','{5}','{6}', 1)",
+            String query = string.Format("INSERT into {0}.users (name,surname,gender, username, password, dateOfBirth, user_type) values('{1}','{2}','{3}','{4}','{5}','{6}', 1)",
                 _database, name, surname, gender,  username, pass, dob.Date.ToString("yyyy-MM-dd")) ;
             initialize();
             _selectCommand = new MySqlCommand(query, _connection);
