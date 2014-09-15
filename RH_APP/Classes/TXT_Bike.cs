@@ -15,10 +15,11 @@ namespace RH_APP.Classes
         public TXT_Bike() : base()
         {
             String filepath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            foreach (string line in File.ReadLines(filepath + "\\RH_DATA_DUMMY.txt"))
+            foreach (string line in File.ReadLines(filepath + @"\RH_DATA_DUMMY.txt"))
             {
                 txtdata.Add(new Measurement(line));
             }
+            
         }
         public override Measurement RecieveData()
         {
