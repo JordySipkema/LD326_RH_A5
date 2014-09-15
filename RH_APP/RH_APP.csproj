@@ -57,10 +57,19 @@
     <Compile Include="GUI\BikeUI.Designer.cs">
       <DependentUpon>BikeUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\chooseYourBikeUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\chooseYourBikeUI.Designer.cs">
+      <DependentUpon>chooseYourBikeUI.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="GUI\BikeUI.resx">
       <DependentUpon>BikeUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\chooseYourBikeUI.resx">
+      <DependentUpon>chooseYourBikeUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -84,7 +93,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="GUI\App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

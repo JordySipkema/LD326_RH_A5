@@ -22,6 +22,7 @@ namespace RH_APP.Classes
             m.RPM = new Random().Next(24, 80);
             m.SPEED = new Random().Next(12, 50);
             m.TIME = String.Format("{0:00}:{1:00}", runningTime.Minutes, runningTime.Seconds);
+            m.DATE = DateTime.Now;
             return m;
         }
 

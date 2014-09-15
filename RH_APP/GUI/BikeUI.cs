@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace RH_APP
 {
@@ -15,17 +16,41 @@ namespace RH_APP
     {
         Controller.RH_Controller controller = null;
 
-        public RH_BIKE_GUI()
+        bool writeToFile;
+        StreamWriter writer;
+
+
+        public RH_BIKE_GUI(IBike b, string path)
         {
-            controller = new Controller.RH_Controller();
+            
+            controller = new Controller.RH_Controller(b);
             controller.UpdatedList += updateGUI;
+            writeToFile = true;
             InitializeComponent();
+            writeRealTime(path);
+        }
+
+        public RH_BIKE_GUI(IBike b)
+        {
+            controller = new Controller.RH_Controller(b);
+            controller.UpdatedList += updateGUI;
+            writeToFile = false;
+            InitializeComponent();
+
+        }
+
+        public void writeRealTime(string file) 
+        {
+            if (File.Exists(file))
+                writer = File.CreateText(file);
+            else
+                writer = File.AppendText(file);
+            writer.AutoFlush = true;
+            writeToFile = true;
         }
 
         private void RH_BIKE_GUI_FormClosing(object sender, FormClosingEventArgs e)
         {
-
-            controller.WriteDataToFile();
             Application.Exit();
         }
 
@@ -45,6 +70,13 @@ namespace RH_APP
             this.dataENERGY.Text = controller.LatestMeasurement.ENERGY + "";
             this.dataTIME.Text = controller.LatestMeasurement.TIME;
             this.dataPULSE.Text = controller.LatestMeasurement.PULSE + "";
+
+            if (writeToFile) {
+                string protoLine = controller.LatestMeasurement.toProtocolString();
+                writer.WriteLine(protoLine);
+
+            }
+
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
@@ -52,6 +84,11 @@ namespace RH_APP
             controller.ChangeSpeed(numericUpDown1.Value);
         }
 
-
+        ~RH_BIKE_GUI() {
+            controller.UpdatedList -= updateGUI;
+            if (writer != null)
+                writer.Flush();
+                writer.Dispose();
+        }
     }
 }

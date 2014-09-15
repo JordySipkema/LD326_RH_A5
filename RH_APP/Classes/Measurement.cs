@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace RH_APP.Classes
 {
-    class Measurement
+    public class Measurement
     {
+        private DateTime _date;
         private int _rpm = -1;
         private int _speed = -1;
 
@@ -28,7 +29,14 @@ namespace RH_APP.Classes
                 _rpm = value;
             }
         }
-
+        public DateTime DATE
+        {
+            get { return _date; }
+            set
+            {
+                _date = value;
+            }
+        }
         public int SPEED
         {
             get { return _speed; }
@@ -113,7 +121,7 @@ namespace RH_APP.Classes
         {
             String[] values = protocolString.Split('\t');
 
-            if (values.Length == 8)
+            if (values.Length == 9 || values.Length == 8)
             {
                 int pulse = -1;
                 int rpm = -1;
@@ -141,10 +149,15 @@ namespace RH_APP.Classes
                 this.ENERGY = energy;
                 this.TIME = time;
 
+                if (values.Length == 9)
+                {
+                    this.DATE = DateTime.Parse(values[8]);
+                }
+
             }
             else
             {
-                throw new ArgumentException("Invalid protocoldata given, Expected 8 parameters instead of " + values.Length);
+                throw new ArgumentException("Invalid protocoldata given, Expected either 8 or 9 parameters instead of " + values.Length);
             }
         }
 
@@ -159,12 +172,14 @@ namespace RH_APP.Classes
             this.ACT_POWER = m.ACT_POWER;
             this.ENERGY = m.ENERGY;
             this.TIME = m.TIME;
+            this.DATE = m.DATE;
         }
 
         public String toProtocolString()
         {
-            String protocol = String.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}",
-                PULSE, RPM, SPEED, DISTANCE, ACT_POWER, ENERGY, TIME, POWER);
+
+            String protocol = String.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}",
+                PULSE, RPM, SPEED, DISTANCE, ACT_POWER, ENERGY, TIME, POWER, DATE.ToString("yyyy-MM-dd HH:mm:ss"));
             return protocol;
         }
     }

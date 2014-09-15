@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RH_APP.Classes
 {
-    abstract class IBike
+    public abstract class IBike
     {
         public Measurement Measurement { get; set; }
 
