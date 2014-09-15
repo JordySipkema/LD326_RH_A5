@@ -24,18 +24,20 @@ namespace SQL_Tutorial.GUI
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Application.Exit();
-        }
-
-        private void createClientToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CreateScreen _createScreen = new CreateScreen();
-            _createScreen.ShowDialog();
+            ExitScreen _exitScreen = new ExitScreen();
+            _exitScreen.ShowDialog();
         }
 
         private void MainScreen_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Application.Exit();
+            ExitScreen _exitScreen = new ExitScreen();
+            _exitScreen.ShowDialog();
+        }
+
+        private void userToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CreateScreen _createScreen = new CreateScreen();
+            _createScreen.ShowDialog();
         }
     }
 }

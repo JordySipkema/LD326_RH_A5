@@ -15,9 +15,7 @@ namespace RH_APP.Classes
         {
             serial = new SerialPort();
             serial.PortName = com_port;
-            serial.BaudRate = 9600;
-            serial.Handshake = System.IO.Ports.Handshake.None;
-            serial.Parity = Parity.None;
+
             serial.DataBits = 8;
             serial.StopBits = StopBits.One;
             serial.ReadTimeout = 2000;

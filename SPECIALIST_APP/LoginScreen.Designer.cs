@@ -74,11 +74,11 @@
             // _passwordLabel
             // 
             this._passwordLabel.AutoSize = true;
-            this._passwordLabel.Location = new System.Drawing.Point(39, 106);
+            this._passwordLabel.Location = new System.Drawing.Point(30, 109);
             this._passwordLabel.Name = "_passwordLabel";
-            this._passwordLabel.Size = new System.Drawing.Size(59, 13);
+            this._passwordLabel.Size = new System.Drawing.Size(68, 13);
             this._passwordLabel.TabIndex = 4;
-            this._passwordLabel.Text = "Passwoord";
+            this._passwordLabel.Text = "Wachtwoord";
             // 
             // label1
             // 

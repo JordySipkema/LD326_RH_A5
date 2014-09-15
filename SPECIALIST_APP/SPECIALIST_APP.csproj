@@ -57,6 +57,12 @@
     <Compile Include="GUI\CreateScreen.Designer.cs">
       <DependentUpon>CreateScreen.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\ExitScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ExitScreen.Designer.cs">
+      <DependentUpon>ExitScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\MainScreen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,6 +78,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="GUI\CreateScreen.resx">
       <DependentUpon>CreateScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ExitScreen.resx">
+      <DependentUpon>ExitScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainScreen.resx">
       <DependentUpon>MainScreen.cs</DependentUpon>
