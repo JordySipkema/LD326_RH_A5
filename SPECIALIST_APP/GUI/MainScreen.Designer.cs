@@ -1,4 +1,4 @@
-﻿namespace SQL_Tutorial.GUI
+﻿namespace Application_Specialist.GUI
 {
     partial class MainScreen
     {

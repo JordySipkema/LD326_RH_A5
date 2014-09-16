@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SQL_Tutorial.GUI
+namespace Application_Specialist.GUI
 {
     public partial class MainScreen : Form
     {

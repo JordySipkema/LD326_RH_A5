@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using System.Windows.Forms;
 
-namespace SQL_Tutorial
+namespace Application_Specialist
 {
     class DBConnect
     {
