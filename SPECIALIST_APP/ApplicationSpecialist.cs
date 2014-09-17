@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SQL_Tutorial
+namespace Application_Specialist
 {
     class ApplicationSpecialist
     {
