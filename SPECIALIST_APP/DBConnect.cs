@@ -12,6 +12,7 @@ namespace SQL_Tutorial
     {
         private MySqlConnection _connection;
         private MySqlCommand _selectCommand;
+        private MySqlCommand _selectBMICommand;
         private MySqlDataReader _reader;
 
         private String _server;
@@ -100,20 +101,35 @@ namespace SQL_Tutorial
         }
 
 
-        public bool saveClient(String name, String surname, String gender, DateTime dob)
+        public bool saveClient(String name, String surname, String gender, DateTime dob, decimal length, decimal weight)
         {
             string query = String.Format("INSERT into {0}.users (name,surname,gender, username, dateOfBirth) values('{1}','{2}','{3}','{4}', '{5}') ;",
-                _database, name, surname, gender, dob.Date.ToString("yyyy-MM-dd"));
-
+                _database, name, surname, gender, dob.Date.ToString("yyyy-MM-dd"), length, weight);
             
+            String queryBMI = String.Format("INSERT into {0}.client_bmi_info (length, weight) values('{1}','{2}') ;", _database, length, weight);
             initialize();
             _selectCommand = new MySqlCommand(query, _connection);
-
+            
             try
             {
                 _connection.Open();
                 _reader = _selectCommand.ExecuteReader();
                 MessageBox.Show("User added!");
+
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Exception: DBConnect.saveClient(): " + ex.Message);
+                return false;
+            }
+
+
+            _selectCommand = new MySqlCommand(queryBMI, _connection);
+
+            try
+            {
+                _connection.Open();
+                _reader = _selectCommand.ExecuteReader();
 
             }
             catch (MySqlException ex)

@@ -29,22 +29,32 @@ namespace SQL_Tutorial.GUI
             _connection = new DBConnect();
 
             string pleaseFillIntext = "Please fill in all fields";
-            if(string.IsNullOrEmpty(_nameBox.Text) || string.IsNullOrEmpty(_surnameBox.Text) || string.IsNullOrEmpty(_genderBox.Text)){
+            if(string.IsNullOrEmpty(_nameBox.Text) || string.IsNullOrEmpty(_surnameBox.Text) || _genderMaleRadioButton.Checked == false || _genderFemaleRadioButton.Checked == false){
                 MessageBox.Show(pleaseFillIntext);
                 return;
             }
-            else if (specialistRadioButton.Checked && String.IsNullOrEmpty(Usernamebox.Text) || specialistRadioButton.Checked && string.IsNullOrEmpty(passwordBox.Text))
+            else if (clientRadioButton.Checked && String.IsNullOrEmpty(_lengthBox.Text) || clientRadioButton.Checked && string.IsNullOrEmpty(_weightBox.Text))
             {
                 MessageBox.Show(pleaseFillIntext);
                 return;
             }
 
+            String gender;
+
+            if (_genderMaleRadioButton.Checked)
+            {
+                gender = "m";
+            }
+            else
+            {
+                gender = "f";
+            }
             
 
             if (clientRadioButton.Checked)
-                _connection.saveClient(_nameBox.Text, _surnameBox.Text, _genderBox.Text.ToLower(), dateOfBirthPicker.Value);
+                _connection.saveClient(_nameBox.Text, _surnameBox.Text, gender, dateOfBirthPicker.Value, Decimal.Parse(_lengthBox.Text), Decimal.Parse(_weightBox.Text));
             else
-                _connection.saveSpecialist(_nameBox.Text, _surnameBox.Text, _genderBox.Text.ToLower(), Usernamebox.Text, passwordBox.Text, dateOfBirthPicker.Value);
+                _connection.saveSpecialist(_nameBox.Text, _surnameBox.Text, gender, Usernamebox.Text, passwordBox.Text, dateOfBirthPicker.Value);
             this.Close();
         }
 
@@ -62,22 +72,8 @@ namespace SQL_Tutorial.GUI
 
         private void CreateScreen_Load(object sender, EventArgs e)
         {
-            Usernamebox.Enabled = false;
-            passwordBox.Enabled = false;
+            _lengthBox.Enabled = false;
+            _weightBox.Enabled = false;
         }
-
-        private void radioButton2_CheckedChanged(object sender, EventArgs e)
-        {
-            if (specialistRadioButton.Checked)
-            {
-                Usernamebox.Enabled = true;
-                passwordBox.Enabled = true;
-            }
-            else {
-                Usernamebox.Enabled = false;
-                passwordBox.Enabled = false;
-            }
-        }
-
     }
 }
