@@ -12,7 +12,6 @@ namespace Application_Specialist
     {
         private MySqlConnection _connection;
         private MySqlCommand _selectCommand;
-        private MySqlCommand _selectBMICommand;
         private MySqlDataReader _reader;
 
         private String _server;

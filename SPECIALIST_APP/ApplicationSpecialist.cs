@@ -20,7 +20,7 @@ namespace Application_Specialist
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new LoginScreen());
+            Application.Run(new Application_Specialist.GUI.LoginScreen());
         }
     }
 }
