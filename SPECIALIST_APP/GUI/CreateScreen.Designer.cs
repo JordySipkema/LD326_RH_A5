@@ -249,6 +249,7 @@
             this.clientRadioButton.TabIndex = 27;
             this.clientRadioButton.Text = "Client";
             this.clientRadioButton.UseVisualStyleBackColor = true;
+            this.clientRadioButton.CheckedChanged += new System.EventHandler(this.clientRadioButton_CheckedChanged);
             // 
             // specialistRadioButton
             // 
@@ -259,6 +260,7 @@
             this.specialistRadioButton.TabIndex = 28;
             this.specialistRadioButton.Text = "Specialist";
             this.specialistRadioButton.UseVisualStyleBackColor = true;
+            this.specialistRadioButton.CheckedChanged += new System.EventHandler(this.clientRadioButton_CheckedChanged);
             // 
             // _genderFemaleRadioButton
             // 

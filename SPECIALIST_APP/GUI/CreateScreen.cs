@@ -29,7 +29,7 @@ namespace Application_Specialist.GUI
             _connection = new DBConnect();
 
             string pleaseFillIntext = "Please fill in all fields";
-            if(string.IsNullOrEmpty(_nameBox.Text) || string.IsNullOrEmpty(_surnameBox.Text) || _genderMaleRadioButton.Checked == false || _genderFemaleRadioButton.Checked == false){
+            if(string.IsNullOrEmpty(_nameBox.Text) || string.IsNullOrEmpty(_surnameBox.Text) || !_genderMaleRadioButton.Checked && !_genderFemaleRadioButton.Checked ){
                 MessageBox.Show(pleaseFillIntext);
                 return;
             }
@@ -52,7 +52,7 @@ namespace Application_Specialist.GUI
             
 
             if (clientRadioButton.Checked)
-                _connection.saveClient(_nameBox.Text, _surnameBox.Text, gender, dateOfBirthPicker.Value, Decimal.Parse(_lengthBox.Text), Decimal.Parse(_weightBox.Text));
+                _connection.saveClient(_nameBox.Text, _surnameBox.Text, Usernamebox.Text, passwordBox.Text,  gender, dateOfBirthPicker.Value, Decimal.Parse(_lengthBox.Text), Decimal.Parse(_weightBox.Text));
             else
                 _connection.saveSpecialist(_nameBox.Text, _surnameBox.Text, gender, Usernamebox.Text, passwordBox.Text, dateOfBirthPicker.Value);
             this.Close();
@@ -74,6 +74,20 @@ namespace Application_Specialist.GUI
         {
             _lengthBox.Enabled = false;
             _weightBox.Enabled = false;
+        }
+
+        private void clientRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (clientRadioButton.Checked)
+            {
+                _lengthBox.Enabled = true;
+                _weightBox.Enabled = true;
+            }
+            else
+            {
+                _lengthBox.Enabled = false;
+                _weightBox.Enabled = false;
+            }
         }
     }
 }
