@@ -5,8 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using System.Globalization;
-using RH_APP.Classes;
-namespace Application_Specialist
+namespace Mallaca
 {
     public class DBConnect
     {

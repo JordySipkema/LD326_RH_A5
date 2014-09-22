@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RH_APP.Classes
+namespace Mallaca
 {
     public class Measurement
     {
