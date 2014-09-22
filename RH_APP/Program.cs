@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using Mallaca;
 namespace RH_APP
 {
     static class Program
@@ -17,6 +17,18 @@ namespace RH_APP
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new GUI.chooseYourBikeUI());
+
+            
+        }
+
+        private static void insertMeasurementTest()
+        {
+            DBConnect db = new DBConnect();
+            Measurement m = new Measurement();
+
+            db.SaveMeasurement(m, db.getNewTrainingSessionId(1), 1);
         }
     }
+
+
 }

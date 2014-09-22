@@ -142,23 +142,40 @@ namespace Mallaca
 
         public bool SaveMeasurement(Measurement m, int sessionId, int userId) 
         {
-            int measurement_id = this.getLastInsertId();
-            string createSesionQuery = String.Format("INSERT INTO {0}.measurement(session_id, RPM, speed, distance, power, energy, pulse, user_id, datetime) VALUES('{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}')",
-                _database, sessionId, m.RPM, m.SPEED, m.DISTANCE, m.POWER, m.PULSE, userId, m.DATE.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+            string measurementQuery = String.Format("INSERT INTO {0}.measurement(session_id, RPM, speed, distance, power, energy, pulse, user_id, datetime, time) VALUES('{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}', '{9}', '{10}')",
+                _database, sessionId, m.RPM, m.SPEED, m.DISTANCE, m.POWER, m.ENERGY,  m.PULSE, userId, m.DATE.ToString("yyyy-MM-dd HH:mm:ss.fff"),  ":00" + m.TIME);
+            openConnection();
+            _selectCommand = new MySqlCommand(measurementQuery, _connection);
 
+            try
+            {
+                _reader = _selectCommand.ExecuteReader();
+                _reader.Close();
+                return true;
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Exception: DBConnect.saveClient(): " + ex.Message);
+                throw;
+            }
+            finally
+            {
+                _connection.Close();
+            }
             return false;
         }
 
-        public int CreateTrainingSession(int userId)
+        public int getNewTrainingSessionId(int userId)
         {
-            string countQuery = String.Format("SELECT users_id, COUNT(*) FROM {0}.measurement WHERE users_id = {0}", _database, userId);
+            string countQuery = String.Format("SELECT COUNT(DISTINCT session_id) FROM {0}.measurement WHERE user_id = {1}", _database, userId);
             openConnection();
             _selectCommand = new MySqlCommand(countQuery, _connection);
 
             try
             {
                 _reader = _selectCommand.ExecuteReader();
-                int retval = _reader.GetInt32(1);
+                _reader.Read();
+                int retval = _reader.GetInt32(0);
                 _reader.Close();
                 return retval;
             }

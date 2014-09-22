@@ -30,7 +30,9 @@ namespace RH_APP.Classes
             try
             {
                 serial.WriteLine("ST");
-                return base.ProtocolToMeasurement(serial.ReadLine());
+                Measurement m = base.ProtocolToMeasurement(serial.ReadLine());
+                m.DATE = DateTime.Now;
+                return m;
             }
             catch (TimeoutException)
             {
