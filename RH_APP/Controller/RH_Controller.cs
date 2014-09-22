@@ -6,20 +6,20 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Mallaca;
 namespace RH_APP.Controller
 {
     class RH_Controller
     {
         private Classes.IBike bike = null;
         private BackgroundWorker bw = new BackgroundWorker();
-        private List<Classes.Measurement> data = new List<Classes.Measurement>();
+        private List<Measurement> data = new List<Measurement>();
 
-        public Classes.Measurement LatestMeasurement
+        public Measurement LatestMeasurement
         {
             get
             {
-                Classes.Measurement m = new Classes.Measurement();
+                Measurement m = new Measurement();
                 try
                 {
                     return data.Last();
@@ -85,7 +85,7 @@ namespace RH_APP.Controller
         private void BackgroundWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             System.Threading.Thread.Sleep(200);
-            Classes.Measurement m = bike.RecieveData();
+            Measurement m = bike.RecieveData();
             e.Result = m;
         }
 
@@ -93,9 +93,9 @@ namespace RH_APP.Controller
         {
             // Access the result through the Result property. 
             // But first be sure that e.Result is a Measurement instance.
-            if (e.Result is Classes.Measurement)
+            if (e.Result is Measurement)
             {
-                Classes.Measurement m = (Classes.Measurement)e.Result;
+                Measurement m = (Measurement)e.Result;
                 this.data.Add(m);
                 OnUpdatedList(EventArgs.Empty);
             }

@@ -1,4 +1,5 @@
-﻿namespace RH_APP
+﻿using Mallaca;
+namespace RH_APP
 {
     partial class RH_BIKE_GUI
     {
@@ -253,7 +254,7 @@
             // 
             // measurementBindingSource
             // 
-            this.measurementBindingSource.DataSource = typeof(RH_APP.Classes.Measurement);
+            this.measurementBindingSource.DataSource = typeof(Measurement);
             // 
             // RH_BIKE_GUI
             // 

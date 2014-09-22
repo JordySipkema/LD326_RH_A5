@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using Mallaca;
 namespace Application_Specialist.GUI
     //Test
 {
@@ -49,13 +49,25 @@ namespace Application_Specialist.GUI
             {
                 gender = "f";
             }
-            
+
+            bool failure;
 
             if (clientRadioButton.Checked)
-                _connection.saveClient(_nameBox.Text, _surnameBox.Text, Usernamebox.Text, passwordBox.Text,  gender, dateOfBirthPicker.Value, Decimal.Parse(_lengthBox.Text), Decimal.Parse(_weightBox.Text));
+                failure = _connection.SaveClient(_nameBox.Text, _surnameBox.Text, Usernamebox.Text, passwordBox.Text,  gender, dateOfBirthPicker.Value, Decimal.Parse(_lengthBox.Text), Decimal.Parse(_weightBox.Text));
             else
-                _connection.saveSpecialist(_nameBox.Text, _surnameBox.Text, gender, Usernamebox.Text, passwordBox.Text, dateOfBirthPicker.Value);
-            this.Close();
+                failure = _connection.saveSpecialist(_nameBox.Text, _surnameBox.Text, gender, Usernamebox.Text, passwordBox.Text, dateOfBirthPicker.Value);
+
+
+            if (!failure)
+            {
+                MessageBox.Show("Success: the user has been added.");
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Could not add the user.");
+            }
+
         }
 
         private void _genderBox_SelectedIndexChanged(object sender, EventArgs e)

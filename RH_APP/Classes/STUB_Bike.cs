@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Mallaca;
 namespace RH_APP.Classes
 {
     class STUB_Bike : IBike

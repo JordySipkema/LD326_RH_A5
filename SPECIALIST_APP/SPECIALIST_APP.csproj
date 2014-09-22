@@ -33,9 +33,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="MySql.Data, Version=6.9.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data.6.9.3.0.Fakes">
+      <HintPath>FakesAssemblies\MySql.Data.6.9.3.0.Fakes.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -50,18 +54,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationSpecialist.cs" />
-    <Compile Include="DBConnect.cs" />
     <Compile Include="GUI\CreateScreen.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI\CreateScreen.Designer.cs">
       <DependentUpon>CreateScreen.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\ExitScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\ExitScreen.Designer.cs">
-      <DependentUpon>ExitScreen.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\MainScreen.cs">
       <SubType>Form</SubType>
@@ -79,9 +76,6 @@
     <EmbeddedResource Include="GUI\CreateScreen.resx">
       <DependentUpon>CreateScreen.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\ExitScreen.resx">
-      <DependentUpon>ExitScreen.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainScreen.resx">
       <DependentUpon>MainScreen.cs</DependentUpon>
     </EmbeddedResource>
@@ -98,6 +92,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Fakes Include="Fakes\MySql.Data.fakes" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -110,6 +105,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mallaca\Mallaca.csproj">
+      <Project>{da5167db-3a0d-4294-bad5-4e09775a8ff9}</Project>
+      <Name>Mallaca</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
