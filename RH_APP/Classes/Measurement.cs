@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -151,7 +152,7 @@ namespace RH_APP.Classes
 
                 if (values.Length == 9)
                 {
-                    this.DATE = DateTime.Parse(values[8]);
+                    this.DATE = DateTime.ParseExact(values[8], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                 }
 
             }

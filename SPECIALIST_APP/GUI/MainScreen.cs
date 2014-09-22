@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SQL_Tutorial.GUI
+namespace Application_Specialist.GUI
 {
     public partial class MainScreen : Form
     {
@@ -22,16 +22,17 @@ namespace SQL_Tutorial.GUI
             MessageBox.Show("This application is made by Group 23TI2A5! \n Farid Amali \n Jordy Sipkema \n Engin Can \n George de Coo \n Kevin van den Akkerveken \n Gerjan Holsappel ");
         }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ExitScreen _exitScreen = new ExitScreen();
-            _exitScreen.ShowDialog();
-        }
-
         private void MainScreen_FormClosing(object sender, FormClosingEventArgs e)
         {
-            ExitScreen _exitScreen = new ExitScreen();
-            _exitScreen.ShowDialog();
+            DialogResult dialog = dialog = MessageBox.Show("Do you really want to close the program?", "Alert", MessageBoxButtons.YesNo);
+            if (dialog == DialogResult.Yes)
+            {
+                Application.ExitThread();
+            }
+            else if (dialog == DialogResult.No)
+            {
+                e.Cancel = true;
+            }
         }
 
         private void userToolStripMenuItem_Click(object sender, EventArgs e)

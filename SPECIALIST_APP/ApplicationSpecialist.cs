@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SQL_Tutorial
+namespace Application_Specialist
 {
     class ApplicationSpecialist
     {
@@ -20,7 +20,7 @@ namespace SQL_Tutorial
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new LoginScreen());
+            Application.Run(new Application_Specialist.GUI.LoginScreen());
         }
     }
 }
