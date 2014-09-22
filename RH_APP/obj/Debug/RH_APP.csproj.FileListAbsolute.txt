@@ -25,3 +25,4 @@ D:\projects\Healthcare\RH_APP\obj\Debug\RH_APP.RH_BIKE_GUI.resources
 D:\projects\Healthcare\RH_APP\obj\Debug\RH_APP.Properties.Resources.resources
 D:\projects\Healthcare\RH_APP\obj\Debug\RH_APP.csproj.GenerateResource.Cache
 D:\projects\Healthcare\RH_APP\obj\Debug\RH_APP.GUI.chooseYourBikeUI.resources
+C:\Users\Jordy\documents\visual studio 2013\Projects\RH_APP\RH_APP\obj\Debug\RH_APP.GUI.chooseYourBikeUI.resources
