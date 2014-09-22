@@ -84,7 +84,7 @@ namespace RH_APP.Controller
 
         private void BackgroundWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            System.Threading.Thread.Sleep(200);
+            System.Threading.Thread.Sleep(800);
             Measurement m = bike.RecieveData();
             e.Result = m;
         }
