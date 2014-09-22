@@ -47,7 +47,7 @@
     <Compile Include="Classes\COM_Bike.cs" />
     <Compile Include="Classes\IBike.cs" />
     <Compile Include="Classes\IP_Bike.cs" />
-    <Compile Include="Classes\Measurement.cs" />
+    <Compile Include="Classes\SIM_Bike.cs" />
     <Compile Include="Classes\STUB_Bike.cs" />
     <Compile Include="Classes\TXT_Bike.cs" />
     <Compile Include="Controller\RH_Controller.cs" />
@@ -94,6 +94,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="GUI\App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mallaca\Mallaca.csproj">
+      <Project>{da5167db-3a0d-4294-bad5-4e09775a8ff9}</Project>
+      <Name>Mallaca</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
