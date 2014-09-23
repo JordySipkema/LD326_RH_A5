@@ -50,15 +50,15 @@ namespace Application_Specialist.GUI
                 gender = "f";
             }
 
-            bool failure;
+            bool succes;
 
             if (clientRadioButton.Checked)
-                failure = _connection.SaveClient(_nameBox.Text, _surnameBox.Text, Usernamebox.Text, passwordBox.Text,  gender, dateOfBirthPicker.Value, Decimal.Parse(_lengthBox.Text), Decimal.Parse(_weightBox.Text));
+                succes = _connection.SaveClient(_nameBox.Text, _surnameBox.Text, Usernamebox.Text, passwordBox.Text,  gender, dateOfBirthPicker.Value, Decimal.Parse(_lengthBox.Text), Decimal.Parse(_weightBox.Text));
             else
-                failure = _connection.saveSpecialist(_nameBox.Text, _surnameBox.Text, gender, Usernamebox.Text, passwordBox.Text, dateOfBirthPicker.Value);
+                succes = _connection.saveSpecialist(_nameBox.Text, _surnameBox.Text, gender, Usernamebox.Text, passwordBox.Text, dateOfBirthPicker.Value);
 
 
-            if (!failure)
+            if (succes)
             {
                 MessageBox.Show("Success: the user has been added.");
                 this.Close();
