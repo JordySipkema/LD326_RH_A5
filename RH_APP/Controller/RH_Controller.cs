@@ -1,48 +1,50 @@
-﻿using System;
+﻿
+using Mallaca;
+using RH_APP.Classes;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Mallaca;
+using System.Threading;
+
 namespace RH_APP.Controller
 {
+// ReSharper disable once InconsistentNaming
     class RH_Controller
     {
-        private Classes.IBike bike = null;
-        private BackgroundWorker bw = new BackgroundWorker();
-        private List<Measurement> data = new List<Measurement>();
+        private readonly IBike _bike;
+        private readonly BackgroundWorker _bw = new BackgroundWorker();
+        private readonly List<Measurement> _data = new List<Measurement>();
 
         public Measurement LatestMeasurement
         {
             get
             {
-                Measurement m = new Measurement();
+                var m = new Measurement();
                 try
                 {
-                    return data.Last();
+                    return _data.Last();
                 }
                 catch (InvalidOperationException) { }
                 return m;
             }
         }
 
-        public RH_Controller(Classes.IBike b)
+        public RH_Controller(IBike b)
         {
             //bike = new Classes.COM_Bike("COM3");
             //bike = new Classes.STUB_Bike();
-            bike = b;
+            _bike = b;
             InitializeBackgroundWorker();
-            bw.RunWorkerAsync();
+            _bw.RunWorkerAsync();
 
         }
 
         public void ChangeSpeed(decimal speed)
         {
-            int speed_int = Convert.ToInt32(speed);
-            bike.SendData(String.Format("PW {0}", speed_int));
+            var speedInt = Convert.ToInt32(speed);
+            _bike.SendData(String.Format("PW {0}", speedInt));
         }
 
         public event EventHandler UpdatedList;
@@ -59,11 +61,11 @@ namespace RH_APP.Controller
 
         public void WriteAllDataToFile()
         {
-            bw.CancelAsync();
-            String filepath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            using (StreamWriter writer = new StreamWriter(filepath + "\\RH_DATA.txt", append: false))
+            _bw.CancelAsync();
+            var filepath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            using (var writer = new StreamWriter(filepath + "\\RH_DATA.txt", append: false))
             {
-                foreach (var measurement in data)
+                foreach (var measurement in _data)
                 {
                     writer.WriteLine(measurement.toProtocolString());
                 }
@@ -74,34 +76,32 @@ namespace RH_APP.Controller
 
         private void InitializeBackgroundWorker()
         {
-            bw.WorkerSupportsCancellation = true;
+            _bw.WorkerSupportsCancellation = true;
             // Attach event handlers to the BackgroundWorker object.
-            bw.DoWork +=
-                new System.ComponentModel.DoWorkEventHandler(BackgroundWorker_DoWork);
-            bw.RunWorkerCompleted +=
-                new System.ComponentModel.RunWorkerCompletedEventHandler(BackgroundWorker_RunWorkerCompleted);
+            _bw.DoWork += BackgroundWorker_DoWork;
+            _bw.RunWorkerCompleted +=  BackgroundWorker_RunWorkerCompleted;
         }
 
-        private void BackgroundWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            System.Threading.Thread.Sleep(800);
-            Measurement m = bike.RecieveData();
+            Thread.Sleep(800);
+            var m = _bike.RecieveData();
             e.Result = m;
         }
 
-        private void BackgroundWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // Access the result through the Result property. 
             // But first be sure that e.Result is a Measurement instance.
-            if (e.Result is Measurement)
+            var result = e.Result as Measurement;
+            if (result != null)
             {
-                Measurement m = (Measurement)e.Result;
-                this.data.Add(m);
+                _data.Add(result);
                 OnUpdatedList(EventArgs.Empty);
             }
             if (!((BackgroundWorker)sender).CancellationPending)
             {
-                bw.RunWorkerAsync();
+                _bw.RunWorkerAsync();
             }
         }
 

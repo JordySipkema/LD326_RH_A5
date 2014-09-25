@@ -94,20 +94,14 @@ namespace RH_Server.Server
 
             //Code to check user/pass here
 
-            var numbers = new List<int>();
-            numbers.AddRange(new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
 
             var authtoken = String.Format("{0}zZz{1}", username, password);
-            var returnJson = new JObject(
+            var returnJson = 
+                new JObject(
                     new JProperty("STATUS", 200),
                     new JProperty("DESC", "OK!"),
-                    new JProperty("AUTHTOKEN", authtoken),
-                    new JProperty("NUMMERS", new JArray(
-                            from n in numbers
-                            select new JValue(n)
-                        )
-                        )
-            );
+                    new JProperty("AUTHTOKEN", authtoken)
+                );
 
             Console.WriteLine(returnJson.ToString());
         }
