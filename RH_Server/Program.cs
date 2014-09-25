@@ -17,7 +17,7 @@ namespace RH_Server
         static void TestCode()
         {
             var c = new ClientHandler();
-            c.HandleLoginPacket(new JObject());
+            //c.HandleLoginPacket(new JObject());
             Console.ReadKey();
         }
 
