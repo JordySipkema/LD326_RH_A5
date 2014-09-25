@@ -8,3 +8,12 @@ C:\Users\Jordy\documents\visual studio 2013\Projects\RH_APP\RH_Server\obj\Debug\
 C:\Users\Jordy\documents\visual studio 2013\Projects\RH_APP\RH_Server\bin\Debug\Mallaca.dll
 C:\Users\Jordy\documents\visual studio 2013\Projects\RH_APP\RH_Server\bin\Debug\MySql.Data.dll
 C:\Users\Jordy\documents\visual studio 2013\Projects\RH_APP\RH_Server\bin\Debug\Mallaca.pdb
+C:\Users\Engin\Documents\Sourcetre\RH_Server\bin\Debug\RH_Server.exe.config
+C:\Users\Engin\Documents\Sourcetre\RH_Server\bin\Debug\RH_Server.exe
+C:\Users\Engin\Documents\Sourcetre\RH_Server\bin\Debug\RH_Server.pdb
+C:\Users\Engin\Documents\Sourcetre\RH_Server\bin\Debug\Mallaca.dll
+C:\Users\Engin\Documents\Sourcetre\RH_Server\bin\Debug\MySql.Data.dll
+C:\Users\Engin\Documents\Sourcetre\RH_Server\bin\Debug\Mallaca.pdb
+C:\Users\Engin\Documents\Sourcetre\RH_Server\obj\Debug\RH_Server.csprojResolveAssemblyReference.cache
+C:\Users\Engin\Documents\Sourcetre\RH_Server\obj\Debug\RH_Server.exe
+C:\Users\Engin\Documents\Sourcetre\RH_Server\obj\Debug\RH_Server.pdb

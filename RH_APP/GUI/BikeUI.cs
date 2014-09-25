@@ -36,6 +36,7 @@ namespace RH_APP
             writeToFile = false;
             InitializeComponent();
             Classes.Client.StartClient();
+            Console.WriteLine("Client started...");
 
 
         }
@@ -52,7 +53,9 @@ namespace RH_APP
 
         private void RH_BIKE_GUI_FormClosing(object sender, FormClosingEventArgs e)
         {
+            controller.FormClosing();
             Classes.Client.StopClient();
+            Console.WriteLine("Client disconnected...");
             Application.Exit();
         }
 
@@ -65,7 +68,6 @@ namespace RH_APP
         {
             this.dataRPM.Text = controller.LatestMeasurement.RPM + "";
             this.dataSPEED.Text = String.Format("{0:0.0}", controller.LatestMeasurement.SPEED / 10.0);
-
             this.dataDISTANCE.Text = String.Format("{0:0.00}", controller.LatestMeasurement.DISTANCE / 10.0);
             this.dataPOWER.Text = controller.LatestMeasurement.POWER + "";
             this.dataPOWERPCT.Text = controller.LatestMeasurement.POWERPCT + "%";
@@ -96,6 +98,11 @@ namespace RH_APP
         }
 
         private void RH_BIKE_GUI_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void RH_BIKE_GUI_Load_1(object sender, EventArgs e)
         {
 
         }
