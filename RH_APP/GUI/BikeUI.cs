@@ -15,14 +15,13 @@ namespace RH_APP
     public partial class RH_BIKE_GUI : Form
     {
         Controller.RH_Controller controller = null;
-
         bool writeToFile;
         StreamWriter writer;
 
 
         public RH_BIKE_GUI(IBike b, string path)
         {
-            
+
             controller = new Controller.RH_Controller(b);
             controller.UpdatedList += updateGUI;
             writeToFile = true;
@@ -36,10 +35,12 @@ namespace RH_APP
             controller.UpdatedList += updateGUI;
             writeToFile = false;
             InitializeComponent();
+            Classes.Client.StartClient();
+
 
         }
 
-        public void writeRealTime(string file) 
+        public void writeRealTime(string file)
         {
             if (File.Exists(file))
                 writer = File.CreateText(file);
@@ -51,6 +52,7 @@ namespace RH_APP
 
         private void RH_BIKE_GUI_FormClosing(object sender, FormClosingEventArgs e)
         {
+            Classes.Client.StopClient();
             Application.Exit();
         }
 
@@ -64,14 +66,15 @@ namespace RH_APP
             this.dataRPM.Text = controller.LatestMeasurement.RPM + "";
             this.dataSPEED.Text = String.Format("{0:0.0}", controller.LatestMeasurement.SPEED / 10.0);
 
-            this.dataDISTANCE.Text = String.Format("{0:0.00}",controller.LatestMeasurement.DISTANCE / 10.0);
+            this.dataDISTANCE.Text = String.Format("{0:0.00}", controller.LatestMeasurement.DISTANCE / 10.0);
             this.dataPOWER.Text = controller.LatestMeasurement.POWER + "";
             this.dataPOWERPCT.Text = controller.LatestMeasurement.POWERPCT + "%";
             this.dataENERGY.Text = controller.LatestMeasurement.ENERGY + "";
             this.dataTIME.Text = controller.LatestMeasurement.TIME;
             this.dataPULSE.Text = controller.LatestMeasurement.PULSE + "";
 
-            if (writeToFile) {
+            if (writeToFile)
+            {
                 string protoLine = controller.LatestMeasurement.toProtocolString();
                 writer.WriteLine(protoLine);
 
@@ -84,11 +87,17 @@ namespace RH_APP
             controller.ChangeSpeed(numericUpDown1.Value);
         }
 
-        ~RH_BIKE_GUI() {
+        ~RH_BIKE_GUI()
+        {
             controller.UpdatedList -= updateGUI;
             if (writer != null)
                 writer.Flush();
-                writer.Dispose();
+            writer.Dispose();
+        }
+
+        private void RH_BIKE_GUI_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

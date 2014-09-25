@@ -3,11 +3,13 @@ using Mallaca;
 using RH_APP.Classes;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Threading;
-
+using System.Text;
+using System.Threading.Tasks;
+using Mallaca;
 namespace RH_APP.Controller
 {
 // ReSharper disable once InconsistentNaming
@@ -71,6 +73,14 @@ namespace RH_APP.Controller
                 }
                 writer.Flush();
             }
+
+        }
+
+        private void SendToServer(object sender, EventArgs args)
+        {
+            string json = JsonConvert.SerializeObject(this.LatestMeasurement);
+            Classes.Client.Send(json);
+            Console.Write(json);
 
         }
 
