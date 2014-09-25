@@ -13,13 +13,13 @@ namespace RH_Server
     {
         static void Main(string[] args)
         {
-            TestCode();
-            //RunServer();
+            //TestCode();
+            RunServer();
         }
 
         static void TestCode()
         {
-            var c = new Client();
+            var c = new ClientHandler();
             c.HandleLoginPacket(new JObject());
             Console.ReadKey();
         }
@@ -33,7 +33,7 @@ namespace RH_Server
             while (true)
             {
                 var newSocket = serverListener.AcceptSocket();
-                var client = new Client() { Socket = newSocket };
+                var client = new ClientHandler() { Socket = newSocket };
                 newSocket.BeginReceive(client.Buffer, 0, client.BufferSize, 0, client.OnRead, null); //This is an async call!
             }
         }

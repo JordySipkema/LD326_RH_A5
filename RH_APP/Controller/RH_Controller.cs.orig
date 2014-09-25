@@ -1,14 +1,20 @@
 ﻿
 using Mallaca;
-using Newtonsoft.Json;
 using RH_APP.Classes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+<<<<<<< HEAD
 using System.Threading;
 
+=======
+using System.Text;
+using System.Threading.Tasks;
+using Mallaca;
+using Newtonsoft.Json;
+>>>>>>> 5a88f8e02eb46546853b472ca08b0256732e3f7a
 namespace RH_APP.Controller
 {
 // ReSharper disable once InconsistentNaming
@@ -77,8 +83,8 @@ namespace RH_APP.Controller
 
         private void SendToServer(object sender, EventArgs args)
         {
-            var json = JsonConvert.SerializeObject(LatestMeasurement);
-            Client.Send(json);
+            string json = JsonConvert.SerializeObject(this.LatestMeasurement);
+            Classes.Client.Send(json);
             Console.Write(json);
 
         }
