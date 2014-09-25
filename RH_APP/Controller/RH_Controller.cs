@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Mallaca;
+using Newtonsoft.Json;
 namespace RH_APP.Controller
 {
     class RH_Controller
@@ -69,6 +70,14 @@ namespace RH_APP.Controller
                 }
                 writer.Flush();
             }
+
+        }
+
+        private void SendToServer(object sender, EventArgs args)
+        {
+            string json = JsonConvert.SerializeObject(this.LatestMeasurement);
+            Classes.Client.Send(json);
+            Console.Write(json);
 
         }
 
