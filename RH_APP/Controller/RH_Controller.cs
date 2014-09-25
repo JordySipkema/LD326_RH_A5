@@ -1,6 +1,7 @@
 ﻿
 using Mallaca;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RH_APP.Classes;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,7 @@ namespace RH_APP.Controller
             //bike = new Classes.COM_Bike("COM3");
             //bike = new Classes.STUB_Bike();
             _bike = b;
+            UpdatedList += SendToServer;
             InitializeBackgroundWorker();
             _bw.RunWorkerAsync();
 
@@ -77,10 +79,28 @@ namespace RH_APP.Controller
 
         private void SendToServer(object sender, EventArgs args)
         {
-            var json = JsonConvert.SerializeObject(LatestMeasurement);
-            Client.Send(json);
-            Console.Write(json);
+            var jsonObject = new JObject(
+                    new JProperty("CMD", "push"),
+                    new JProperty("count", 1),
+                    new JProperty("measurements", 
+                            new JArray(
+                                JObject.FromObject(LatestMeasurement)
+                            )
+                        )
+                );
 
+            var json = jsonObject.ToString();
+            //Johan's code line
+            json = json.Length.ToString().PadRight(4, ' ') + json;
+            Client.Send(json);
+        }
+
+        public void FormClosing()
+        {
+            var jsonObject = new JObject(new JProperty("CMD", "dc"));
+            var json = jsonObject.ToString();
+            json = json.Length.ToString().PadRight(4, ' ') + json;
+            Client.Send(json);
         }
 
         private void InitializeBackgroundWorker()

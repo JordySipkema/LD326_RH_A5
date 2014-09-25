@@ -4,3 +4,9 @@ C:\Users\Jordy\documents\visual studio 2013\Projects\RH_APP\Mallaca\bin\Debug\My
 C:\Users\Jordy\documents\visual studio 2013\Projects\RH_APP\Mallaca\obj\Debug\Mallaca.dll
 C:\Users\Jordy\documents\visual studio 2013\Projects\RH_APP\Mallaca\obj\Debug\Mallaca.pdb
 C:\Users\Jordy\documents\visual studio 2013\Projects\RH_APP\Mallaca\obj\Debug\Mallaca.csprojResolveAssemblyReference.cache
+C:\Users\Engin\Documents\Sourcetre\Mallaca\bin\Debug\Mallaca.dll
+C:\Users\Engin\Documents\Sourcetre\Mallaca\bin\Debug\Mallaca.pdb
+C:\Users\Engin\Documents\Sourcetre\Mallaca\bin\Debug\MySql.Data.dll
+C:\Users\Engin\Documents\Sourcetre\Mallaca\obj\Debug\Mallaca.csprojResolveAssemblyReference.cache
+C:\Users\Engin\Documents\Sourcetre\Mallaca\obj\Debug\Mallaca.dll
+C:\Users\Engin\Documents\Sourcetre\Mallaca\obj\Debug\Mallaca.pdb
