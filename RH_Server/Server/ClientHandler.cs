@@ -4,14 +4,20 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Mallaca;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 
 namespace RH_Server.Server
 {
     class ClientHandler
     {
+        private Thread _thread;
+
         public readonly byte[] Buffer = new byte[1024];
         public int BufferSize = 1024;
         public Socket Socket;
@@ -20,57 +26,66 @@ namespace RH_Server.Server
 
         //private string username;
         //private Boolean isLoggedIn;
-        int totalReceived = 0;
 
-        public void OnRead(IAsyncResult ar)
+        public ClientHandler()
         {
-            try
+            _thread = new Thread(ThreadLoop);
+            _thread.Start();
+        }
+
+        private void ThreadLoop()
+        {
+            while (true)
             {
-                
-                int receiveCount = Socket.EndReceive(ar);
-                totalReceived += receiveCount;
-                _totalBuffer += ASCIIEncoding.Default.GetString(Buffer, 0, receiveCount);
-                
-                
-                if (_totalBuffer.Length >= 4)
+                try
                 {
-                    int packetSize = int.Parse(_totalBuffer.Substring(0, 4));
-                    if (_totalBuffer.Length >= packetSize + 4)
+                    var receiveCount = Socket.Receive(Buffer);
+                    _totalBuffer += ASCIIEncoding.Default.GetString(Buffer, 0, receiveCount);
+
+                    if (_totalBuffer.Length < 4) continue; 
+                    //Continue means: if _totalBuffer.Lenght < 4, DO NOT PROCEED
+
+                    var packetSize = int.Parse(_totalBuffer.Substring(0, 4));
+
+                    if (_totalBuffer.Length < packetSize + 4) continue; 
+                    //Continue means: if statement == true, DO NOT PROCEED
+
+                    var jsonData = _totalBuffer.Substring(4, packetSize);
+                    Console.WriteLine(jsonData);
+
+                    var json = JObject.Parse(jsonData);
+
+                    var packetType = (string)json["CMD"];
+
+                    switch (packetType)
                     {
-                        Console.WriteLine(_totalBuffer);
-                        string jsonData = _totalBuffer.Substring(4, packetSize);
-                        var json = JObject.Parse(jsonData);
-
-                        var packetType = (string)json["CMD"];
-
-                        switch (packetType)
-                        {
-                            case "ping":
-                                HandlePingPacket(json);
-                                break;
-                            case "dc":
-                                HandleDisconnectPacket(json);
-                                break;
-                            default:
-                                Console.WriteLine("Unknown packet");
-                                break;
-                        }
-
-
-
-
-                        _totalBuffer = _totalBuffer.Substring(packetSize + 4);
+                        case "ping":
+                            HandlePingPacket(json);
+                            break;
+                        case "dc":
+                            //HandleDisconnectPacket(json);
+                            Console.WriteLine("DC PACKET RECIEVED");
+                            break;
+                        case "push":
+                            Console.WriteLine("This is a push packet!");
+                            break;
+                        default:
+                            Console.WriteLine("Unknown packet");
+                            break;
                     }
+
+
+
+
+                    _totalBuffer = _totalBuffer.Substring(packetSize + 4);
+                    //_totalBuffer = String.Empty;
                 }
-
-
-                Socket.BeginReceive(Buffer, 0, 1024, 0, OnRead, null);
+                catch (SocketException e)
+                {
+                    Console.WriteLine("Client has been disconnected.");
+                    Console.WriteLine(e.Message);
+                }
             }
-            catch (SocketException)
-            {
-                Console.WriteLine("Client has been disconnected.");
-            }
-
         }
 
         private void SendPacket(String packet)
@@ -95,15 +110,15 @@ namespace RH_Server.Server
             const string password = "pass2";
 
             //Code to check user/pass here
-            
+
             var authtoken = String.Format("{0}zZz{1}", username, password);
-            var returnJson = 
+            var returnJson =
                 new JObject(
                     new JProperty("STATUS", Statuscode.GetCode(Statuscode.Status.Ok)),
-                    new JProperty("DESC",Statuscode.GetDescription(Statuscode.Status.Ok)),
+                    new JProperty("DESC", Statuscode.GetDescription(Statuscode.Status.Ok)),
                     new JProperty("AUTHTOKEN", authtoken)
                 );
-
+            
             Console.WriteLine(returnJson.ToString());
         }
 
@@ -113,11 +128,6 @@ namespace RH_Server.Server
 
             //TODO: Code for saving data to DB/FileIO
             //code to release the authtoken
-
-            var returnJson =
-                new JObject(
-                       
-                    );
         }
     }
 }

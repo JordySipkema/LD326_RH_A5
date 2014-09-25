@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Newtonsoft.Json.Linq;
+using RH_Server.Server;
+using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using Newtonsoft.Json.Linq;
-using RH_Server.Server;
 
 namespace RH_Server
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             //TestCode();
             RunServer();
@@ -33,8 +30,8 @@ namespace RH_Server
             while (true)
             {
                 var newSocket = serverListener.AcceptSocket();
-                var client = new ClientHandler() { Socket = newSocket };
-                newSocket.BeginReceive(client.Buffer, 0, client.BufferSize, 0, client.OnRead, null); //This is an async call!
+                Console.WriteLine("Socket accepted");
+                var client = new ClientHandler() {Socket = newSocket};
             }
         }
     }
