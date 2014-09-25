@@ -1,110 +1,81 @@
-﻿using RH_APP.Classes;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System;
 using System.IO;
+using System.Windows.Forms;
+using RH_APP.Classes;
+using RH_APP.Controller;
 
-namespace RH_APP
+namespace RH_APP.GUI
 {
     public partial class RH_BIKE_GUI : Form
     {
-        Controller.RH_Controller controller = null;
-        bool writeToFile;
-        StreamWriter writer;
+        private readonly RH_Controller _controller;
+        private bool _writeToFile;
+        private StreamWriter _writer;
 
 
         public RH_BIKE_GUI(IBike b, string path)
         {
 
-            controller = new Controller.RH_Controller(b);
-            controller.UpdatedList += updateGUI;
-            writeToFile = true;
+            _controller = new RH_Controller(b);
+            _controller.UpdatedList += updateGUI;
+            _writeToFile = true;
             InitializeComponent();
             writeRealTime(path);
         }
 
         public RH_BIKE_GUI(IBike b)
         {
-            controller = new Controller.RH_Controller(b);
-            controller.UpdatedList += updateGUI;
-            writeToFile = false;
+            _controller = new RH_Controller(b);
+            _controller.UpdatedList += updateGUI;
+            _writeToFile = false;
             InitializeComponent();
-            Classes.Client.StartClient();
-            Console.WriteLine("Client started...");
-
-
         }
 
         public void writeRealTime(string file)
         {
             if (File.Exists(file))
-                writer = File.CreateText(file);
+                _writer = File.CreateText(file);
             else
-                writer = File.AppendText(file);
-            writer.AutoFlush = true;
-            writeToFile = true;
+                _writer = File.AppendText(file);
+            _writer.AutoFlush = true;
+            _writeToFile = true;
         }
 
         private void RH_BIKE_GUI_FormClosing(object sender, FormClosingEventArgs e)
         {
-            controller.FormClosing();
-            Classes.Client.StopClient();
-            Console.WriteLine("Client disconnected...");
+            _controller.FormClosing();
             Application.Exit();
-        }
-
-        private void measurementBindingSource_CurrentChanged(object sender, EventArgs e)
-        {
-
         }
 
         public void updateGUI(object sender, EventArgs args)
         {
-            this.dataRPM.Text = controller.LatestMeasurement.RPM + "";
-            this.dataSPEED.Text = String.Format("{0:0.0}", controller.LatestMeasurement.SPEED / 10.0);
-            this.dataDISTANCE.Text = String.Format("{0:0.00}", controller.LatestMeasurement.DISTANCE / 10.0);
-            this.dataPOWER.Text = controller.LatestMeasurement.POWER + "";
-            this.dataPOWERPCT.Text = controller.LatestMeasurement.POWERPCT + "%";
-            this.dataENERGY.Text = controller.LatestMeasurement.ENERGY + "";
-            this.dataTIME.Text = controller.LatestMeasurement.TIME;
-            this.dataPULSE.Text = controller.LatestMeasurement.PULSE + "";
+            dataRPM.Text = _controller.LatestMeasurement.RPM + "";
+            dataSPEED.Text = String.Format("{0:0.0}", _controller.LatestMeasurement.SPEED / 10.0);
+            dataDISTANCE.Text = String.Format("{0:0.00}", _controller.LatestMeasurement.DISTANCE / 10.0);
+            dataPOWER.Text = _controller.LatestMeasurement.POWER + "";
+            dataPOWERPCT.Text = _controller.LatestMeasurement.POWERPCT + "%";
+            dataENERGY.Text = _controller.LatestMeasurement.ENERGY + "";
+            dataTIME.Text = _controller.LatestMeasurement.TIME;
+            dataPULSE.Text = _controller.LatestMeasurement.PULSE + "";
 
-            if (writeToFile)
-            {
-                string protoLine = controller.LatestMeasurement.toProtocolString();
-                writer.WriteLine(protoLine);
-
-            }
-
+            if (!_writeToFile) return;
+            var protoLine = _controller.LatestMeasurement.toProtocolString();
+            _writer.WriteLine(protoLine);
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            controller.ChangeSpeed(numericUpDown1.Value);
+            _controller.ChangeSpeed(numericUpDown1.Value);
         }
 
         ~RH_BIKE_GUI()
         {
-            controller.UpdatedList -= updateGUI;
-            if (writer != null)
-                writer.Flush();
-            writer.Dispose();
-        }
-
-        private void RH_BIKE_GUI_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void RH_BIKE_GUI_Load_1(object sender, EventArgs e)
-        {
-
+            _controller.UpdatedList -= updateGUI;
+            if (_writer != null)
+            {
+                _writer.Flush();
+                _writer.Dispose();
+            }
         }
     }
 }

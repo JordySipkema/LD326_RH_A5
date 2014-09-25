@@ -1,6 +1,5 @@
 ﻿
 using Mallaca;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RH_APP.Classes;
 using System;
@@ -35,6 +34,8 @@ namespace RH_APP.Controller
 
         public RH_Controller(IBike b)
         {
+            TCPController.StartConnection();
+            Console.WriteLine("Client started...");
             //bike = new Classes.COM_Bike("COM3");
             //bike = new Classes.STUB_Bike();
             _bike = b;
@@ -54,7 +55,7 @@ namespace RH_APP.Controller
 
         private void OnUpdatedList(EventArgs e)
         {
-            EventHandler handler = UpdatedList;
+            var handler = UpdatedList;
             if (handler != null)
             {
                 handler(this, e);
@@ -89,18 +90,28 @@ namespace RH_APP.Controller
                         )
                 );
 
-            var json = jsonObject.ToString();
-            //Johan's code line
-            json = json.Length.ToString().PadRight(4, ' ') + json;
-            Client.Send(json);
+            SendData(jsonObject);
         }
 
         public void FormClosing()
         {
+            _bw.CancelAsync();
+
             var jsonObject = new JObject(new JProperty("CMD", "dc"));
+            SendData(jsonObject);
+
+            while (TCPController.Busy)
+            {
+                //WAIT
+            }
+            TCPController.StopConnection();
+        }
+
+        private void SendData(JObject jsonObject)
+        {
             var json = jsonObject.ToString();
             json = json.Length.ToString().PadRight(4, ' ') + json;
-            Client.Send(json);
+            TCPController.Send(json);   
         }
 
         private void InitializeBackgroundWorker()
