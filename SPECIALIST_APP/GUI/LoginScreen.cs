@@ -24,7 +24,9 @@ namespace Application_Specialist.GUI
         private void _loginButton_Click(object sender, EventArgs e)
         {
             DBConnect _connection = new DBConnect();
-            if (_connection.userValidation(_usernameBox.Text, _passwordBox.Text))
+            //if (_connection.ValidateUser(_usernameBox.Text, _passwordBox.Text))
+            //TODO: send username and hashed password to server for authentication.
+            if(true)
             {
                 this.Hide();
                 MainScreen _mainScreen = new MainScreen();
