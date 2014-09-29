@@ -8,9 +8,9 @@ namespace Mallaca
 {
     class Client : User
     {
-        public int Lenght { get; set; }
-        public int Weight { get; set; }
-        public double BMI { get { return Weight / (Lenght * Lenght);} }
+        public decimal Lenght { get; set; }
+        public decimal Weight { get; set; }
+        public decimal BMI { get { return Weight / (Lenght * Lenght);} }
         public Client()
         { 
         
