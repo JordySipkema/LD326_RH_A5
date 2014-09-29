@@ -61,40 +61,29 @@ namespace Mallaca
          }
 
         public bool userValidation(String _username, String _password) {
+            _selectCommand = new MySqlCommand("SELECT * FROM " + _database + ".users WHERE user_type > 0 AND username=\"" + _username + "\" AND password=\"" + _password + "\";", _connection);
+                
+            _reader = _selectCommand.ExecuteReader();
 
-            try
+            int _counter = 0;
+
+            while (_reader.Read())
             {
-                
-                _selectCommand = new MySqlCommand("SELECT * FROM " + _database + ".users WHERE user_type > 0 AND username=\"" + _username + "\" AND password=\"" + _password + "\";", _connection);
-                
-                _reader = _selectCommand.ExecuteReader();
-
-                int _counter = 0;
-
-                while (_reader.Read())
-                {
-                    _counter += 1;
-                }
-                if (_counter == 1)
-                {
-                    _isValid = true;
-
-                }
-                else if (_counter > 1)
-                {
-                    _isValid = false;
-                }
-                else
-                {
-                    _connection.Close();
-                    _isValid = false;
-                }
-                
+                _counter += 1;
             }
-            catch (MySqlException ex)
+            if (_counter == 1)
             {
-                throw;
-                //MessageBox.Show(ex.Message);
+                _isValid = true;
+
+            }
+            else if (_counter > 1)
+            {
+                _isValid = false;
+            }
+            else
+            {
+                _connection.Close();
+                _isValid = false;
             }
             return _isValid;
         }
@@ -142,7 +131,7 @@ namespace Mallaca
 
         public bool SaveMeasurement(Measurement m, int sessionId, int userId) 
         {
-            string measurementQuery = String.Format("INSERT INTO {0}.measurement(session_id, RPM, speed, distance, power, energy, pulse, user_id, datetime, time) VALUES('{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}', '{9}', '{10}')",
+            var measurementQuery = String.Format("INSERT INTO {0}.measurement(session_id, RPM, speed, distance, power, energy, pulse, user_id, datetime, time) VALUES('{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}', '{9}', '{10}')",
                 _database, sessionId, m.RPM, m.SPEED, m.DISTANCE, m.POWER, m.ENERGY,  m.PULSE, userId, m.DATE.ToString("yyyy-MM-dd HH:mm:ss.fff"),  ":00" + m.TIME);
             openConnection();
             _selectCommand = new MySqlCommand(measurementQuery, _connection);
@@ -162,7 +151,6 @@ namespace Mallaca
             {
                 _connection.Close();
             }
-            return false;
         }
 
         public List<User> getAllUsers()

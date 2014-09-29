@@ -5,3 +5,9 @@ RH_APP/obj/
 Mallaca/obj/Debug/Mallaca.csproj.FileListAbsolute.txt
 SPECIALIST_APP/Fakes/
 SPECIALIST_APP/FakesAssemblies/
+RH_Server/obj/
+Mallaca/bin/Debug/Mallaca.pdb
+Mallaca/bin/
+Mallaca/obj/
+RH_Server/bin/
+RH_Server/obj/

@@ -1,5 +1,4 @@
-﻿using Mallaca;
-namespace RH_APP
+﻿namespace RH_APP.GUI
 {
     partial class RH_BIKE_GUI
     {
@@ -34,6 +33,7 @@ namespace RH_APP
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.dataRPM = new System.Windows.Forms.Label();
+            this.measurementBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.dataSPEED = new System.Windows.Forms.Label();
             this.dataDISTANCE = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -46,9 +46,8 @@ namespace RH_APP
             this.dataENERGY = new System.Windows.Forms.Label();
             this.dataPULSE = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.measurementBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.measurementBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -85,24 +84,28 @@ namespace RH_APP
             // 
             this.dataRPM.AutoSize = true;
             this.dataRPM.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.measurementBindingSource, "RPM", true));
-            this.dataRPM.Font = new System.Drawing.Font("Digital-7", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dataRPM.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dataRPM.Location = new System.Drawing.Point(75, 58);
             this.dataRPM.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.dataRPM.Name = "dataRPM";
-            this.dataRPM.Size = new System.Drawing.Size(68, 40);
+            this.dataRPM.Size = new System.Drawing.Size(62, 46);
             this.dataRPM.TabIndex = 3;
             this.dataRPM.Text = "---";
             this.dataRPM.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // measurementBindingSource
+            // 
+            this.measurementBindingSource.DataSource = typeof(Mallaca.Measurement);
             // 
             // dataSPEED
             // 
             this.dataSPEED.AutoSize = true;
             this.dataSPEED.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.measurementBindingSource, "SPEED", true));
-            this.dataSPEED.Font = new System.Drawing.Font("Digital-7", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dataSPEED.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dataSPEED.Location = new System.Drawing.Point(259, 58);
             this.dataSPEED.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.dataSPEED.Name = "dataSPEED";
-            this.dataSPEED.Size = new System.Drawing.Size(93, 40);
+            this.dataSPEED.Size = new System.Drawing.Size(88, 46);
             this.dataSPEED.TabIndex = 4;
             this.dataSPEED.Text = "---.-";
             this.dataSPEED.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -111,11 +114,11 @@ namespace RH_APP
             // 
             this.dataDISTANCE.AutoSize = true;
             this.dataDISTANCE.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.measurementBindingSource, "DISTANCE", true));
-            this.dataDISTANCE.Font = new System.Drawing.Font("Digital-7", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dataDISTANCE.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dataDISTANCE.Location = new System.Drawing.Point(419, 58);
             this.dataDISTANCE.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.dataDISTANCE.Name = "dataDISTANCE";
-            this.dataDISTANCE.Size = new System.Drawing.Size(93, 40);
+            this.dataDISTANCE.Size = new System.Drawing.Size(88, 46);
             this.dataDISTANCE.TabIndex = 5;
             this.dataDISTANCE.Text = "--.--";
             this.dataDISTANCE.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -134,11 +137,11 @@ namespace RH_APP
             // 
             this.dataTIME.AutoSize = true;
             this.dataTIME.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.measurementBindingSource, "TIME", true));
-            this.dataTIME.Font = new System.Drawing.Font("Digital-7", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dataTIME.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dataTIME.Location = new System.Drawing.Point(223, 135);
             this.dataTIME.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.dataTIME.Name = "dataTIME";
-            this.dataTIME.Size = new System.Drawing.Size(138, 61);
+            this.dataTIME.Size = new System.Drawing.Size(132, 69);
             this.dataTIME.TabIndex = 7;
             this.dataTIME.Text = "--:--";
             this.dataTIME.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -177,11 +180,11 @@ namespace RH_APP
             // 
             this.dataPOWERPCT.AutoSize = true;
             this.dataPOWERPCT.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.measurementBindingSource, "POWERPCT", true));
-            this.dataPOWERPCT.Font = new System.Drawing.Font("Digital-7", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dataPOWERPCT.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dataPOWERPCT.Location = new System.Drawing.Point(76, 171);
             this.dataPOWERPCT.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.dataPOWERPCT.Name = "dataPOWERPCT";
-            this.dataPOWERPCT.Size = new System.Drawing.Size(44, 31);
+            this.dataPOWERPCT.Size = new System.Drawing.Size(54, 36);
             this.dataPOWERPCT.TabIndex = 11;
             this.dataPOWERPCT.Text = "-%";
             this.dataPOWERPCT.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -190,11 +193,11 @@ namespace RH_APP
             // 
             this.dataPOWER.AutoSize = true;
             this.dataPOWER.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.measurementBindingSource, "POWER", true));
-            this.dataPOWER.Font = new System.Drawing.Font("Digital-7", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dataPOWER.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dataPOWER.Location = new System.Drawing.Point(75, 218);
             this.dataPOWER.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.dataPOWER.Name = "dataPOWER";
-            this.dataPOWER.Size = new System.Drawing.Size(68, 40);
+            this.dataPOWER.Size = new System.Drawing.Size(62, 46);
             this.dataPOWER.TabIndex = 12;
             this.dataPOWER.Text = "---";
             this.dataPOWER.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -203,11 +206,11 @@ namespace RH_APP
             // 
             this.dataENERGY.AutoSize = true;
             this.dataENERGY.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.measurementBindingSource, "ENERGY", true));
-            this.dataENERGY.Font = new System.Drawing.Font("Digital-7", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dataENERGY.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dataENERGY.Location = new System.Drawing.Point(267, 218);
             this.dataENERGY.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.dataENERGY.Name = "dataENERGY";
-            this.dataENERGY.Size = new System.Drawing.Size(85, 40);
+            this.dataENERGY.Size = new System.Drawing.Size(76, 46);
             this.dataENERGY.TabIndex = 13;
             this.dataENERGY.Text = "----";
             this.dataENERGY.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -215,11 +218,11 @@ namespace RH_APP
             // dataPULSE
             // 
             this.dataPULSE.AutoSize = true;
-            this.dataPULSE.Font = new System.Drawing.Font("Digital-7", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dataPULSE.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dataPULSE.Location = new System.Drawing.Point(480, 218);
             this.dataPULSE.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.dataPULSE.Name = "dataPULSE";
-            this.dataPULSE.Size = new System.Drawing.Size(37, 40);
+            this.dataPULSE.Size = new System.Drawing.Size(48, 46);
             this.dataPULSE.TabIndex = 14;
             this.dataPULSE.Text = "P";
             this.dataPULSE.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -232,6 +235,7 @@ namespace RH_APP
             0,
             0});
             this.numericUpDown1.Location = new System.Drawing.Point(52, 302);
+            this.numericUpDown1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             400,
             0,
@@ -251,10 +255,6 @@ namespace RH_APP
             0,
             0});
             this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
-            // 
-            // measurementBindingSource
-            // 
-            this.measurementBindingSource.DataSource = typeof(Measurement);
             // 
             // RH_BIKE_GUI
             // 
@@ -277,12 +277,12 @@ namespace RH_APP
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Margin = new System.Windows.Forms.Padding(4);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "RH_BIKE_GUI";
             this.Text = "Remote Healthcare - Bike Interface";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.RH_BIKE_GUI_FormClosing);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.measurementBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

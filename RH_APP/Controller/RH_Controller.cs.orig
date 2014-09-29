@@ -1,14 +1,20 @@
 ﻿
 using Mallaca;
-using Newtonsoft.Json.Linq;
 using RH_APP.Classes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+<<<<<<< HEAD
 using System.Threading;
 
+=======
+using System.Text;
+using System.Threading.Tasks;
+using Mallaca;
+using Newtonsoft.Json;
+>>>>>>> 5a88f8e02eb46546853b472ca08b0256732e3f7a
 namespace RH_APP.Controller
 {
 // ReSharper disable once InconsistentNaming
@@ -34,12 +40,9 @@ namespace RH_APP.Controller
 
         public RH_Controller(IBike b)
         {
-            TCPController.StartConnection();
-            Console.WriteLine("Client started...");
             //bike = new Classes.COM_Bike("COM3");
             //bike = new Classes.STUB_Bike();
             _bike = b;
-            UpdatedList += SendToServer;
             InitializeBackgroundWorker();
             _bw.RunWorkerAsync();
 
@@ -55,7 +58,7 @@ namespace RH_APP.Controller
 
         private void OnUpdatedList(EventArgs e)
         {
-            var handler = UpdatedList;
+            EventHandler handler = UpdatedList;
             if (handler != null)
             {
                 handler(this, e);
@@ -80,38 +83,10 @@ namespace RH_APP.Controller
 
         private void SendToServer(object sender, EventArgs args)
         {
-            var jsonObject = new JObject(
-                    new JProperty("CMD", "push"),
-                    new JProperty("count", 1),
-                    new JProperty("measurements", 
-                            new JArray(
-                                JObject.FromObject(LatestMeasurement)
-                            )
-                        )
-                );
+            string json = JsonConvert.SerializeObject(this.LatestMeasurement);
+            Classes.Client.Send(json);
+            Console.Write(json);
 
-            SendData(jsonObject);
-        }
-
-        public void FormClosing()
-        {
-            _bw.CancelAsync();
-
-            var jsonObject = new JObject(new JProperty("CMD", "dc"));
-            SendData(jsonObject);
-
-            while (TCPController.Busy)
-            {
-                //WAIT
-            }
-            TCPController.StopConnection();
-        }
-
-        private void SendData(JObject jsonObject)
-        {
-            var json = jsonObject.ToString();
-            json = json.Length.ToString().PadRight(4, ' ') + json;
-            TCPController.Send(json);   
         }
 
         private void InitializeBackgroundWorker()
