@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Linq;
+using Newtonsoft.Json.Linq;
 using RH_Server.Server;
 using System;
 using System.Net;
@@ -25,6 +26,14 @@ namespace RH_Server
         {
             Console.WriteLine("RH_Server initializing");
             var serverListener = new TcpListener(IPAddress.Any, 9001); //Its over 9000!!!
+
+            //Code for getting server IP
+            var serverip = Dns.GetHostEntry(Dns.GetHostName())
+                .AddressList.First(o => o.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                .ToString();
+            //Display server IP:
+            Console.WriteLine("RH_Server IP: {0}", serverip);
+
             Console.WriteLine("RH_Server READY! Now listening.");
             serverListener.Start();
             while (true)
