@@ -184,6 +184,4 @@ namespace Mallaca
             return protocol;
         }
     }
-
-
 }

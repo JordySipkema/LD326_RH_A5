@@ -21,7 +21,7 @@ namespace RH_APP.Controller
             try
             {
                 // Establish the remote endpoint for the socket.
-                var remoteEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9001);//145.48.205.97
+                var remoteEP = new IPEndPoint(IPAddress.Parse("10.0.1.11"), 9001);//145.48.205.97
 
                 // Create a TCP/IP socket.
                 _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
