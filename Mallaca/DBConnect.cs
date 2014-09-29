@@ -165,6 +165,101 @@ namespace Mallaca
             return false;
         }
 
+        public List<User> getAllUsers()
+        {
+            string usersQuery = String.Format("SELECT user_type, {0}.users.id, username, name, dateOfBirth, surname, gender, password, length, weight FROM {0}.users LEFT JOIN {0}.client_bmi_info on {0}.users.id = {0}.client_bmi_info.users_id  ", _database);
+            openConnection();
+            _selectCommand = new MySqlCommand(usersQuery, _connection);
+
+            List<User> users = new List<User>();
+
+            _reader = _selectCommand.ExecuteReader();
+            while (_reader.Read())
+            {
+                User u;
+                if (_reader.GetInt32(0) == 1)
+                {
+                    u = new Specialist
+                    {
+                        Username = _reader.IsDBNull(2) ? null : _reader.GetString(2),
+                        Password = _reader.IsDBNull(7) ? null : _reader.GetString(7),
+                        Surname = _reader.IsDBNull(5) ? null : _reader.GetString(5),
+                        Name = _reader.IsDBNull(3) ? null : _reader.GetString(3),
+                        DateOfBirth = _reader.IsDBNull(4) ? DateTime.MinValue : (DateTime)_reader.GetMySqlDateTime(4),
+                        UserType = _reader.IsDBNull(0) ? 0 : _reader.GetInt32(0),
+                        Id = _reader.IsDBNull(1) ? 0 : _reader.GetInt32(1),
+                        Gender = _reader.IsDBNull(6) ? null : _reader.GetString(6)
+                    };               
+                }
+                else
+                {
+                    u = new Client
+                    {
+                        Username = _reader.IsDBNull(2) ? null : _reader.GetString(2),
+                        Password = _reader.IsDBNull(7) ? null : _reader.GetString(7),
+                        Surname = _reader.IsDBNull(5) ? null : _reader.GetString(5),
+                        Name = _reader.IsDBNull(3) ? null : _reader.GetString(3),
+                        DateOfBirth = _reader.IsDBNull(4) ? DateTime.MinValue : (DateTime)_reader.GetMySqlDateTime(4),
+                        UserType = _reader.IsDBNull(0) ? 0 : _reader.GetInt32(0),
+                        Id = _reader.IsDBNull(1) ? 0 : _reader.GetInt32(1),
+                        Gender = _reader.IsDBNull(6) ? null : _reader.GetString(6),
+                        Lenght = _reader.IsDBNull(8) ? -1 : _reader.GetDecimal(8),
+                        Weight = _reader.IsDBNull(9) ? -1 : _reader.GetDecimal(9)
+                    };
+                }
+                users.Add(u);
+            }
+                
+            _reader.Close();
+
+            
+            if (users.Count == 0)
+                return users;
+
+            string clientsQuery = String.Format("Select specialistId, clientId FROM {0}.specialist_has_client", _database);
+            _selectCommand = new MySqlCommand(clientsQuery, _connection);
+
+            List<Specialist> specialists = new List<Specialist>();
+            try
+            {
+                _reader = _selectCommand.ExecuteReader();
+                while(_reader.Read())
+                {
+                    
+                    int specialistId = _reader.GetInt32(0);
+                    int clientId = _reader.GetInt32(1);
+                    Specialist specialist;
+                    if (specialists.Any(p => p.Id == specialistId))
+                    {
+                        specialist = specialists.First(p => p.Id == specialistId);
+                    }
+                    else
+                    {
+                        User userSpecialist = users.First(q => q.Id == specialistId);
+                        if(!(userSpecialist is Specialist))
+                            continue;
+
+                        users.Remove(userSpecialist);
+                        specialist = (Specialist)userSpecialist;
+                        specialists.Add(specialist);
+                    }
+
+                    specialist.Clients.Add(users.First(z => z.Id == clientId));
+                }
+
+                
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Exception when adding clients to a specialist: " + ex.Message);
+            }
+
+            List<User> specialistUsers = specialists.Cast<User>().ToList();
+            List<User> finalList = users.Union(specialistUsers).ToList();
+
+            return finalList;
+        }
+
         public int getNewTrainingSessionId(int userId)
         {
             string countQuery = String.Format("SELECT COUNT(DISTINCT session_id) FROM {0}.measurement WHERE user_id = {1}", _database, userId);
