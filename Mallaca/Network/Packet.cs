@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Mallaca.Network
 {
-    class Packet
+    public class Packet
     {
         public static int getLengthOfPacket(string buffer)
         {

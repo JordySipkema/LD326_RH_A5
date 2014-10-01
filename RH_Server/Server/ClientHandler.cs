@@ -9,7 +9,6 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using Mallaca.Network;
 
 namespace RH_Server.Server
 {
@@ -60,7 +59,7 @@ namespace RH_Server.Server
 
                     switch (packetType)
                     {
-                        case "login"
+                        case "login":
                             HandleLoginPacket(json);
                             break;
                         case "ping":
