@@ -5,12 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
-namespace Mallaca.Network
+namespace Mallaca.Network.Packet
 {
-    public class Packet
+    public abstract class Packet
     {
+        public Packet(string type)
+        { 
+        
+        }
+
+        
+
         public static int getLengthOfPacket(string buffer)
         {
             if (buffer.Length < 4) return -1;
@@ -22,7 +28,7 @@ namespace Mallaca.Network
         /// <summary>
         ///  Tries to retrieve exactly one packet as a JSON object from a string.
         /// </summary>
-        public static JObject RetrieveJSONPacket(int packetSize, string buffer)
+        public static JObject RetrieveJSON(int packetSize, string buffer)
         {
 
             if (buffer.Length < packetSize + 4) return null;
@@ -32,6 +38,27 @@ namespace Mallaca.Network
             //Console.WriteLine(jsonData);
 
             return JObject.Parse(jsonData);
+        }
+
+        public static Packet RetrievePacket(int packetSize, string buffer)
+        {
+
+            if (buffer.Length < packetSize + 4) return null;
+            //Continue means: if statement == true, DO NOT PROCEED
+
+            var jsonData = buffer.Substring(4, packetSize);
+            //Console.WriteLine(jsonData);
+
+            JObject json = JObject.Parse(jsonData);
+            Packet p;
+            switch(json["CMD"].ToString())
+            {
+                case LoginPacket.cmd:
+                    p = new LoginPacket();
+                    break;
+            }
+
+            return 
         }
     }
 }
