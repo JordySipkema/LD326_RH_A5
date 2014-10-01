@@ -5,6 +5,7 @@ using Mallaca.Network;
 using RH_APP.Classes;
 using RH_APP.Controller;
 
+
 namespace RH_APP.GUI
 {
     public partial class RH_BIKE_GUI : Form
@@ -13,12 +14,12 @@ namespace RH_APP.GUI
         private bool _writeToFile;
         private StreamWriter _writer;
 
-
         public RH_BIKE_GUI(IBike b, string path)
         {
 
             _controller = new RH_Controller(b);
             _controller.UpdatedList += updateGUI;
+
             _writeToFile = true;
             InitializeComponent();
             writeRealTime(path);
@@ -79,7 +80,12 @@ namespace RH_APP.GUI
             }
         }
 
-        public void sendMessage()
+        public void receiveMessage()
+        {
+            //Nog implementeren
+        }
+
+        private void _sendButton_Click(object sender, EventArgs e)
         {
             if (_textBox.Text == "")
             {
@@ -93,27 +99,32 @@ namespace RH_APP.GUI
                 _chatLogBox.AppendText("You say: " + message);
                 _chatLogBox.AppendText(Environment.NewLine);
 
-                TCPController.Send(message);
+                Chat_Controller.SendMessage(message);
 
                 _textBox.Text = "";
             }
-        }
-
-        public void receiveMessage()
-        {
-            //Nog implementeren
-        }
-
-        private void _sendButton_Click(object sender, EventArgs e)
-        {
-            sendMessage();
         }
 
         private void _textBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)13)
             {
-                sendMessage();
+                if (_textBox.Text == "")
+                {
+                    MessageBox.Show("No message has been sent");
+                }
+                else
+                {
+
+                    String message = _textBox.Text;
+
+                    _chatLogBox.AppendText("You say: " + message);
+                    _chatLogBox.AppendText(Environment.NewLine);
+
+                    Chat_Controller.SendMessage(message);
+
+                    _textBox.Text = "";
+                }
             }
         }
     }
