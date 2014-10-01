@@ -43,7 +43,7 @@ namespace Application_Specialist.GUI
             if (true)
             {
                 this.Hide();
-                MainScreen _mainScreen = new MainScreen();
+                var _mainScreen = new MainScreen();
                 this.Hide();
                 _mainScreen.ShowDialog();
 
