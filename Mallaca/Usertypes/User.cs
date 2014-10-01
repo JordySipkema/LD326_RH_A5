@@ -8,7 +8,7 @@ namespace Mallaca
 {
     public  enum UserType
     {
-        User = -1, Client = 0, Specialist = 1, Administrator = 2, Govenor = 3, Commissioner = 4, High_Commissioner = 5
+        User = -1, Client = 0, Specialist = 1, Administrator = 2, Govenor = 3, Commissioner = 4, HighCommissioner = 5
     }
     public class User
     {

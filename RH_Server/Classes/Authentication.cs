@@ -6,12 +6,13 @@ using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Mallaca;
 
 namespace RH_Server.Classes
 {
-    static class Authentication
+    public static class Authentication
     {
-        private static readonly List<Users> authUsers = new List<Users>(); 
+        private static readonly List<User> AuthUsers = new List<User>(); 
 
         public static Boolean Authenticate(String user, String passhash)
         {
@@ -25,11 +26,9 @@ namespace RH_Server.Classes
             var aboutToHash = String.Format("{0}-{1}-{2}", user, passhash, millis);
 
             //2. Hash the string.
-            var sha256 = SHA256.Create();
-            var hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(aboutToHash));
-            var stringHash = Convert.ToBase64String(hash);
+           var hash = Hashing.CreateSHA256(aboutToHash);
 
-            Console.WriteLine(stringHash);
+            Console.WriteLine(hash);
 
             return true;
         }
