@@ -6,8 +6,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
+using Mallaca;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
+using Mallaca.Network;
 
 namespace RH_Server.Server
 {
@@ -21,7 +30,7 @@ namespace RH_Server.Server
 
         private string _totalBuffer = "";
 
-        private readonly List<Measurement> _measurementsList = new List<Measurement>();
+        private List<Measurement> _measurementsList = new List<Measurement>();
 
         //private string username;
         //private Boolean isLoggedIn;

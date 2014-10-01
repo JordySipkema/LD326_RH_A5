@@ -1,5 +1,6 @@
 ﻿
 using Mallaca;
+using Newtonsoft.Json.Linq;
 using RH_APP.Classes;
 using System;
 using System.Collections.Generic;
@@ -7,14 +8,12 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 <<<<<<< HEAD
+using Mallaca.Network;
+=======
+using Client = Mallaca.Network.NetworkClient;
+>>>>>>> 0ced60100fcd5945dee311490aebedea7bf39b83
 using System.Threading;
 
-=======
-using System.Text;
-using System.Threading.Tasks;
-using Mallaca;
-using Newtonsoft.Json;
->>>>>>> 5a88f8e02eb46546853b472ca08b0256732e3f7a
 namespace RH_APP.Controller
 {
 // ReSharper disable once InconsistentNaming
@@ -43,6 +42,7 @@ namespace RH_APP.Controller
             //bike = new Classes.COM_Bike("COM3");
             //bike = new Classes.STUB_Bike();
             _bike = b;
+            UpdatedList += SendToServer;
             InitializeBackgroundWorker();
             _bw.RunWorkerAsync();
 
@@ -83,10 +83,28 @@ namespace RH_APP.Controller
 
         private void SendToServer(object sender, EventArgs args)
         {
-            string json = JsonConvert.SerializeObject(this.LatestMeasurement);
-            Classes.Client.Send(json);
-            Console.Write(json);
+            var jsonObject = new JObject(
+                    new JProperty("CMD", "push"),
+                    new JProperty("count", 1),
+                    new JProperty("measurements", 
+                            new JArray(
+                                JObject.FromObject(LatestMeasurement)
+                            )
+                        )
+                );
 
+            var json = jsonObject.ToString();
+            //Johan's code line
+            json = json.Length.ToString().PadRight(4, ' ') + json;
+            TCPController.Send(json);
+        }
+
+        public void FormClosing()
+        {
+            var jsonObject = new JObject(new JProperty("CMD", "dc"));
+            var json = jsonObject.ToString();
+            json = json.Length.ToString().PadRight(4, ' ') + json;
+            TCPController.Send(json);
         }
 
         private void InitializeBackgroundWorker()
