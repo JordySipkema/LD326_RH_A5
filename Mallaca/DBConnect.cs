@@ -54,15 +54,16 @@ namespace Mallaca
             _database = dbname;
 
 
-            String _connectionString;
+            //String connectionString = "SERVER=" + _server + ";" 
+             //   + "USERNAME= " + _username + ";" + "PASSWORD=" + _password + ";Convert Zero Datetime=True;";
 
-            _connectionString = "SERVER=" + _server + ";" 
-                + "USERNAME= " + _username + ";" + "PASSWORD=" + _password + ";Convert Zero Datetime=True;";
+            var connectionString = String.Format("SERVER={0}; USERNAME={1}; PASSWORD={2};Convert Zero Datetime=True;",
+                _server, _username, _password);
 
             if (dbname != null)
-                _connectionString += "DATABASE=" + _database + ";";
+                connectionString += "DATABASE=" + _database + ";";
 
-            Connection = new MySqlConnection(_connectionString);
+            Connection = new MySqlConnection(connectionString);
             Connection.Open();
             
          }
