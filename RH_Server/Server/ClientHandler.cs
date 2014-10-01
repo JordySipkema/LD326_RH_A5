@@ -14,23 +14,21 @@ namespace RH_Server.Server
 {
     class ClientHandler
     {
-        private Thread _thread;
-
         public readonly byte[] Buffer = new byte[1024];
         public int BufferSize = 1024;
         public Socket Socket;
 
         private string _totalBuffer = "";
 
-        private List<Measurement> _measurementsList = new List<Measurement>();
+        private readonly List<Measurement> _measurementsList = new List<Measurement>();
 
         //private string username;
         //private Boolean isLoggedIn;
 
         public ClientHandler()
         {
-            _thread = new Thread(ThreadLoop);
-            _thread.Start();
+            var thread = new Thread(ThreadLoop);
+            thread.Start();
         }
 
         private void ThreadLoop()
@@ -111,11 +109,8 @@ namespace RH_Server.Server
 
         private void HandleLoginPacket(JObject json)
         {
-            //var username = (string)json["USER"];
-            //var password = (string)json["PASSWORD"];
-
-            const string username = "test1";
-            const string password = "pass2";
+           var username = (string)json["USER"];
+            var password = (string)json["PASSWORD"];
 
             //Code to check user/pass here
 

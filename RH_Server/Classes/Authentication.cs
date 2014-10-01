@@ -1,12 +1,7 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using Mallaca;
+using Mallaca.Usertypes;
 
 namespace RH_Server.Classes
 {
@@ -17,6 +12,11 @@ namespace RH_Server.Classes
         public static Boolean Authenticate(String user, String passhash)
         {
             //check that user and passhash are valid.
+            var database = new DBConnect();
+            var tuple = database.ValidateUser(user, passhash, true);
+
+            if (!tuple.Item1) // if the tuple.Item1 equals false, return false and exit this method.
+                return false;
 
             //Creating the hash
             //1. Prepare the string for hashing (user-passhash-milliseconds_since_epoch)
@@ -28,7 +28,8 @@ namespace RH_Server.Classes
             //2. Hash the string.
            var hash = Hashing.CreateSHA256(aboutToHash);
 
-            Console.WriteLine(hash);
+            //3. Create the user :D
+            var u = new User{ Name = user, AuthToken = hash};
 
             return true;
         }
