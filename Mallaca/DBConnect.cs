@@ -54,27 +54,28 @@ namespace Mallaca
             _database = dbname;
 
 
-            String _connectionString;
+            //String connectionString = "SERVER=" + _server + ";" 
+             //   + "USERNAME= " + _username + ";" + "PASSWORD=" + _password + ";Convert Zero Datetime=True;";
 
-            _connectionString = "SERVER=" + _server + ";" 
-                + "USERNAME= " + _username + ";" + "PASSWORD=" + _password + ";Convert Zero Datetime=True;";
+            var connectionString = String.Format("SERVER={0}; USERNAME={1}; PASSWORD={2};Convert Zero Datetime=True;",
+                _server, _username, _password);
 
             if (dbname != null)
-                _connectionString += "DATABASE=" + _database + ";";
+                connectionString += "DATABASE=" + _database + ";";
 
-            Connection = new MySqlConnection(_connectionString);
+            Connection = new MySqlConnection(connectionString);
             Connection.Open();
             
          }
 
-        public bool ValidateUser(String _username, String _password, UserType userType, bool passIsHashedWithSHA256) {
+        public bool ValidateUser(String username, String password, UserType userType, bool passIsHashedWithSha256) {
             openConnection();
             try
             { 
-                if (!passIsHashedWithSHA256)
-                    _password = Hashing.CreateSHA256(_password);
+                if (!passIsHashedWithSha256)
+                    password = Hashing.CreateSHA256(password);
 
-                _selectCommand = new MySqlCommand("SELECT * FROM " + _database + ".users WHERE user_type = "+ ((int)userType) + " AND username=\"" + _username + "\" AND password=\"" + _password + "\";", Connection);
+                _selectCommand = new MySqlCommand("SELECT * FROM " + _database + ".users WHERE user_type = "+ ((int)userType) + " AND username=\"" + username + "\" AND password=\"" + password + "\";", Connection);
                 
                 _reader = _selectCommand.ExecuteReader();
                 int rows = 0;

@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Mallaca;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -64,6 +67,11 @@ namespace RH_Server.Server
 
                     switch (packetType)
                     {
+                        case "login":
+
+
+                            HandleLoginPacket(json);
+                            break;
                         case "ping":
                             HandlePingPacket(json);
                             break;

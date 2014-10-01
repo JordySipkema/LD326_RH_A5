@@ -8,18 +8,19 @@ namespace Mallaca
 {
     public  enum UserType
     {
-        User = -1, Client = 0, Specialist = 1, Administrator = 2, Govenor = 3, Commissioner = 4, High_Commissioner = 5
+        User = -1, Client = 0, Specialist = 1, Administrator = 2, Govenor = 3, Commissioner = 4, HighCommissioner = 5
     }
     public class User
     {
 
-        public int? Id { get; set; }
-        public string Username { get; set; }
-        public String PasswordToBeSaved { get; set; }
-        public string Name { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public string Surname { get; set; }
-        public string Gender { get; set; }
+        public int? Id { get; private set; }
+        public string Username { get; private set; }
+        public String PasswordToBeSaved { get; private set; }
+        public string Name { get; private set; }
+        public DateTime DateOfBirth { get; private set; }
+        public string Surname { get; private set; }
+        public string Gender { get; private set; }
+        public string AuthToken { get; private set; }
         public virtual UserType UserType  { get { return UserType.User;  } }
 
         
