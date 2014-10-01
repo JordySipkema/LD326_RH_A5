@@ -9,7 +9,7 @@ namespace Mallaca
 {
     public class DBConnect
     {
-        private MySqlConnection _connection;
+        public MySqlConnection Connection {get; private set;}
         private MySqlCommand _selectCommand;
         private MySqlDataReader _reader;
 
@@ -21,8 +21,14 @@ namespace Mallaca
 
         public DBConnect()
         {
-            initialize();
+            initialize("deb58589n5_a5", "paullindelauf", "s121.webhostingserver.nl", "deb58589n5_healthcare");
         }
+
+        public DBConnect(string username, string pass, string serverAdress, string dbname)
+        {
+            initialize(username, pass, serverAdress, dbname);
+        }
+
 
         public String Server { 
             get { return _server; } set { _server = value; }
@@ -40,21 +46,24 @@ namespace Mallaca
             get { return _password; } set { _password = value; }
         }
 
-        public void initialize()
+        public void initialize(string username, string pass, string server, string dbname)
         {
-            this._username = "deb58589n5_a5";
-            this._password = "paullindelauf";
-            _server     = "s121.webhostingserver.nl";
-            _database = "deb58589n5_healthcare";
+            this._username = username;
+            this._password = pass;
+            _server = server;
+            _database = dbname;
 
 
             String _connectionString;
 
-            _connectionString = "SERVER=" + _server + ";" + "DATABASE=" + _database + ";"
-                + "USERNAME= " + _username + ";" + "PASSWORD=" + _password + ";";
+            _connectionString = "SERVER=" + _server + ";" 
+                + "USERNAME= " + _username + ";" + "PASSWORD=" + _password + ";Convert Zero Datetime=True;";
 
-            _connection = new MySqlConnection(_connectionString);
-            _connection.Open();
+            if (dbname != null)
+                _connectionString += "DATABASE=" + _database + ";";
+
+            Connection = new MySqlConnection(_connectionString);
+            Connection.Open();
             
          }
 
@@ -65,7 +74,7 @@ namespace Mallaca
                 if (!passIsHashedWithSHA256)
                     _password = Hashing.CreateSHA256(_password);
 
-                _selectCommand = new MySqlCommand("SELECT * FROM " + _database + ".users WHERE user_type = "+ ((int)userType) + " AND username=\"" + _username + "\" AND password=\"" + _password + "\";", _connection);
+                _selectCommand = new MySqlCommand("SELECT * FROM " + _database + ".users WHERE user_type = "+ ((int)userType) + " AND username=\"" + _username + "\" AND password=\"" + _password + "\";", Connection);
                 
                 _reader = _selectCommand.ExecuteReader();
                 int rows = 0;
@@ -82,17 +91,17 @@ namespace Mallaca
             }
             finally
             {
-                _connection.Close();
+                Connection.Close();
             }
             return false;
         }
 
         public void openConnection()
         {
-            if (_connection.State == System.Data.ConnectionState.Open)
+            if (Connection.State == System.Data.ConnectionState.Open)
                 return;
             else
-                _connection.Open();
+                Connection.Open();
         }
 
         public bool SaveMeasurement(Measurement m, int sessionId, int userId) 
@@ -100,7 +109,7 @@ namespace Mallaca
             var measurementQuery = String.Format("INSERT INTO {0}.measurement(session_id, RPM, speed, distance, power, energy, pulse, user_id, datetime, time) VALUES('{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}', '{9}', '{10}')",
                 _database, sessionId, m.RPM, m.SPEED, m.DISTANCE, m.POWER, m.ENERGY,  m.PULSE, userId, m.DATE.ToString("yyyy-MM-dd HH:mm:ss.fff"),  ":00" + m.TIME);
             openConnection();
-            _selectCommand = new MySqlCommand(measurementQuery, _connection);
+            _selectCommand = new MySqlCommand(measurementQuery, Connection);
 
             try
             {
@@ -115,7 +124,7 @@ namespace Mallaca
             }
             finally
             {
-                _connection.Close();
+                Connection.Close();
             }
         }
 
@@ -123,7 +132,7 @@ namespace Mallaca
         {
             string usersQuery = String.Format("SELECT user_type, {0}.users.id, username, name, dateOfBirth, surname, gender, password, length, weight FROM {0}.users LEFT JOIN {0}.client_bmi_info on {0}.users.id = {0}.client_bmi_info.users_id  ", _database);
             openConnection();
-            _selectCommand = new MySqlCommand(usersQuery, _connection);
+            _selectCommand = new MySqlCommand(usersQuery, Connection);
 
             List<User> users = new List<User>();
 
@@ -169,7 +178,7 @@ namespace Mallaca
                 return users;
 
             string clientsQuery = String.Format("Select specialistId, clientId FROM {0}.specialist_has_client", _database);
-            _selectCommand = new MySqlCommand(clientsQuery, _connection);
+            _selectCommand = new MySqlCommand(clientsQuery, Connection);
 
             List<Specialist> specialists = new List<Specialist>();
             try
@@ -208,6 +217,7 @@ namespace Mallaca
             catch (MySqlException ex)
             {
                 Console.WriteLine("Exception when adding clients to a specialist: " + ex.Message);
+                throw;
             }
 
             List<User> specialistUsers = specialists.Cast<User>().ToList();
@@ -220,15 +230,15 @@ namespace Mallaca
         {
             openConnection();
             
-            MySqlTransaction trans = _connection.BeginTransaction();
+            MySqlTransaction trans = Connection.BeginTransaction();
             try
             {
                 string userQuery;
                 if (user.Id == null)
                 {
-                    userQuery = string.Format("INSERT INTO {7}.users(username, dateOfBirth, surname, gender, name, user_type) VALUES('{0}','{1}','{2}','{3}','{4}','{5}')",
+                    userQuery = string.Format("INSERT INTO {6}.users(username, dateOfBirth, surname, gender, name, user_type) VALUES('{0}','{1}','{2}','{3}','{4}','{5}')",
                          user.Username, user.DateOfBirth.ToString("yyyy-mm-dd"), user.Surname, user.Gender, user.Name,((int) user.UserType), _database);
-                    _selectCommand = new MySqlCommand(userQuery, _connection);
+                    _selectCommand = new MySqlCommand(userQuery, Connection);
                     _selectCommand.ExecuteNonQuery();
                     user.Id = getLastInsertId(); 
                 }
@@ -237,14 +247,14 @@ namespace Mallaca
                     string date = user.DateOfBirth.ToString("yyyy-MM-dd");
                     userQuery = string.Format("UPDATE {7}.users SET username='{0}', dateOfBirth='{1}',surname='{2}',gender='{3}', name='{4}', user_type='{5}' WHERE id = {6}",
                         user.Username, date, user.Surname, user.Gender, user.Name, ((int)user.UserType), user.Id, _database);
-                    _selectCommand = new MySqlCommand(userQuery, _connection);
+                    _selectCommand = new MySqlCommand(userQuery, Connection);
                     _selectCommand.ExecuteNonQuery();
                 }
 
                 if(!string.IsNullOrWhiteSpace(user.PasswordToBeSaved))
                 {
-                    string queryPass = String.Format("UPDATE {1}.users SET password= '{0}' WHERE id = {3}", Hashing.CreateSHA256(user.PasswordToBeSaved), _database, user.Id);
-                    MySqlCommand command = new MySqlCommand(queryPass, _connection);
+                    string queryPass = String.Format("UPDATE {1}.users SET password= '{0}' WHERE id = {2}", Hashing.CreateSHA256(user.PasswordToBeSaved), _database, user.Id);
+                    MySqlCommand command = new MySqlCommand(queryPass, Connection);
                     user.PasswordToBeSaved = null;
                     command.ExecuteNonQuery();
                 }
@@ -254,19 +264,19 @@ namespace Mallaca
                     Client c = (Client)user;
                     string clientQuery = string.Format("INSERT INTO {3}.client_bmi_info(users_id, length, weight) VALUES('{0}','{1}','{2}') ON DUPLICATE KEY " +
                         "UPDATE length =  '{1}', weight = '{2}'", c.Id, c.Lenght.ToString("0.000", CultureInfo.InvariantCulture), c.Weight.ToString("0.000", CultureInfo.InvariantCulture), _database);
-                    _selectCommand = new MySqlCommand(clientQuery, _connection);
+                    _selectCommand = new MySqlCommand(clientQuery, Connection);
                     _selectCommand.ExecuteNonQuery();
                 }
                 else if (user is Specialist)
                 {
                     Specialist s = (Specialist)user;
                     string removeClients = string.Format("DELETE FROM {1}.specialist_has_client WHERE specialistId= {0}", user.Id, _database);
-                    _selectCommand = new MySqlCommand(removeClients, _connection);
+                    _selectCommand = new MySqlCommand(removeClients, Connection);
                     _selectCommand.ExecuteNonQuery();
                     foreach (Client client in s.Clients)
                     {
                         string addclient = string.Format("INSERT INTO {2}.specialist_has_client(specialistId ,clientId) VALUES('{0}', '{1}')", s.Id, client.Id, _database);
-                        _selectCommand = new MySqlCommand(addclient, _connection);
+                        _selectCommand = new MySqlCommand(addclient, Connection);
                         _selectCommand.ExecuteNonQuery();
                     }
                 }
@@ -276,11 +286,12 @@ namespace Mallaca
             catch (MySqlException ex)
             {
                 trans.Rollback(); // rollback all changes 
-                return false;
+                //return false;
+                throw;
             }
             finally
             {
-                _connection.Close();
+                Connection.Close();
             }
             return true;
         }
@@ -302,7 +313,7 @@ namespace Mallaca
             }
             finally
             {
-                _connection.Close();
+                Connection.Close();
             }
             return true;
         }
@@ -311,7 +322,7 @@ namespace Mallaca
         {
             string countQuery = String.Format("SELECT COUNT(DISTINCT session_id) FROM {0}.measurement WHERE user_id = {1}", _database, userId);
             openConnection();
-            _selectCommand = new MySqlCommand(countQuery, _connection);
+            _selectCommand = new MySqlCommand(countQuery, Connection);
 
             try
             {
@@ -328,7 +339,7 @@ namespace Mallaca
             }
             finally
             {
-                _connection.Close();
+                Connection.Close();
             }
             
             
@@ -338,7 +349,7 @@ namespace Mallaca
 
         private int getLastInsertId() 
         {
-            MySqlCommand query = new MySqlCommand("SELECT last_insert_id();", _connection);
+            MySqlCommand query = new MySqlCommand("SELECT last_insert_id();", Connection);
             
             try
             {
