@@ -8,9 +8,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RH_APP.Classes
+namespace Mallaca
 {
-    public class Client
+    public class NetworkClient
     {
         private static Socket client;
 
@@ -20,7 +20,7 @@ namespace RH_APP.Classes
             try
             {
                 // Establish the remote endpoint for the socket.
-                IPEndPoint remoteEP = new IPEndPoint(IPAddress.Parse("145.48.205.64"), 9001);//145.48.205.97
+                IPEndPoint remoteEP = new IPEndPoint(IPAddress.Parse("localhost"), 9001);//145.48.205.97
 
                 // Create a TCP/IP socket.
                 client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
