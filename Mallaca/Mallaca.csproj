@@ -44,11 +44,14 @@
   <ItemGroup>
     <Compile Include="Client.cs" />
     <Compile Include="DBConnect.cs" />
+    <Compile Include="Hashing.cs" />
     <Compile Include="Measurement.cs" />
+    <Compile Include="Network\NetworkClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Specialist.cs" />
+    <Compile Include="Network\TCPController.cs" />
     <Compile Include="User.cs" />
-    <Compile Include="Statuscode.cs" />
+    <Compile Include="Network\Statuscode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

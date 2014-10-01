@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RH_APP.Controller;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
 
 namespace Application_Specialist.GUI
 {
@@ -39,6 +41,45 @@ namespace Application_Specialist.GUI
         {
             CreateScreen _createScreen = new CreateScreen();
             _createScreen.ShowDialog();
+        }
+
+        public void receiveMessage()
+        {
+            //Nog implementeren
+        }
+
+        public void sendMessage()
+        {
+            if (_textBox.Text == "")
+            {
+                MessageBox.Show("No message has been sent");
+            }
+            else
+            {
+
+                String message = _textBox.Text;
+
+                _chatLogBox.AppendText("You say: " + message);
+                _chatLogBox.AppendText(Environment.NewLine);
+
+                TCPController.Send(message);
+
+                _textBox.Text = "";
+            }
+        }
+
+
+        private void _sendButton_Click(object sender, EventArgs e)
+        {
+            sendMessage();
+        }
+
+        private void _textBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+            {
+                sendMessage();
+            }
         }
     }
 }

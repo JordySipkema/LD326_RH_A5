@@ -52,21 +52,22 @@ namespace Application_Specialist.GUI
 
             bool succes;
 
-            if (clientRadioButton.Checked)
-                succes = _connection.SaveClient(_nameBox.Text, _surnameBox.Text, Usernamebox.Text, passwordBox.Text,  gender, dateOfBirthPicker.Value, Decimal.Parse(_lengthBox.Text), Decimal.Parse(_weightBox.Text));
-            else
-                succes = _connection.saveSpecialist(_nameBox.Text, _surnameBox.Text, gender, Usernamebox.Text, passwordBox.Text, dateOfBirthPicker.Value);
+            //TODO create user with given data, save into db
+            //if (clientRadioButton.Checked)
+            //    succes = _connection.SaveClient(_nameBox.Text, _surnameBox.Text, Usernamebox.Text, passwordBox.Text,  gender, dateOfBirthPicker.Value, Decimal.Parse(_lengthBox.Text), Decimal.Parse(_weightBox.Text));
+            //else
+            //    succes = _connection.saveSpecialist(_nameBox.Text, _surnameBox.Text, gender, Usernamebox.Text, passwordBox.Text, dateOfBirthPicker.Value);
 
 
-            if (succes)
-            {
-                MessageBox.Show("Success: the user has been added.");
-                this.Close();
-            }
-            else
-            {
-                MessageBox.Show("Could not add the user.");
-            }
+            //if (succes)
+            //{
+            //    MessageBox.Show("Success: the user has been added.");
+            //    this.Close();
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Could not add the user.");
+            //}
 
         }
 

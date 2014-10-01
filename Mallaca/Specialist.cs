@@ -6,20 +6,26 @@ using System.Threading.Tasks;
 
 namespace Mallaca
 {
-    class Specialist : User
+    public class Specialist : User
     {
-
-        public Specialist(int id, string username, string password, string name, DateTime dob, string surname, string gender, int userType)
-            : base( id, username, password, name, dob, surname, gender, userType)
+        public override UserType UserType
         {
-            Clients = new List<User>();
+            get
+            {
+                return UserType.Specialist;
+            }
+        }
+        public Specialist(int id, string username, string password, string name, DateTime dob, string surname, string gender, int userType)
+            : base( id, username, password, name, dob, surname, gender)
+        {
+            Clients = new List<Client>();
         }
 
         public Specialist() 
         {
-            Clients = new List<User>();
+            Clients = new List<Client>();
         }
-        public List<User> Clients { get; set; }
+        public List<Client> Clients { get; set; }
 
         
     }

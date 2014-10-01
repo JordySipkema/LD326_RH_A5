@@ -77,5 +77,43 @@ namespace RH_APP.GUI
                 _writer.Dispose();
             }
         }
+
+        public void sendMessage()
+        {
+            if (_textBox.Text == "")
+            {
+                MessageBox.Show("No message has been sent");
+            }
+            else
+            {
+
+                String message = _textBox.Text;
+
+                _chatLogBox.AppendText("You say: " + message);
+                _chatLogBox.AppendText(Environment.NewLine);
+
+                TCPController.Send(message);
+
+                _textBox.Text = "";
+            }
+        }
+
+        public void receiveMessage()
+        {
+            //Nog implementeren
+        }
+
+        private void _sendButton_Click(object sender, EventArgs e)
+        {
+            sendMessage();
+        }
+
+        private void _textBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+            {
+                sendMessage();
+            }
+        }
     }
 }

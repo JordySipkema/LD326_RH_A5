@@ -72,6 +72,9 @@ namespace RH_Server.Server
                         case "push":
                             HandlePushPacket(json);
                             break;
+                        case "chat":
+                            HandleChatPacket(json);
+                            break;
                         default:
                             Console.WriteLine("Unknown packet");
                             break;
@@ -85,7 +88,7 @@ namespace RH_Server.Server
                 }
                 catch (SocketException e)
                 {
-                    Console.WriteLine("Client has been disconnected.");
+                    Console.WriteLine("Client with IP-address: " + Socket.RemoteEndPoint.ToString() + " has been disconnected.");
                     Console.WriteLine(e.Message);
                 }
             }
@@ -157,6 +160,14 @@ namespace RH_Server.Server
             Console.WriteLine("Written {0} measurements to file", _measurementsList.Count);
 
             //code to release the authtoken
+        }
+
+        public void HandleChatPacket(JObject json)
+        {
+            var message = json.ToString();
+
+            Console.WriteLine(Socket.RemoteEndPoint.ToString() + " says: " + message);
+
         }
     }
 }

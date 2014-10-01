@@ -111,6 +111,10 @@
       <Project>{da5167db-3a0d-4294-bad5-4e09775a8ff9}</Project>
       <Name>Mallaca</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RH_APP\RH_APP.csproj">
+      <Project>{7b8617db-470d-424a-843a-8b2aedbb3369}</Project>
+      <Name>RH_APP</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
