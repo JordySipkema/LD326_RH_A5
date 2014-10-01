@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Newtonsoft.Json.Linq;
+using RH_Server.Classes;
 using RH_Server.Server;
 using System;
 using System.Net;
@@ -11,14 +12,13 @@ namespace RH_Server
     {
         static void Main()
         {
-            //TestCode();
-            RunServer();
+            TestCode();
+            //RunServer();
         }
 
         static void TestCode()
         {
-            var c = new ClientHandler();
-            //c.HandleLoginPacket(new JObject());
+            var x = Authentication.Authenticate("Jordy", "Sipkema");
             Console.ReadKey();
         }
 
@@ -29,7 +29,7 @@ namespace RH_Server
 
             //Code for getting server IP
             var serverip = Dns.GetHostEntry(Dns.GetHostName())
-                .AddressList.First(o => o.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                .AddressList.First(o => o.AddressFamily == AddressFamily.InterNetwork)
                 .ToString();
             //Display server IP:
             Console.WriteLine("RH_Server IP: {0}", serverip);
