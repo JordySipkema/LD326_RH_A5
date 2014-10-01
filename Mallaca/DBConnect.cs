@@ -262,21 +262,23 @@ namespace Mallaca
 
                 if (user is Client)
                 {
-                    Client c = (Client)user;
-                    string clientQuery = string.Format("INSERT INTO {3}.client_bmi_info(users_id, length, weight) VALUES('{0}','{1}','{2}') ON DUPLICATE KEY " +
+                    var c = (Client)user;
+                    var clientQuery = string.Format("INSERT INTO {3}.client_bmi_info(users_id, length, weight) VALUES('{0}','{1}','{2}') ON DUPLICATE KEY " +
                         "UPDATE length =  '{1}', weight = '{2}'", c.Id, c.Lenght.ToString("0.000", CultureInfo.InvariantCulture), c.Weight.ToString("0.000", CultureInfo.InvariantCulture), _database);
                     _selectCommand = new MySqlCommand(clientQuery, Connection);
                     _selectCommand.ExecuteNonQuery();
                 }
                 else if (user is Specialist)
                 {
-                    Specialist s = (Specialist)user;
-                    string removeClients = string.Format("DELETE FROM {1}.specialist_has_client WHERE specialistId= {0}", user.Id, _database);
+                    var s = (Specialist)user;
+                    var removeClients = string.Format("DELETE FROM {1}.specialist_has_client WHERE specialistId= {0}", user.Id, _database);
                     _selectCommand = new MySqlCommand(removeClients, Connection);
                     _selectCommand.ExecuteNonQuery();
-                    foreach (Client client in s.Clients)
+
+                    foreach (var addclient in s.Clients.Select(client => 
+                        string.Format("INSERT INTO {2}.specialist_has_client(specialistId ,clientId) VALUES('{0}', '{1}')",
+                        s.Id, client.Id, _database)))
                     {
-                        string addclient = string.Format("INSERT INTO {2}.specialist_has_client(specialistId ,clientId) VALUES('{0}', '{1}')", s.Id, client.Id, _database);
                         _selectCommand = new MySqlCommand(addclient, Connection);
                         _selectCommand.ExecuteNonQuery();
                     }
@@ -284,7 +286,7 @@ namespace Mallaca
 
                 trans.Commit();
             }
-            catch (MySqlException ex)
+            catch (MySqlException)
             {
                 trans.Rollback(); // rollback all changes 
                 //return false;
@@ -305,10 +307,10 @@ namespace Mallaca
             openConnection();
             try
             {
-                MySqlCommand removeCommand = new MySqlCommand(remove);
+                var removeCommand = new MySqlCommand(remove);
                 removeCommand.ExecuteNonQuery();
             }
-            catch (MySqlException ex)
+            catch (MySqlException)
             {
                 return false;
             }
@@ -350,7 +352,7 @@ namespace Mallaca
 
         private int getLastInsertId() 
         {
-            MySqlCommand query = new MySqlCommand("SELECT last_insert_id();", Connection);
+            var query = new MySqlCommand("SELECT last_insert_id();", Connection);
             
             try
             {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using Mallaca.Network;
 using RH_APP.Classes;
 using RH_APP.Controller;
 

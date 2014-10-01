@@ -48,14 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Client.cs" />
     <Compile Include="Classes\COM_Bike.cs" />
     <Compile Include="Classes\IBike.cs" />
     <Compile Include="Classes\IP_Bike.cs" />
     <Compile Include="Classes\STUB_Bike.cs" />
     <Compile Include="Classes\TXT_Bike.cs" />
     <Compile Include="Controller\RH_Controller.cs" />
-    <Compile Include="Controller\TCPController.cs" />
     <Compile Include="GUI\BikeUI.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -1,6 +1,5 @@
 ﻿
 using Mallaca;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RH_APP.Classes;
 using System;
@@ -8,7 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using Client = RH_APP.Classes.Client;
+using Mallaca.Network;
 using System.Threading;
 
 namespace RH_APP.Controller
@@ -93,7 +92,7 @@ namespace RH_APP.Controller
             var json = jsonObject.ToString();
             //Johan's code line
             json = json.Length.ToString().PadRight(4, ' ') + json;
-            Client.Send(json);
+            TCPController.Send(json);
         }
 
         public void FormClosing()
@@ -101,7 +100,7 @@ namespace RH_APP.Controller
             var jsonObject = new JObject(new JProperty("CMD", "dc"));
             var json = jsonObject.ToString();
             json = json.Length.ToString().PadRight(4, ' ') + json;
-            Client.Send(json);
+            TCPController.Send(json);
         }
 
         private void InitializeBackgroundWorker()

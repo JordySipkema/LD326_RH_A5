@@ -28,7 +28,7 @@ namespace Application_Specialist.GUI
         {
             _connection = new DBConnect();
 
-            string pleaseFillIntext = "Please fill in all fields";
+            const string pleaseFillIntext = "Please fill in all fields";
             if(string.IsNullOrEmpty(_nameBox.Text) || string.IsNullOrEmpty(_surnameBox.Text) || !_genderMaleRadioButton.Checked && !_genderFemaleRadioButton.Checked ){
                 MessageBox.Show(pleaseFillIntext);
                 return;
@@ -39,16 +39,7 @@ namespace Application_Specialist.GUI
                 return;
             }
 
-            String gender;
-
-            if (_genderMaleRadioButton.Checked)
-            {
-                gender = "m";
-            }
-            else
-            {
-                gender = "f";
-            }
+            var gender = _genderMaleRadioButton.Checked ? "m" : "f";
 
             bool succes;
 

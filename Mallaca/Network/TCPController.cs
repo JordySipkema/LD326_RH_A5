@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RH_APP.Controller
+namespace Mallaca.Network
 {
 // ReSharper disable once InconsistentNaming
     public class TCPController
