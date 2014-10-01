@@ -31,35 +31,33 @@ namespace RH_Server.Server
             thread.Start();
         }
 
+    
+
         private void ThreadLoop()
         {
             while (true)
             {
                 try
                 {
+                    
+
                     var receiveCount = Socket.Receive(Buffer);
                     _totalBuffer += ASCIIEncoding.Default.GetString(Buffer, 0, receiveCount);
 
-                    if (_totalBuffer.Length < 4) continue;
-                    //Continue means: if _totalBuffer.Lenght < 4, DO NOT PROCEED
 
-                    var packetSize = int.Parse(_totalBuffer.Substring(0, 4));
+                    var packetSize = Packet.getLengthOfPacket(_totalBuffer);
+                    if (packetSize == -1)
+                        continue;
+                    JObject json = Packet.RetrieveJSONPacket(packetSize, _totalBuffer);
 
-                    if (_totalBuffer.Length < packetSize + 4) continue;
-                    //Continue means: if statement == true, DO NOT PROCEED
-
-                    var jsonData = _totalBuffer.Substring(4, packetSize);
-                    //Console.WriteLine(jsonData);
-
-                    var json = JObject.Parse(jsonData);
+                    if (json == null)
+                        continue;
 
                     var packetType = (string)json["CMD"];
 
                     switch (packetType)
                     {
                         case "login":
-
-
                             HandleLoginPacket(json);
                             break;
                         case "ping":
