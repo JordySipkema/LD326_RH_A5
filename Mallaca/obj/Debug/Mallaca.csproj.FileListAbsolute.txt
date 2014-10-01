@@ -10,3 +10,10 @@ C:\Users\Engin\Documents\Sourcetre\Mallaca\bin\Debug\MySql.Data.dll
 C:\Users\Engin\Documents\Sourcetre\Mallaca\obj\Debug\Mallaca.csprojResolveAssemblyReference.cache
 C:\Users\Engin\Documents\Sourcetre\Mallaca\obj\Debug\Mallaca.dll
 C:\Users\Engin\Documents\Sourcetre\Mallaca\obj\Debug\Mallaca.pdb
+C:\Users\Engin\Documents\Workspace\CSharp\23TI2A5\Mallaca\bin\Debug\Mallaca.dll
+C:\Users\Engin\Documents\Workspace\CSharp\23TI2A5\Mallaca\bin\Debug\Mallaca.pdb
+C:\Users\Engin\Documents\Workspace\CSharp\23TI2A5\Mallaca\bin\Debug\MySql.Data.dll
+C:\Users\Engin\Documents\Workspace\CSharp\23TI2A5\Mallaca\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Engin\Documents\Workspace\CSharp\23TI2A5\Mallaca\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Engin\Documents\Workspace\CSharp\23TI2A5\Mallaca\obj\Debug\Mallaca.dll
+C:\Users\Engin\Documents\Workspace\CSharp\23TI2A5\Mallaca\obj\Debug\Mallaca.pdb

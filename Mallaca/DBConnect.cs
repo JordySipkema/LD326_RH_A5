@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mallaca.Usertypes;
 using MySql.Data.MySqlClient;
 using System.Globalization;
 namespace Mallaca
@@ -68,36 +70,47 @@ namespace Mallaca
             
          }
 
-        public bool ValidateUser(String username, String password, UserType userType, bool passIsHashedWithSha256) {
-            openConnection();
+        public Tuple<bool, UserType> ValidateUser(String username, String password, bool passIsHashedWithSha256) {
+            OpenConnection();
             try
             { 
                 if (!passIsHashedWithSha256)
                     password = Hashing.CreateSHA256(password);
 
-                _selectCommand = new MySqlCommand("SELECT * FROM " + _database + ".users WHERE user_type = "+ ((int)userType) + " AND username=\"" + username + "\" AND password=\"" + password + "\";", Connection);
-                
+                _selectCommand = new MySqlCommand(
+                    String.Format("SELECT * FROM {0}.users WHERE username='{1}' AND password='{2}';", _database, username
+                        , password) , Connection);
                 _reader = _selectCommand.ExecuteReader();
-                int rows = 0;
+                var rows = 0;
+                var usertypeInt = -2;
                 while (_reader.Read())
+                {
+                    var dr = (IDataRecord) _reader;
+                    string type = dr["user_type"].ToString();
+                    usertypeInt = Int32.Parse(type);
+                    
                     rows++;
-                
-                if(rows == 1)
-                    return true ;
+                }
+
+                if (rows == 1 && Enum.IsDefined(typeof (UserType), usertypeInt))
+                {
+                    var usertype = (UserType) usertypeInt;
+                    return new Tuple<bool, UserType>(true, usertype);
+                }
             }
             catch(MySqlException e)
             {
                 Console.WriteLine("Could not validate user. " + e.Message);
-                return false;
             }
             finally
             {
                 Connection.Close();
             }
-            return false;
+
+            return new Tuple<bool, UserType>(false, UserType.None);
         }
 
-        public void openConnection()
+        public void OpenConnection()
         {
             if (Connection.State == System.Data.ConnectionState.Open)
                 return;
@@ -109,7 +122,7 @@ namespace Mallaca
         {
             var measurementQuery = String.Format("INSERT INTO {0}.measurement(session_id, RPM, speed, distance, power, energy, pulse, user_id, datetime, time) VALUES('{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}', '{9}', '{10}')",
                 _database, sessionId, m.RPM, m.SPEED, m.DISTANCE, m.POWER, m.ENERGY,  m.PULSE, userId, m.DATE.ToString("yyyy-MM-dd HH:mm:ss.fff"),  ":00" + m.TIME);
-            openConnection();
+            OpenConnection();
             _selectCommand = new MySqlCommand(measurementQuery, Connection);
 
             try
@@ -132,6 +145,10 @@ namespace Mallaca
         private List<User> readToUser(MySqlDataReader _reader)
         {
             List<User> users = new List<User>();
+            string usersQuery = String.Format("SELECT user_type, {0}.users.id, username, name, dateOfBirth, surname, gender, password, length, weight FROM {0}.users LEFT JOIN {0}.client_bmi_info on {0}.users.id = {0}.client_bmi_info.users_id  ", _database);
+            OpenConnection();
+            _selectCommand = new MySqlCommand(usersQuery, Connection);
+
 
             while (_reader.Read())
             {
@@ -181,6 +198,7 @@ namespace Mallaca
 
             _reader = _selectCommand.ExecuteReader();
             List<Tuple<int, int>> specCli = new List<Tuple<int,int>>();
+
             while(_reader.Read())
             {
                 specCli.Add(new Tuple<int, int>(_reader.GetInt32(0), _reader.GetInt32(1)));
@@ -246,7 +264,7 @@ namespace Mallaca
         public List<User> GetAllUsers()
         {
             string usersQuery = String.Format("SELECT user_type, {0}.users.id, username, name, dateOfBirth, surname, gender, password, length, weight FROM {0}.users LEFT JOIN {0}.client_bmi_info on {0}.users.id = {0}.client_bmi_info.users_id  ", _database);
-            openConnection();
+            OpenConnection();
             _selectCommand = new MySqlCommand(usersQuery, Connection);
 
 
@@ -265,7 +283,7 @@ namespace Mallaca
 
         public bool saveUser(User user)
         {
-            openConnection();
+            OpenConnection();
             
             MySqlTransaction trans = Connection.BeginTransaction();
             try
@@ -351,7 +369,7 @@ namespace Mallaca
         }
 
         private User getUserQuery(string command){
-            openConnection();
+            OpenConnection();
             _reader = new MySqlCommand(command, Connection).ExecuteReader();
             List<User> user = readToUser(_reader);
             if (user.Count == 0)
@@ -367,7 +385,7 @@ namespace Mallaca
             if(user.Id == null)
                 return false;
             string remove = string.Format("DELETE FROM users WHERE id='{0}'", user.Id);
-            openConnection();
+            OpenConnection();
             try
             {
                 var removeCommand = new MySqlCommand(remove);
@@ -387,7 +405,7 @@ namespace Mallaca
         public int getNewTrainingSessionId(int userId)
         {
             string countQuery = String.Format("SELECT COUNT(DISTINCT session_id) FROM {0}.measurement WHERE user_id = {1}", _database, userId);
-            openConnection();
+            OpenConnection();
             _selectCommand = new MySqlCommand(countQuery, Connection);
 
             try

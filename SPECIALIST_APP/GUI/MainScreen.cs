@@ -15,9 +15,13 @@ namespace Application_Specialist.GUI
 {
     public partial class MainScreen : Form
     {
+        private Chat_Controller _chatController;
+
+
         public MainScreen()
         {
             InitializeComponent();
+            _chatController = new Chat_Controller();
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -44,12 +48,7 @@ namespace Application_Specialist.GUI
             _createScreen.ShowDialog();
         }
 
-        public void receiveMessage()
-        {
-            //Nog implementeren
-        }
-
-        public void sendMessage()
+        private void _sendButton_Click(object sender, EventArgs e)
         {
             if (_textBox.Text == "")
             {
@@ -63,23 +62,32 @@ namespace Application_Specialist.GUI
                 _chatLogBox.AppendText("You say: " + message);
                 _chatLogBox.AppendText(Environment.NewLine);
 
-                TCPController.Send(message);
+                _chatController.SendMessage(message);
 
                 _textBox.Text = "";
             }
-        }
-
-
-        private void _sendButton_Click(object sender, EventArgs e)
-        {
-            sendMessage();
         }
 
         private void _textBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)13)
             {
-                sendMessage();
+                if (_textBox.Text == "")
+                {
+                    MessageBox.Show("No message has been sent");
+                }
+                else
+                {
+
+                    String message = _textBox.Text;
+
+                    _chatLogBox.AppendText("You say: " + message);
+                    _chatLogBox.AppendText(Environment.NewLine);
+
+                    _chatController.SendMessage(message);
+
+                    _textBox.Text = "";
+                }
             }
         }
     }

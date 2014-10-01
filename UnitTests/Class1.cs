@@ -8,6 +8,8 @@ using Mallaca;
 using System.IO;
 using MySql.Data.MySqlClient;
 using MySql;
+using Mallaca.Usertypes;
+
 namespace UnitTests 
 {
     public class DBIntegration : IDisposable
@@ -33,9 +35,6 @@ namespace UnitTests
                 Console.WriteLine(e.Message);
                 throw;
             }
-            //saveSpecialistWithClient();
-            //saveClient();
-            //validateUserHighAnsiTest();
         }
 
         [Fact]
@@ -96,10 +95,11 @@ namespace UnitTests
         {
             Assert.NotNull(db);
             string password = "Ò¿0ír}æ5u4¨±«³9CKÓgó-^¬NhÇ6¤ÿ¹ä`Ä'E/þö¼m9Ð&á,xk¿½+CÐezá×Sç^UñIèÒ";
-            bool passGood = db.ValidateUser("selfridge", password, UserType.Specialist, false);
-            bool passWrong = db.ValidateUser("selfridge", "Wan Shi Tong", UserType.Specialist, false);
-            Assert.True(passGood);
-            Assert.False(passWrong);
+            Tuple<bool, UserType> passGood = db.ValidateUser("selfridge", password, false);
+            Tuple<bool, UserType> passWrong = db.ValidateUser("selfridge", "Wan Shi Tong", false);
+            Assert.True(passGood.Item1);
+            Assert.False(passWrong.Item1);
+            Assert.True(passGood.Item2 == UserType.Specialist);
         }
 
         [Fact]

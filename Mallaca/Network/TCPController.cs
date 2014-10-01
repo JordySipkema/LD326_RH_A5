@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Mallaca.Network
 {
@@ -52,7 +48,10 @@ namespace Mallaca.Network
         public static void Send(String data)
         {
             //Socket must be set to any instance....
-            if (_socket == null) return;
+            if (_socket == null)
+            {
+                StartConnection();
+            }
 
             // Convert the string data to byte data using ASCII encoding.
             var byteData = Encoding.ASCII.GetBytes(data);
