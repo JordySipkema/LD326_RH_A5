@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Network\Packet.cs" />
     <Compile Include="Usertypes\Client.cs" />
     <Compile Include="DBConnect.cs" />
     <Compile Include="Hashing.cs" />

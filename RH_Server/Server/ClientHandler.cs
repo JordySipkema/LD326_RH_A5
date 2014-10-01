@@ -60,7 +60,7 @@ namespace RH_Server.Server
 
                     switch (packetType)
                     {
-                        case "login"
+                        case "login":
                             HandleLoginPacket(json);
                             break;
                         case "ping":

@@ -129,15 +129,10 @@ namespace Mallaca
             }
         }
 
-        public List<User> GetAllUsers()
+        private List<User> readToUser(MySqlDataReader _reader)
         {
-            string usersQuery = String.Format("SELECT user_type, {0}.users.id, username, name, dateOfBirth, surname, gender, password, length, weight FROM {0}.users LEFT JOIN {0}.client_bmi_info on {0}.users.id = {0}.client_bmi_info.users_id  ", _database);
-            openConnection();
-            _selectCommand = new MySqlCommand(usersQuery, Connection);
-
             List<User> users = new List<User>();
 
-            _reader = _selectCommand.ExecuteReader();
             while (_reader.Read())
             {
                 User u;
@@ -171,6 +166,92 @@ namespace Mallaca
                     continue;
                 users.Add(u);
             }
+            _reader.Close();
+            return users;
+        }
+
+        public List<User>getSpecialistClients(List<User> users)
+        {
+
+            string clientsQuery = String.Format("Select specialistId, clientId FROM {0}.specialist_has_client", _database);
+            _selectCommand = new MySqlCommand(clientsQuery, Connection);
+
+            
+            List<Specialist> specialists = new List<Specialist>();
+
+            _reader = _selectCommand.ExecuteReader();
+            List<Tuple<int, int>> specCli = new List<Tuple<int,int>>();
+            while(_reader.Read())
+            {
+                specCli.Add(new Tuple<int, int>(_reader.GetInt32(0), _reader.GetInt32(1)));
+            }
+            _reader.Close();
+
+            foreach(Tuple<int, int> relation in specCli)
+            {
+                int specialistId = relation.Item1;
+                int clientId = relation.Item2;
+                Specialist specialist;
+                if (specialists.Any(p => p.Id == specialistId))
+                {
+                    specialist = specialists.First(p => p.Id == specialistId);
+                }
+                else
+                {
+                    User userSpecialist;
+                    try
+                    {
+                        userSpecialist = users.First(q => q.Id == specialistId);
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        continue;
+                    }
+                    
+                    if (!(userSpecialist is Specialist))
+                        continue;
+
+                    users.Remove(userSpecialist);
+                    specialist = (Specialist)userSpecialist;
+                    specialists.Add(specialist);
+                }
+
+                User client;
+                try
+                {
+                    client = users.First(z => z.Id == clientId);
+                }
+                catch(InvalidOperationException)
+                {
+                    //client does not exist in the list, try to get it from the db
+                    client = getUser(clientId);
+                    string test = "";
+                }
+
+
+                if (!(client is Client))
+                    continue;
+
+                specialist.Clients.Add((Client)client);
+            }
+
+
+
+
+            List<User> specialistUsers = specialists.Cast<User>().ToList();
+            List<User> finalList = users.Union(specialistUsers).ToList();
+            return finalList;
+        }
+
+        public List<User> GetAllUsers()
+        {
+            string usersQuery = String.Format("SELECT user_type, {0}.users.id, username, name, dateOfBirth, surname, gender, password, length, weight FROM {0}.users LEFT JOIN {0}.client_bmi_info on {0}.users.id = {0}.client_bmi_info.users_id  ", _database);
+            openConnection();
+            _selectCommand = new MySqlCommand(usersQuery, Connection);
+
+
+            _reader = _selectCommand.ExecuteReader();
+            List<User> users = readToUser(_reader);
                 
             _reader.Close();
 
@@ -178,53 +259,8 @@ namespace Mallaca
             if (users.Count == 0)
                 return users;
 
-            string clientsQuery = String.Format("Select specialistId, clientId FROM {0}.specialist_has_client", _database);
-            _selectCommand = new MySqlCommand(clientsQuery, Connection);
+            return getSpecialistClients(users);
 
-            List<Specialist> specialists = new List<Specialist>();
-            try
-            {
-                _reader = _selectCommand.ExecuteReader();
-                while(_reader.Read())
-                {
-                    
-                    int specialistId = _reader.GetInt32(0);
-                    int clientId = _reader.GetInt32(1);
-                    Specialist specialist;
-                    if (specialists.Any(p => p.Id == specialistId))
-                    {
-                        specialist = specialists.First(p => p.Id == specialistId);
-                    }
-                    else
-                    {
-                        User userSpecialist = users.First(q => q.Id == specialistId);
-                        if(!(userSpecialist is Specialist))
-                            continue;
-
-                        users.Remove(userSpecialist);
-                        specialist = (Specialist)userSpecialist;
-                        specialists.Add(specialist);
-                    }
-
-                    User client = users.First(z => z.Id == clientId);
-                    if (!(client is Client))
-                        continue;
-
-                    specialist.Clients.Add((Client) client);
-                }
-
-                
-            }
-            catch (MySqlException ex)
-            {
-                Console.WriteLine("Exception when adding clients to a specialist: " + ex.Message);
-                throw;
-            }
-
-            List<User> specialistUsers = specialists.Cast<User>().ToList();
-            List<User> finalList = users.Union(specialistUsers).ToList();
-
-            return finalList;
         }
 
         public bool saveUser(User user)
@@ -297,6 +333,33 @@ namespace Mallaca
                 Connection.Close();
             }
             return true;
+        }
+
+        public User getUser(string username)
+        {
+            string usersQuery = String.Format("SELECT user_type, {0}.users.id, username, name, dateOfBirth, surname, gender, password, length, weight FROM {0}.users LEFT JOIN {0}.client_bmi_info on {0}.users.id = {0}.client_bmi_info.users_id WHERE username = '{1}' ",
+                _database, username);
+            return getUserQuery(usersQuery);
+        }
+
+        public User getUser(int id)
+        {
+
+            string usersQuery = String.Format("SELECT user_type, {0}.users.id, username, name, dateOfBirth, surname, gender, password, length, weight FROM {0}.users LEFT JOIN {0}.client_bmi_info on {0}.users.id = {0}.client_bmi_info.users_id WHERE {0}.users.id = '{1}' ",
+                _database, id);
+            return getUserQuery(usersQuery);
+        }
+
+        private User getUserQuery(string command){
+            openConnection();
+            _reader = new MySqlCommand(command, Connection).ExecuteReader();
+            List<User> user = readToUser(_reader);
+            if (user.Count == 0)
+                return null;
+            if (user[0] is Specialist)
+                user = getSpecialistClients(user);
+            return user[0];
+
         }
 
         public bool removeUser(User user) 
