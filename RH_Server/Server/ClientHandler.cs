@@ -13,6 +13,7 @@ using Mallaca;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+using Mallaca.Network;
 
 namespace RH_Server.Server
 {

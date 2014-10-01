@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Mallaca
 {
-    class Hashing
+    public class Hashing
     {
         public static String CreateSHA256(String value)
         {
