@@ -48,7 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Client.cs" />
+    <Compile Include="Classes\NetworkClient.cs" />
     <Compile Include="Classes\COM_Bike.cs" />
     <Compile Include="Classes\IBike.cs" />
     <Compile Include="Classes\IP_Bike.cs" />

@@ -8,11 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mallaca;
+using Mallaca.Network;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 
 namespace Application_Specialist.GUI
 {
     public partial class LoginScreen : Form
     {
+        
 
         public LoginScreen()
         {
@@ -22,22 +27,35 @@ namespace Application_Specialist.GUI
         }
 
         private void _loginButton_Click(object sender, EventArgs e)
-        {
-            DBConnect _connection = new DBConnect();
+        { 
+            JObject loginPacket = new JObject(
+                new JProperty("CMD", "LOGIN"),
+                new JProperty("username", _usernameBox.Text),
+                new JProperty("password", Hashing.CreateSHA256(_passwordBox.Text)));
+
             //if (_connection.ValidateUser(_usernameBox.Text, _passwordBox.Text))
             //TODO: send username and hashed password to server for authentication.
-            if(true)
+            
+        }
+
+        private void onLoginPacketResponse()
+        {
+            if (true)
             {
                 this.Hide();
                 MainScreen _mainScreen = new MainScreen();
                 this.Hide();
                 _mainScreen.ShowDialog();
+
             }
             else
             {
                 MessageBox.Show("Invalid username/password!");
             }
+
         }
+
+        
 
         private void _passwordBox_KeyPress(object sender, KeyPressEventArgs e)
         {

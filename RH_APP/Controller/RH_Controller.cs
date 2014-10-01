@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using Client = RH_APP.Classes.Client;
+using Client = Mallaca.Network.NetworkClient;
 using System.Threading;
 
 namespace RH_APP.Controller

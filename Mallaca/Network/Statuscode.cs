@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mallaca
+namespace Mallaca.Network
 {
     public class Statuscode
     {
