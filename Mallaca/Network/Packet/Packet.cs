@@ -54,11 +54,15 @@ namespace Mallaca.Network.Packet
             switch(json["CMD"].ToString())
             {
                 case LoginPacket.cmd:
-                    p = new LoginPacket();
+                    p = new LoginPacket(json["username"].ToString(), json["passowrd"].ToString());
+                    break;
+
+                default:
+                    p = null;
                     break;
             }
 
-            return 
+            return p;
         }
     }
 }

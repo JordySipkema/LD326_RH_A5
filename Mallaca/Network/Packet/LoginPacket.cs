@@ -17,12 +17,12 @@ namespace Mallaca.Network.Packet
             : base(cmd)
         {
             if (j["CMD"].ToString() != cmd)
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("Given JSON defines the wrong packet.");
             username = j["username"].ToString();
             password = j["password"].ToString();
         }
 
-        public static const string cmd = "LOGIN";
+        public const string cmd = "LOGIN";
         public string username { get; set; }
         public string password { get; set; }
 
