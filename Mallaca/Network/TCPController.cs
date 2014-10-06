@@ -1,56 +1,48 @@
 ﻿using System;
-using System.Net;
+using System.Net.Security;
 using System.Net.Sockets;
+using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 
 namespace Mallaca.Network
 {
-// ReSharper disable once InconsistentNaming
+    // ReSharper disable once InconsistentNaming
     public class TCPController
     {
-        private static Socket _socket;
+        private static TcpClient _client;
+        private static SslStream _sslStream;
         public static Boolean Busy { get; private set; }
 
-        public static void StartConnection()
+        public static void RunClient()
         {
-            // Connect to a remote device.
-            try
-            {
-                // Establish the remote endpoint for the socket.
-                var remoteEP = new IPEndPoint(IPAddress.Parse("10.0.1.11"), 9001);//145.48.205.97
-
-                // Create a TCP/IP socket.
-                _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-                // Connect to the remote endpoint.
-                _socket.BeginConnect(remoteEP, ConnectCallback, _socket);
-                Console.WriteLine("Client connected...");
-
-
-                // Release the socket.
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("ERROR!! " + e.ToString());
-            }
+            _client = new TcpClient();
+            Busy = true;
+            _client.BeginConnect(NetworkSettings.ServerIP, NetworkSettings.ServerPort, ConnectCallback, null);
+            Console.WriteLine("Client connected...");
         }
 
-        public static void StopConnection()
+        public static void StopClient()
         {
-            if (_socket == null) return;
-
-            _socket.Shutdown(SocketShutdown.Both);
-            _socket.Disconnect(false);
-            _socket = null;
-            Console.WriteLine("Socket closed...");
+            if (_client == null) return;
+            _client.Close();
+            _client = null;
+            Console.WriteLine("Client closed...");
         }
 
         public static void Send(String data)
         {
-            //Socket must be set to any instance....
-            if (_socket == null)
+            if (_client == null && !Busy)
             {
-                StartConnection();
+                RunClient();
+            }
+            else if (_client == null && Busy)
+            {
+                while (Busy)
+                {
+                    Thread.Sleep(10);
+                }
             }
 
             // Convert the string data to byte data using ASCII encoding.
@@ -58,47 +50,78 @@ namespace Mallaca.Network
 
             // Begin sending the data
             Busy = true;
-            _socket.BeginSend(byteData, 0, byteData.Length, 0,SendCallback, _socket);
-            Console.WriteLine("Sent data: " + data);
+            _sslStream.BeginWrite(byteData, 0, byteData.Length, SendCallback, _sslStream);
+            _sslStream.Flush();
+
+            Console.WriteLine("Data sent: " + data);
         }
 
         private static void ConnectCallback(IAsyncResult ar)
         {
+            // ReSharper disable once RedundantDelegateCreation
+            _sslStream = new SslStream(_client.GetStream(), false,
+                new RemoteCertificateValidationCallback(ValidateServerCertificate), null);
+
             try
             {
-                // Retrieve the socket
-                var socket = (Socket)ar.AsyncState;
-
-                // Complete the connection.
-                socket.EndConnect(ar);
-
-                // Signal that connected
-                Console.WriteLine("TCPController: Connection active");
+                _sslStream.AuthenticateAsClient(NetworkSettings.ServerIP);
             }
-            catch (Exception e)
+
+            catch (AuthenticationException e)
             {
-                Console.WriteLine("TCPController ERROR!! \n" + e.ToString());
+                Console.WriteLine("Exception: {0}", e.Message);
+
+                if (e.InnerException != null)
+                {
+                    Console.WriteLine("Inner exception: {0}", e.InnerException.Message);
+                }
+
+                Console.WriteLine("Authentication failed - closing the connection.");
+
+                StopClient();
             }
+            var tcpclient = (TcpClient)ar.AsyncState;
+            // Complete the connection.
+            tcpclient.EndConnect(ar);
+
+            // Signal that connected
+            Console.WriteLine("TCPController: Connection active");
+            Busy = false;
         }
 
         private static void SendCallback(IAsyncResult ar)
         {
             try
             {
-                // Retrieve the socket
-                var cl = (Socket)ar.AsyncState;
+                //Retrieve the SslStream
+                var sslstream = (SslStream)ar.AsyncState;
 
-                // Complete sending the data to the remote device.
-                var bytesSent = cl.EndSend(ar);
+                //Complete sending the data to the remote device
+                sslstream.EndWrite(ar);
+
                 Busy = false;
-                Console.WriteLine("Sent to server...", bytesSent);
+                Console.WriteLine("Sent to server...");
 
             }
-            catch (Exception e)
+
+            catch (Exception exception)
             {
-                Console.WriteLine("ERROR!!" + e.ToString());
+                Console.WriteLine("ERROR!!: " + exception);
             }
         }
 
+        private static bool ValidateServerCertificate(object sender, X509Certificate certificate, X509Chain chain,
+            SslPolicyErrors sslPolicyErrors)
+        {
+            if (sslPolicyErrors == SslPolicyErrors.None)
+            {
+                return true;
+            }
+
+            Console.WriteLine("Certificate error: {0}", sslPolicyErrors);
+
+            // Do not allow this client to communicate with unauthenticated servers.
+            return false;
+        }
     }
 }

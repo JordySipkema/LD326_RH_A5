@@ -21,7 +21,7 @@ namespace Mallaca.Network
             var json = chatPacket.ToString();
             json = json.Length.ToString().PadRight(4, ' ') + json;
 
-            TCPController.StartConnection();
+            TCPController.RunClient();
             TCPController.Send(json);
 
         }

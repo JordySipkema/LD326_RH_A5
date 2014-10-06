@@ -1,5 +1,11 @@
-﻿using Mallaca;
+﻿using System.Net.Security;
+using System.Resources;
+using System.Security.Cryptography.X509Certificates;
+using Mallaca;
 using Mallaca.Network;
+using Mallaca.Network.Packet;
+using Mallaca.Properties;
+using Mallaca.Usertypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -16,7 +22,8 @@ namespace RH_Server.Server
     {
         public readonly byte[] Buffer = new byte[1024];
         public int BufferSize = 1024;
-        public Socket Socket;
+        public TcpClient Tcpclient;
+        private readonly SslStream _sslStream;
 
         private string _totalBuffer = "";
 
@@ -27,8 +34,14 @@ namespace RH_Server.Server
 
         public ClientHandler()
         {
+            var certificate = new X509Certificate(Resources._23tia5_centificate, "AvansHogeschool23ti2a5");
+
+            _sslStream = new SslStream(Tcpclient.GetStream());
+            _sslStream.AuthenticateAsServer(certificate);
+
             var thread = new Thread(ThreadLoop);
             thread.Start();
+
         }
 
     
@@ -39,16 +52,16 @@ namespace RH_Server.Server
             {
                 try
                 {
-                    
-
-                    var receiveCount = Socket.Receive(Buffer);
+                    //new Socket().Receive(Buffer);
+                    var receiveCount = _sslStream.Read(Buffer, 0, 1024);
                     _totalBuffer += ASCIIEncoding.Default.GetString(Buffer, 0, receiveCount);
 
 
                     var packetSize = Packet.getLengthOfPacket(_totalBuffer);
                     if (packetSize == -1)
                         continue;
-                    JObject json = Packet.RetrieveJSONPacket(packetSize, _totalBuffer);
+
+                    JObject json = Packet.RetrieveJSON(packetSize, _totalBuffer);
 
                     if (json == null)
                         continue;
@@ -88,7 +101,7 @@ namespace RH_Server.Server
                 }
                 catch (SocketException e)
                 {
-                    Console.WriteLine("Client with IP-address: " + Socket.RemoteEndPoint.ToString() + " has been disconnected.");
+                    Console.WriteLine("Client with IP-address: " + Tcpclient.Client.LocalEndPoint + " has been disconnected.");
                     Console.WriteLine(e.Message);
                 }
             }
@@ -98,7 +111,7 @@ namespace RH_Server.Server
         private void SendPacket(String packet)
         {
             packet = packet.Length.ToString().PadRight(4, ' ') + packet;
-            Socket.Send(ASCIIEncoding.Default.GetBytes(packet));
+            _sslStream.Write(ASCIIEncoding.Default.GetBytes(packet));
         }
 
         private void HandlePingPacket(JObject json)
@@ -163,7 +176,8 @@ namespace RH_Server.Server
         {
             var message = json.ToString();
 
-            StreamWriter writer = new StreamWriter();
+            StreamWriter writer = null;
+            //StreamWriter writer = new StreamWriter();
             try
             {
                 writer.WriteLine(message);
@@ -183,7 +197,8 @@ namespace RH_Server.Server
         public void HandleResponseChatPacket(JObject json)
         {
             String message;
-            StreamReader reader = new StreamReader();
+            StreamReader reader = null;
+            //StreamReader reader = new StreamReader();
 
             try
             {
