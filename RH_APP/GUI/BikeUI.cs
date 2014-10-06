@@ -57,17 +57,9 @@ namespace RH_APP.GUI
         public void updateGraph()
         {
 
-            _graph.Series["RPM"].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
-            _graph.Series["RPM"].Color = Color.Blue;
-            _graph.Series["RPM"].Points.AddXY(_controller.LatestMeasurement.TIME, _controller.LatestMeasurement.RPM);
-
-            
-
-            _graph.ChartAreas[0].AxisY.Maximum = 200;
-            _graph.ChartAreas[0].AxisY.Minimum = 0;
-            //_graph.Series["PULSE"].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
-            //_graph.Series["PULSE"].Color = Color.Green;
-            //_graph.Series["PULSE"].Points.AddY(_controller.LatestMeasurement.PULSE);
+            _graph.Series["SPEED"].Points.AddXY(_controller.LatestMeasurement.TIME, _controller.LatestMeasurement.SPEED /10.0);
+           
+            _graph.Series["PULSE"].Points.AddXY(_controller.LatestMeasurement.TIME, _controller.LatestMeasurement.PULSE);
         }
 
         public void updateGUI(object sender, EventArgs args)
@@ -149,6 +141,25 @@ namespace RH_APP.GUI
                     _textBox.Text = "";
                 }
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+            _graph.Series["SPEED"].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
+            _graph.Series["SPEED"].Color = Color.Blue;
+
+            _graph.ChartAreas[0].AxisY.Maximum = 150;
+            _graph.ChartAreas[0].AxisY.Minimum = 0;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            _graph.Series["PULSE"].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
+            _graph.Series["PULSE"].Color = Color.Red;
+
+            _graph.ChartAreas[0].AxisY.Maximum = 300;
+            _graph.ChartAreas[0].AxisY.Minimum = 50;
         }
     }
 }
