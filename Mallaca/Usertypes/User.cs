@@ -19,7 +19,6 @@ namespace Mallaca.Usertypes
         public string AuthToken { get; set; }
         public virtual UserType UserType  { get { return UserType.User;  } }
 
-        
 
         public bool IsClient { get { return UserType == UserType.Client; } }
         public bool IsSpecialist { get { return UserType == UserType.Specialist; } }

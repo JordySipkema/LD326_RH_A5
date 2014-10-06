@@ -1,17 +1,12 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace Mallaca.Network.Packet
 {
     public abstract class Packet
     {
         
-        public Packet()
+        protected Packet()
         { 
         
         }
@@ -73,5 +68,7 @@ namespace Mallaca.Network.Packet
 
             return p;
         }
+
+        public abstract JObject ToJsonObject();
     }
 }
