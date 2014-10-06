@@ -9,7 +9,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-
+using Mallaca.Network.Packet;
 namespace RH_Server.Server
 {
     class ClientHandler
@@ -39,7 +39,7 @@ namespace RH_Server.Server
             {
                 try
                 {
-                    
+
 
                     var receiveCount = Socket.Receive(Buffer);
                     _totalBuffer += ASCIIEncoding.Default.GetString(Buffer, 0, receiveCount);
@@ -48,7 +48,7 @@ namespace RH_Server.Server
                     var packetSize = Packet.getLengthOfPacket(_totalBuffer);
                     if (packetSize == -1)
                         continue;
-                    JObject json = Packet.RetrieveJSONPacket(packetSize, _totalBuffer);
+                    JObject json = Packet.RetrieveJSON(packetSize, _totalBuffer);
 
                     if (json == null)
                         continue;
@@ -163,41 +163,41 @@ namespace RH_Server.Server
         {
             var message = json.ToString();
 
-            StreamWriter writer = new StreamWriter();
-            try
-            {
-                writer.WriteLine(message);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                writer.Flush();
-                writer.Close();
-                writer = null;
-            }
+            //StreamWriter writer = new StreamWriter();
+            //try
+            //{
+            //    writer.WriteLine(message);
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e);
+            //}
+            //finally
+            //{
+            //    writer.Flush();
+            //    writer.Close();
+            //    writer = null;
+            //}
         }
 
         public void HandleResponseChatPacket(JObject json)
         {
-            String message;
-            StreamReader reader = new StreamReader();
+        //    String message;
+        //    StreamReader reader = new StreamReader();
 
-            try
-            {
-                 message = reader.ReadLine();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                reader.Close();
-                reader = null;
-            }
+        //    try
+        //    {
+        //         message = reader.ReadLine();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e);
+        //    }
+        //    finally
+        //    {
+        //        reader.Close();
+        //        reader = null;
+        //    }
         }
     }
 }
