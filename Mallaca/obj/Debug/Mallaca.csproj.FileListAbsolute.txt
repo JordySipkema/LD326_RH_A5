@@ -18,3 +18,5 @@ C:\Users\Engin\Documents\Workspace\CSharp\23TI2A5\Mallaca\bin\Debug\Newtonsoft.J
 C:\Users\Engin\Documents\Workspace\CSharp\23TI2A5\Mallaca\obj\Debug\Mallaca.dll
 C:\Users\Engin\Documents\Workspace\CSharp\23TI2A5\Mallaca\obj\Debug\Mallaca.pdb
 C:\Users\Engin\Documents\Workspace\CSharp\23TI2A5\Mallaca\obj\Debug\Mallaca.csprojResolveAssemblyReference.cache
+C:\Users\Engin\Documents\Workspace\CSharp\23TI2A5\Mallaca\obj\Debug\Mallaca.Properties.Resources.resources
+C:\Users\Engin\Documents\Workspace\CSharp\23TI2A5\Mallaca\obj\Debug\Mallaca.csproj.GenerateResource.Cache
