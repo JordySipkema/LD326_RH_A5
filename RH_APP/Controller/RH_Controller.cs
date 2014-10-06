@@ -99,7 +99,7 @@ namespace RH_APP.Controller
         {
             var jsonObject = new JObject(new JProperty("CMD", "dc"));
             var json = jsonObject.ToString();
-            json = json.Length.ToString().PadRight(4, ' ') + json;
+            
             TCPController.Send(json);
         }
 
