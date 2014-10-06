@@ -85,9 +85,6 @@ namespace RH_Server.Server
                         case "chat":
                             HandleChatPacket(json);
                             break;
-                        case "resp-chat":
-                            HandleResponseChatPacket(json);
-                            break;
                         default:
                             Console.WriteLine("Unknown packet");
                             break;

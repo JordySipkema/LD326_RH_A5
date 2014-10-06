@@ -61,6 +61,7 @@ namespace Mallaca.Network
             if (_client == null)
                 return;
 
+            data = data.Length.ToString().PadRight(4, ' ') + data;
             // Convert the string data to byte data using ASCII encoding.
             var byteData = Encoding.ASCII.GetBytes(data);
 
