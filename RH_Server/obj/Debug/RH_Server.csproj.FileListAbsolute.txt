@@ -28,3 +28,14 @@ C:\Users\Engin\Documents\Workspace\CSharp\23TI2A5\RH_Server\bin\Debug\Mallaca.pd
 C:\Users\Engin\Documents\Workspace\CSharp\23TI2A5\RH_Server\bin\Debug\Newtonsoft.Json.xml
 C:\Users\Engin\Documents\Workspace\CSharp\23TI2A5\RH_Server\obj\Debug\RH_Server.exe
 C:\Users\Engin\Documents\Workspace\CSharp\23TI2A5\RH_Server\obj\Debug\RH_Server.pdb
+C:\Users\kevin\Desktop\remote healthcare\RH_Server\bin\Debug\RH_Server.exe.config
+C:\Users\kevin\Desktop\remote healthcare\RH_Server\obj\Debug\RH_Server.exe
+C:\Users\kevin\Desktop\remote healthcare\RH_Server\obj\Debug\RH_Server.pdb
+C:\Users\kevin\Desktop\remote healthcare\RH_Server\bin\Debug\RH_Server.exe
+C:\Users\kevin\Desktop\remote healthcare\RH_Server\bin\Debug\RH_Server.pdb
+C:\Users\kevin\Desktop\remote healthcare\RH_Server\bin\Debug\Mallaca.dll
+C:\Users\kevin\Desktop\remote healthcare\RH_Server\bin\Debug\Newtonsoft.Json.dll
+C:\Users\kevin\Desktop\remote healthcare\RH_Server\bin\Debug\MySql.Data.dll
+C:\Users\kevin\Desktop\remote healthcare\RH_Server\bin\Debug\Mallaca.pdb
+C:\Users\kevin\Desktop\remote healthcare\RH_Server\bin\Debug\Newtonsoft.Json.xml
+C:\Users\kevin\Desktop\remote healthcare\RH_Server\obj\Debug\RH_Server.csprojResolveAssemblyReference.cache

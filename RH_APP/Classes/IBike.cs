@@ -14,6 +14,7 @@ namespace RH_APP.Classes
 
         public abstract void SendData(String command);
 
+
         protected Measurement ProtocolToMeasurement(String protocolData)
         {
             String[] values = protocolData.Split('\t');
