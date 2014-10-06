@@ -28,6 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -47,8 +51,11 @@
             this._chatLogBox = new System.Windows.Forms.TextBox();
             this._textBox = new System.Windows.Forms.TextBox();
             this._sendButton = new System.Windows.Forms.Button();
-            this.measurementBindingSource = new System.Windows.Forms.BindingSource();
+            this.label4 = new System.Windows.Forms.Label();
+            this._graph = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.measurementBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this._graph)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.measurementBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -217,8 +224,8 @@
             0,
             0,
             0});
-            this.numericUpDown1.Location = new System.Drawing.Point(39, 245);
-            this.numericUpDown1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.numericUpDown1.Location = new System.Drawing.Point(38, 251);
+            this.numericUpDown1.Margin = new System.Windows.Forms.Padding(2);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             400,
             0,
@@ -230,7 +237,8 @@
             0,
             0});
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(90, 20);
+            this.numericUpDown1.ReadOnly = true;
+            this.numericUpDown1.Size = new System.Drawing.Size(47, 20);
             this.numericUpDown1.TabIndex = 15;
             this.numericUpDown1.Value = new decimal(new int[] {
             25,
@@ -267,6 +275,34 @@
             this._sendButton.UseVisualStyleBackColor = true;
             this._sendButton.Click += new System.EventHandler(this._sendButton_Click);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(90, 253);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(72, 13);
+            this.label4.TabIndex = 19;
+            this.label4.Text = "SET POWER";
+            // 
+            // _graph
+            // 
+            chartArea1.Name = "ChartArea1";
+            this._graph.ChartAreas.Add(chartArea1);
+            this._graph.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this._graph.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            legend1.Name = "Legend1";
+            this._graph.Legends.Add(legend1);
+            this._graph.Location = new System.Drawing.Point(40, 362);
+            this._graph.Name = "_graph";
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "RPM";
+            series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Time;
+            this._graph.Series.Add(series1);
+            this._graph.Size = new System.Drawing.Size(828, 300);
+            this._graph.TabIndex = 20;
+            // 
             // measurementBindingSource
             // 
             this.measurementBindingSource.DataSource = typeof(Mallaca.Measurement);
@@ -275,7 +311,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(905, 347);
+            this.ClientSize = new System.Drawing.Size(905, 690);
+            this.Controls.Add(this._graph);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this._sendButton);
             this.Controls.Add(this._textBox);
             this.Controls.Add(this._chatLogBox);
@@ -299,6 +337,7 @@
             this.Text = "Remote Healthcare - Client Edition";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.RH_BIKE_GUI_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this._graph)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.measurementBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -327,6 +366,8 @@
         private System.Windows.Forms.TextBox _chatLogBox;
         private System.Windows.Forms.TextBox _textBox;
         private System.Windows.Forms.Button _sendButton;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.DataVisualization.Charting.Chart _graph;
     }
 }
 
