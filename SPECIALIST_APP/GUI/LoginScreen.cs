@@ -11,7 +11,7 @@ using Mallaca;
 using Mallaca.Network;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-
+using Mallaca.Network.Packet;
 
 namespace Application_Specialist.GUI
 {
@@ -28,23 +28,27 @@ namespace Application_Specialist.GUI
 
         private void _loginButton_Click(object sender, EventArgs e)
         { 
-            JObject loginPacket = new JObject(
-                new JProperty("CMD", "LOGIN"),
-                new JProperty("username", _usernameBox.Text),
-                new JProperty("password", Hashing.CreateSHA256(_passwordBox.Text)));
+            LoginPacket p = new LoginPacket(_usernameBox.Text, _passwordBox.Text);
 
-            //if (_connection.ValidateUser(_usernameBox.Text, _passwordBox.Text))
-            //TODO: send username and hashed password to server for authentication.
-            
+            TCPController.RunClient();
+            TCPController.OnPacketReceived += onLoginPacketResponse;
+            TCPController.Send(p.ToString());
+
+            TCPController.ReceiveTransmission();
+
+
         }
 
-        private void onLoginPacketResponse()
+        private void onLoginPacketResponse(Packet p)
         {
-            if (true)
+            LoginResponsePacket resp = p as LoginResponsePacket;
+            if (resp != null && resp.status == "200")
             {
-                this.Hide();
+                this.BeginInvoke((Action)(this.Hide));
+
+                //TODO: Store auth token.
+                TCPController.OnPacketReceived -= onLoginPacketResponse;
                 var _mainScreen = new MainScreen();
-                this.Hide();
                 _mainScreen.ShowDialog();
 
             }
