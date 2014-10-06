@@ -69,5 +69,15 @@ namespace Mallaca.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] invalid_certificate {
+            get {
+                object obj = ResourceManager.GetObject("invalid_certificate", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

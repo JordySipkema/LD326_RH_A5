@@ -66,13 +66,14 @@
     <Compile Include="Network\Statuscode.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="23tia5_centificate.pfx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="23tia5_centificate.pfx" />
+    <None Include="invalid_certificate.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

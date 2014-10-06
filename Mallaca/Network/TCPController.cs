@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Net.Security;
 using System.Net.Sockets;
+using System.Runtime.Remoting.Messaging;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
+using Mallaca.Properties;
 
 namespace Mallaca.Network
 {
@@ -18,9 +20,33 @@ namespace Mallaca.Network
         public static void RunClient()
         {
             _client = new TcpClient();
-            Busy = true;
             _client.Connect(NetworkSettings.ServerIP, NetworkSettings.ServerPort);
-            Console.WriteLine("Client connected...");
+
+            // ReSharper disable once RedundantDelegateCreation
+            _sslStream = new SslStream(_client.GetStream(), false,
+                new RemoteCertificateValidationCallback(ValidateServerCertificate), null);
+
+            try
+            {
+                _sslStream.AuthenticateAsClient(NetworkSettings.ServerIP);
+            }
+
+            catch (AuthenticationException e)
+            {
+                Console.WriteLine("Exception: {0}", e.Message);
+
+                if (e.InnerException != null)
+                {
+                    Console.WriteLine("Inner exception: {0}", e.InnerException.Message);
+                }
+
+                Console.WriteLine("Authentication failed - closing the connection.");
+
+                StopClient();
+            }
+
+            // Signal that connected
+            Console.WriteLine("TCPController: Connection active");
         }
 
         public static void StopClient()
@@ -56,39 +82,6 @@ namespace Mallaca.Network
             Console.WriteLine("Data sent: " + data);
         }
 
-        private static void ConnectCallback(IAsyncResult ar)
-        {
-            // ReSharper disable once RedundantDelegateCreation
-            _sslStream = new SslStream(_client.GetStream(), false,
-                new RemoteCertificateValidationCallback(ValidateServerCertificate), null);
-
-            try
-            {
-                _sslStream.AuthenticateAsClient(NetworkSettings.ServerIP);
-            }
-
-            catch (AuthenticationException e)
-            {
-                Console.WriteLine("Exception: {0}", e.Message);
-
-                if (e.InnerException != null)
-                {
-                    Console.WriteLine("Inner exception: {0}", e.InnerException.Message);
-                }
-
-                Console.WriteLine("Authentication failed - closing the connection.");
-
-                StopClient();
-            }
-            var tcpclient = (TcpClient)ar.AsyncState;
-            // Complete the connection.
-            tcpclient.EndConnect(ar);
-
-            // Signal that connected
-            Console.WriteLine("TCPController: Connection active");
-            Busy = false;
-        }
-
         private static void SendCallback(IAsyncResult ar)
         {
             try
@@ -113,15 +106,8 @@ namespace Mallaca.Network
         private static bool ValidateServerCertificate(object sender, X509Certificate certificate, X509Chain chain,
             SslPolicyErrors sslPolicyErrors)
         {
-            if (sslPolicyErrors == SslPolicyErrors.None)
-            {
-                return true;
-            }
-
-            Console.WriteLine("Certificate error: {0}", sslPolicyErrors);
-
-            // Do not allow this client to communicate with unauthenticated servers.
-            return false;
+            var servercert = new X509Certificate2(Resources._23tia5_centificate, "AvansHogeschool23ti2a5");
+            return certificate.Equals(servercert);
         }
     }
 }
