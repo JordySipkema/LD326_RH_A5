@@ -1,11 +1,10 @@
 ﻿using System.Net.Security;
-using System.Resources;
+using System.Runtime.Versioning;
 using System.Security.Cryptography.X509Certificates;
 using Mallaca;
 using Mallaca.Network;
 using Mallaca.Network.Packet;
 using Mallaca.Properties;
-using Mallaca.Usertypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -20,9 +19,9 @@ namespace RH_Server.Server
 {
     class ClientHandler
     {
-        public readonly byte[] Buffer = new byte[1024];
-        public int BufferSize = 1024;
-        public TcpClient Tcpclient;
+        private readonly byte[] Buffer = new byte[1024];
+        private int _bufferSize = 1024;
+        private readonly TcpClient _tcpclient;
         private readonly SslStream _sslStream;
 
         private string _totalBuffer = "";
@@ -32,19 +31,19 @@ namespace RH_Server.Server
         //private string username;
         //private Boolean isLoggedIn;
 
-        public ClientHandler()
+        public ClientHandler(TcpClient client)
         {
-            var certificate = new X509Certificate(Resources._23tia5_centificate, "AvansHogeschool23ti2a5");
+            _tcpclient = client;
+            var certificate = new X509Certificate2(Resources._23tia5_centificate, "AvansHogeschool23ti2a5");
+            //var certificate = new X509Certificate2(Resources.invalid_certificate, "apeture");
 
-            _sslStream = new SslStream(Tcpclient.GetStream());
+            _sslStream = new SslStream(_tcpclient.GetStream());
             _sslStream.AuthenticateAsServer(certificate);
 
             var thread = new Thread(ThreadLoop);
             thread.Start();
 
         }
-
-    
 
         private void ThreadLoop()
         {
@@ -53,7 +52,7 @@ namespace RH_Server.Server
                 try
                 {
                     //new Socket().Receive(Buffer);
-                    var receiveCount = _sslStream.Read(Buffer, 0, 1024);
+                    var receiveCount = _sslStream.Read(Buffer, 0, _bufferSize);
                     _totalBuffer += ASCIIEncoding.Default.GetString(Buffer, 0, receiveCount);
 
 
@@ -101,7 +100,7 @@ namespace RH_Server.Server
                 }
                 catch (SocketException e)
                 {
-                    Console.WriteLine("Client with IP-address: " + Tcpclient.Client.LocalEndPoint + " has been disconnected.");
+                    Console.WriteLine("Client with IP-address: " + _tcpclient.Client.LocalEndPoint + " has been disconnected.");
                     Console.WriteLine(e.Message);
                 }
             }

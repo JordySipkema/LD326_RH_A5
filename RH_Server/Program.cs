@@ -39,7 +39,7 @@ namespace RH_Server
             {
                 var tcpclient = serverListener.AcceptTcpClient();
                 Console.WriteLine("TCP Client accepted");
-                var client = new ClientHandler() {Tcpclient = tcpclient};
+                var client = new ClientHandler(tcpclient);
             }
         }
     }
