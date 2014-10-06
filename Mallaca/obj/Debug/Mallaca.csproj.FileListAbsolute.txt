@@ -20,13 +20,3 @@ C:\Users\Engin\Documents\Workspace\CSharp\23TI2A5\Mallaca\obj\Debug\Mallaca.pdb
 C:\Users\Engin\Documents\Workspace\CSharp\23TI2A5\Mallaca\obj\Debug\Mallaca.csprojResolveAssemblyReference.cache
 C:\Users\Engin\Documents\Workspace\CSharp\23TI2A5\Mallaca\obj\Debug\Mallaca.Properties.Resources.resources
 C:\Users\Engin\Documents\Workspace\CSharp\23TI2A5\Mallaca\obj\Debug\Mallaca.csproj.GenerateResource.Cache
-C:\Users\kevin\Desktop\remote healthcare\Mallaca\bin\Debug\Mallaca.dll
-C:\Users\kevin\Desktop\remote healthcare\Mallaca\bin\Debug\Mallaca.pdb
-C:\Users\kevin\Desktop\remote healthcare\Mallaca\bin\Debug\MySql.Data.dll
-C:\Users\kevin\Desktop\remote healthcare\Mallaca\bin\Debug\Newtonsoft.Json.dll
-C:\Users\kevin\Desktop\remote healthcare\Mallaca\bin\Debug\Newtonsoft.Json.xml
-C:\Users\kevin\Desktop\remote healthcare\Mallaca\obj\Debug\Mallaca.csprojResolveAssemblyReference.cache
-C:\Users\kevin\Desktop\remote healthcare\Mallaca\obj\Debug\Mallaca.Properties.Resources.resources
-C:\Users\kevin\Desktop\remote healthcare\Mallaca\obj\Debug\Mallaca.csproj.GenerateResource.Cache
-C:\Users\kevin\Desktop\remote healthcare\Mallaca\obj\Debug\Mallaca.dll
-C:\Users\kevin\Desktop\remote healthcare\Mallaca\obj\Debug\Mallaca.pdb
