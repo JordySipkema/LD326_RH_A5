@@ -84,9 +84,6 @@ namespace RH_Server.Server
                         case "chat":
                             HandleChatPacket(json);
                             break;
-                        case "resp-chat":
-                            HandleResponseChatPacket(json);
-                            break;
                         default:
                             Console.WriteLine("Unknown packet");
                             break;
@@ -173,45 +170,23 @@ namespace RH_Server.Server
 
         public void HandleChatPacket(JObject json)
         {
-            var message = json.ToString();
+            var message = (String)json["message"];
 
-            StreamWriter writer = null;
-            //StreamWriter writer = new StreamWriter();
-            try
-            {
-                writer.WriteLine(message);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                writer.Flush();
-                writer.Close();
-                writer = null;
-            }
-        }
 
-        public void HandleResponseChatPacket(JObject json)
-        {
-            String message;
-            StreamReader reader = null;
-            //StreamReader reader = new StreamReader();
+            NetworkStream networkStream = _tcpclient.GetStream();
 
-            try
-            {
-                 message = reader.ReadLine();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                reader.Close();
-                reader = null;
-            }
+            StreamWriter writer = new StreamWriter(networkStream);
+
+            writer.WriteLine(message);
+
+            writer.Flush();
+            writer.Close();
+
+            StreamReader reader = new StreamReader(networkStream);
+
+            var responseMessage = reader.ReadLine();
+            reader.Close();
+
         }
     }
 }

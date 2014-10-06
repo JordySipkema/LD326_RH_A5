@@ -9,7 +9,7 @@ namespace Mallaca.Network
         public static void SendMessage(String message)
         {
             JObject chatPacket = new JObject(
-                    new JProperty("CMD", "CHAT"),
+                    new JProperty("CMD", "chat"),
                     new JProperty("message", message));
 
             var json = chatPacket.ToString();
