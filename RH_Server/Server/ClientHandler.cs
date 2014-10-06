@@ -1,5 +1,4 @@
 ﻿using System.Net.Security;
-using System.Runtime.Versioning;
 using System.Security.Cryptography.X509Certificates;
 using Mallaca;
 using Mallaca.Network;
@@ -14,13 +13,14 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using RH_Server.Classes;
 
 namespace RH_Server.Server
 {
     class ClientHandler
     {
         private readonly byte[] Buffer = new byte[1024];
-        private int _bufferSize = 1024;
+        private const int _bufferSize = 1024;
         private readonly TcpClient _tcpclient;
         private readonly SslStream _sslStream;
 
@@ -119,22 +119,37 @@ namespace RH_Server.Server
 
         private void HandleLoginPacket(JObject json)
         {
-           var username = (string)json["USER"];
+            //Recieve the username and password from json.
+            var username = (string)json["USER"];
             var password = (string)json["PASSWORD"];
 
+            JObject returnJson;
             //Code to check user/pass here
+            if (Authentication.Authenticate(username, password, _sslStream))
+            {
 
-            var authtoken = String.Format("{0}zZz{1}", username, password);
-            var returnJson =
-                new JObject(
-                    new JProperty("STATUS", Statuscode.GetCode(Statuscode.Status.Ok)),
-                    new JProperty("DESC", Statuscode.GetDescription(Statuscode.Status.Ok)),
-                    new JProperty("AUTHTOKEN", authtoken)
-                );
+                returnJson =
+                    new JObject(
+                        new JProperty("STATUS", Statuscode.GetCode(Statuscode.Status.Ok)),
+                        new JProperty("DESC", Statuscode.GetDescription(Statuscode.Status.Ok)),
+                        new JProperty("AUTHTOKEN", Authentication.GetUser(username).AuthToken)
+                        );
 
+            }
+            else //If the code reaches this point, the authentification has failed.
+            {
+                returnJson =
+                    new JObject(
+                        new JProperty("STATUS", Statuscode.GetCode(Statuscode.Status.InvalidUsernameOrPassword)),
+                        new JProperty("DESC", Statuscode.GetDescription(Statuscode.Status.InvalidUsernameOrPassword))
+                        );
+            }
+
+            //Send the result back to the client.
             Console.WriteLine(returnJson.ToString());
             SendPacket(returnJson.ToString());
         }
+
         private void HandlePushPacket(JObject json)
         {
             var size = json["count"];
@@ -170,23 +185,36 @@ namespace RH_Server.Server
 
         public void HandleChatPacket(JObject json)
         {
-            var message = (String)json["message"];
+            var authToken = (string) json["AUTHTOKEN"];
+            var username = (string) json["USERNAMEDESTINATION"];
+            var message = (string) json["MESSAGE"];
 
+            //Check if the authToken is valid:
+            if (Authentication.Authenticate(authToken))
+            {
+                
+            }
+        }
 
-            NetworkStream networkStream = _tcpclient.GetStream();
+        public void HandleResponseChatPacket(JObject json)
+        {
+            String message;
+            StreamReader reader = null;
+            //StreamReader reader = new StreamReader();
 
-            StreamWriter writer = new StreamWriter(networkStream);
-
-            writer.WriteLine(message);
-
-            writer.Flush();
-            writer.Close();
-
-            StreamReader reader = new StreamReader(networkStream);
-
-            var responseMessage = reader.ReadLine();
-            reader.Close();
-
+            try
+            {
+                 message = reader.ReadLine();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                reader.Close();
+                reader = null;
+            }
         }
     }
 }

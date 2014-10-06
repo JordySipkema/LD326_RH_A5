@@ -90,8 +90,7 @@ namespace RH_APP.GUI
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            int value = (int)numericUpDown1.Value;
-            _controller.SetPower(value);
+            _controller.SetPower((int)numericUpDown1.Value);
         }
 
         ~RH_BIKE_GUI()

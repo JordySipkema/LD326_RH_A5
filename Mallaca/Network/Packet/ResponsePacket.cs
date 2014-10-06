@@ -28,5 +28,10 @@ namespace Mallaca.Network.Packet
 
         public string status { get; set; }
         public string description { get; set; }
+
+        public override JObject ToJsonObject()
+        {
+            return GetJsonObject();
+        }
     }
 }

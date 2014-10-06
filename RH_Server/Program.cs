@@ -17,7 +17,7 @@ namespace RH_Server
 
         static void TestCode()
         {
-            var x = Authentication.Authenticate("Jordy", "Sipkema");
+            var x = Authentication.Authenticate("Jordy", "Sipkema", null);
             Console.ReadKey();
         }
 
