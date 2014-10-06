@@ -13,7 +13,7 @@ namespace Mallaca.Network
                     new JProperty("message", message));
 
             var json = chatPacket.ToString();
-            json = json.Length.ToString().PadRight(4, ' ') + json;
+            //json = json.Length.ToString().PadRight(4, ' ') + json;
 
             TCPController.RunClient();
             TCPController.Send(json);

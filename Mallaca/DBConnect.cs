@@ -78,7 +78,7 @@ namespace Mallaca
                     password = Hashing.CreateSHA256(password);
 
                 _selectCommand = new MySqlCommand(
-                    String.Format("SELECT * FROM {0}.users WHERE username='{1}' AND password='{2}';", _database, username
+                    String.Format("SELECT * FROM {0}.users WHERE Username='{1}' AND password='{2}';", _database, username
                         , password) , Connection);
                 _reader = _selectCommand.ExecuteReader();
                 var rows = 0;
@@ -145,7 +145,7 @@ namespace Mallaca
         private List<User> readToUser(MySqlDataReader _reader)
         {
             List<User> users = new List<User>();
-            string usersQuery = String.Format("SELECT user_type, {0}.users.id, username, name, dateOfBirth, surname, gender, password, length, weight FROM {0}.users LEFT JOIN {0}.client_bmi_info on {0}.users.id = {0}.client_bmi_info.users_id  ", _database);
+            string usersQuery = String.Format("SELECT user_type, {0}.users.id, Username, name, dateOfBirth, surname, gender, password, length, weight FROM {0}.users LEFT JOIN {0}.client_bmi_info on {0}.users.id = {0}.client_bmi_info.users_id  ", _database);
             OpenConnection();
             _selectCommand = new MySqlCommand(usersQuery, Connection);
 
@@ -263,7 +263,7 @@ namespace Mallaca
 
         public List<User> GetAllUsers()
         {
-            string usersQuery = String.Format("SELECT user_type, {0}.users.id, username, name, dateOfBirth, surname, gender, password, length, weight FROM {0}.users LEFT JOIN {0}.client_bmi_info on {0}.users.id = {0}.client_bmi_info.users_id  ", _database);
+            string usersQuery = String.Format("SELECT user_type, {0}.users.id, Username, name, dateOfBirth, surname, gender, password, length, weight FROM {0}.users LEFT JOIN {0}.client_bmi_info on {0}.users.id = {0}.client_bmi_info.users_id  ", _database);
             OpenConnection();
             _selectCommand = new MySqlCommand(usersQuery, Connection);
 
@@ -291,7 +291,7 @@ namespace Mallaca
                 string userQuery;
                 if (user.Id == null)
                 {
-                    userQuery = string.Format("INSERT INTO {6}.users(username, dateOfBirth, surname, gender, name, user_type) VALUES('{0}','{1}','{2}','{3}','{4}','{5}')",
+                    userQuery = string.Format("INSERT INTO {6}.users(Username, dateOfBirth, surname, gender, name, user_type) VALUES('{0}','{1}','{2}','{3}','{4}','{5}')",
                          user.Username, user.DateOfBirth.ToString("yyyy-mm-dd"), user.Surname, user.Gender, user.Name,((int) user.UserType), _database);
                     _selectCommand = new MySqlCommand(userQuery, Connection);
                     _selectCommand.ExecuteNonQuery();
@@ -300,7 +300,7 @@ namespace Mallaca
                 else
                 {
                     string date = user.DateOfBirth.ToString("yyyy-MM-dd");
-                    userQuery = string.Format("UPDATE {7}.users SET username='{0}', dateOfBirth='{1}',surname='{2}',gender='{3}', name='{4}', user_type='{5}' WHERE id = {6}",
+                    userQuery = string.Format("UPDATE {7}.users SET Username='{0}', dateOfBirth='{1}',surname='{2}',gender='{3}', name='{4}', user_type='{5}' WHERE id = {6}",
                         user.Username, date, user.Surname, user.Gender, user.Name, ((int)user.UserType), user.Id, _database);
                     _selectCommand = new MySqlCommand(userQuery, Connection);
                     _selectCommand.ExecuteNonQuery();
@@ -355,7 +355,7 @@ namespace Mallaca
 
         public User getUser(string username)
         {
-            string usersQuery = String.Format("SELECT user_type, {0}.users.id, username, name, dateOfBirth, surname, gender, password, length, weight FROM {0}.users LEFT JOIN {0}.client_bmi_info on {0}.users.id = {0}.client_bmi_info.users_id WHERE username = '{1}' ",
+            string usersQuery = String.Format("SELECT user_type, {0}.users.id, Username, name, dateOfBirth, surname, gender, password, length, weight FROM {0}.users LEFT JOIN {0}.client_bmi_info on {0}.users.id = {0}.client_bmi_info.users_id WHERE Username = '{1}' ",
                 _database, username);
             return getUserQuery(usersQuery);
         }
@@ -363,7 +363,7 @@ namespace Mallaca
         public User getUser(int id)
         {
 
-            string usersQuery = String.Format("SELECT user_type, {0}.users.id, username, name, dateOfBirth, surname, gender, password, length, weight FROM {0}.users LEFT JOIN {0}.client_bmi_info on {0}.users.id = {0}.client_bmi_info.users_id WHERE {0}.users.id = '{1}' ",
+            string usersQuery = String.Format("SELECT user_type, {0}.users.id, Username, name, dateOfBirth, surname, gender, password, length, weight FROM {0}.users LEFT JOIN {0}.client_bmi_info on {0}.users.id = {0}.client_bmi_info.users_id WHERE {0}.users.id = '{1}' ",
                 _database, id);
             return getUserQuery(usersQuery);
         }

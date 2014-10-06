@@ -4,8 +4,7 @@ using System;
 namespace Mallaca.Network.Packet
 {
     public abstract class Packet
-    {
-        
+    {        
         protected Packet()
         { 
         
@@ -32,15 +31,14 @@ namespace Mallaca.Network.Packet
         /// <summary>
         ///  Tries to retrieve exactly one packet as a JSON object from a string.
         /// </summary>
-        public static JObject RetrieveJSON(int packetSize, string buffer)
+        public static JObject RetrieveJSON(int packetSize, ref string buffer)
         {
 
             if (buffer.Length < packetSize + 4) return null;
             //Continue means: if statement == true, DO NOT PROCEED
 
             var jsonData = buffer.Substring(4, packetSize);
-            //Console.WriteLine(jsonData);
-
+            buffer.Remove(0, packetSize + 4);
             return JObject.Parse(jsonData);
         }
 
@@ -50,7 +48,9 @@ namespace Mallaca.Network.Packet
             if (buffer.Length < packetSize + 4) return null;
             //Continue means: if statement == true, DO NOT PROCEED
 
+
             var jsonData = buffer.Substring(4, packetSize);
+            buffer.Remove(0, packetSize + 4);
             //Console.WriteLine(jsonData);
 
             JObject json = JObject.Parse(jsonData);
@@ -58,7 +58,7 @@ namespace Mallaca.Network.Packet
             switch(json["CMD"].ToString())
             {
                 case LoginPacket.cmd:
-                    p = new LoginPacket(json["username"].ToString(), json["passowrd"].ToString());
+                    p = new LoginPacket(json["Username"].ToString(), json["passowrd"].ToString());
                     break;
 
                 case LoginResponsePacket.cmd:

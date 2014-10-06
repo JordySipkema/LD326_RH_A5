@@ -60,7 +60,7 @@ namespace RH_Server.Server
                     if (packetSize == -1)
                         continue;
 
-                    JObject json = Packet.RetrieveJSON(packetSize, _totalBuffer);
+                    JObject json = Packet.RetrieveJSON(packetSize, ref _totalBuffer);
 
                     if (json == null)
                         continue;
