@@ -19,7 +19,7 @@ namespace Mallaca.Network
         {
             _client = new TcpClient();
             Busy = true;
-            _client.BeginConnect(NetworkSettings.ServerIP, NetworkSettings.ServerPort, ConnectCallback, null);
+            _client.Connect(NetworkSettings.ServerIP, NetworkSettings.ServerPort);
             Console.WriteLine("Client connected...");
         }
 
