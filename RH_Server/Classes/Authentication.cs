@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Mallaca;
 using Mallaca.Usertypes;
 
@@ -7,9 +9,9 @@ namespace RH_Server.Classes
 {
     public static class Authentication
     {
-        private static readonly List<User> AuthUsers = new List<User>(); 
+        private static readonly Dictionary<User, Stream> AuthUsers = new Dictionary<User, Stream>();
 
-        public static Boolean Authenticate(String user, String passhash)
+        public static Boolean Authenticate(String user, String passhash, Stream socketStream)
         {
             //check that user and passhash are valid.
             var database = new DBConnect();
@@ -29,9 +31,27 @@ namespace RH_Server.Classes
            var hash = Hashing.CreateSHA256(aboutToHash);
 
             //3. Create the user :D
-            var u = new User{ Name = user, AuthToken = hash};
+            var u = new User{ Name = user, PasswordToBeSaved = passhash, AuthToken = hash};
+
+            //4. Add the user to the AuthUsers class.
+            AuthUsers.Add(u, socketStream);
 
             return true;
+        }
+
+        public static Boolean Authenticate(String authToken)
+        {
+            return (AuthUsers.Count(x => x.Key.AuthToken == authToken) == 1);
+        }
+
+        public static Stream GetStream(String username)
+        {
+            return AuthUsers.First(x => x.Key.Username == username).Value;
+        }
+
+        public static User GetUser(String username)
+        {
+            return AuthUsers.First(x => x.Key.Username == username).Key;
         }
     }
 }
