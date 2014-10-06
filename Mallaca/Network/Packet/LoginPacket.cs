@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 namespace Mallaca.Network.Packet
 {
-    class LoginPacket : Packet
+    public class LoginPacket : Packet
     {
-        public LoginPacket(string username, string password) : base(cmd)
+        public LoginPacket(string username, string password)
         {
-
+            this.username = username;
+            this.password = password;
         }
 
         public LoginPacket(JObject j)
-            : base(cmd)
         {
             if (j["CMD"].ToString() != cmd)
                 throw new InvalidOperationException("Given JSON defines the wrong packet.");

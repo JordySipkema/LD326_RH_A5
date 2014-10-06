@@ -1,10 +1,17 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Mallaca.Network.Packet
 {
     public abstract class Packet
     {
-        protected Packet(string type)
+        
+        public Packet()
         { 
         
         }
@@ -16,7 +23,15 @@ namespace Mallaca.Network.Packet
             if (buffer.Length < 4) return -1;
             //Continue means: if _totalBuffer.Lenght < 4, DO NOT PROCEED
 
-            return int.Parse(buffer.Substring(0, 4));
+            //return int.Parse(buffer.Substring(0, 4));
+
+            char[] chars = buffer.Substring(0, 4).ToCharArray();
+            byte[] bytes = new byte[4];
+
+            for (int i = 0; i < chars.Length; i++)
+                bytes[i] = (byte)chars[i];
+            
+            return BitConverter.ToInt32(bytes,0);
         }
 
         /// <summary>
@@ -34,7 +49,7 @@ namespace Mallaca.Network.Packet
             return JObject.Parse(jsonData);
         }
 
-        public static Packet RetrievePacket(int packetSize, string buffer)
+        public static Packet RetrievePacket(int packetSize, ref string buffer)
         {
 
             if (buffer.Length < packetSize + 4) return null;
