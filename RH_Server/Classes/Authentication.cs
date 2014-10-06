@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using Mallaca;
@@ -9,7 +9,8 @@ namespace RH_Server.Classes
 {
     public static class Authentication
     {
-        private static readonly Dictionary<User, Stream> AuthUsers = new Dictionary<User, Stream>();
+        //ConcurrentDictionary to enhance thread safety.
+        private static readonly ConcurrentDictionary<User, Stream> AuthUsers = new ConcurrentDictionary<User, Stream>();
 
         public static Boolean Authenticate(String user, String passhash, Stream socketStream)
         {
@@ -28,14 +29,13 @@ namespace RH_Server.Classes
             var aboutToHash = String.Format("{0}-{1}-{2}", user, passhash, millis);
 
             //2. Hash the string.
-           var hash = Hashing.CreateSHA256(aboutToHash);
+            var hash = Hashing.CreateSHA256(aboutToHash);
 
             //3. Create the user :D
-            var u = new User{ Name = user, PasswordToBeSaved = passhash, AuthToken = hash};
+            var u = new User {Name = user, PasswordToBeSaved = passhash, AuthToken = hash};
 
             //4. Add the user to the AuthUsers class.
-            AuthUsers.Add(u, socketStream);
-
+            AuthUsers.GetOrAdd(u, socketStream);
             return true;
         }
 

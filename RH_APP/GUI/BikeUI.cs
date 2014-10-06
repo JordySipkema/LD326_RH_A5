@@ -67,7 +67,8 @@ namespace RH_APP.GUI
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            _controller.ChangeSpeed(numericUpDown1.Value);
+            _controller.SetPower((int)numericUpDown1.Value);
+            //_controller.ChangeSpeed(numericUpDown1.Value);
         }
 
         ~RH_BIKE_GUI()

@@ -1,5 +1,4 @@
 ﻿using System.Net.Security;
-using System.Runtime.Versioning;
 using System.Security.Cryptography.X509Certificates;
 using Mallaca;
 using Mallaca.Network;
@@ -21,7 +20,7 @@ namespace RH_Server.Server
     class ClientHandler
     {
         private readonly byte[] Buffer = new byte[1024];
-        private int _bufferSize = 1024;
+        private const int _bufferSize = 1024;
         private readonly TcpClient _tcpclient;
         private readonly SslStream _sslStream;
 
