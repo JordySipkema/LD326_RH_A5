@@ -28,6 +28,8 @@ namespace RH_Server.Server
 
         private readonly List<Measurement> _measurementsList = new List<Measurement>();
 
+        private DBConnect _dbConnect = new DBConnect();
+
         //private string username;
         //private Boolean isLoggedIn;
 
@@ -87,6 +89,16 @@ namespace RH_Server.Server
                         case "resp-chat":
                             HandleResponseChatPacket(json);
                             break;
+                        case "pull":
+                            HandlePullPacket(json);
+                            break;
+                        case "lsm":
+                            HandleLsmPacket(json);
+                            break;
+                        case "lsu":
+                            HandleLsuPacket(json);
+                            break;
+
                         default:
                             Console.WriteLine("Unknown packet");
                             break;
@@ -212,6 +224,32 @@ namespace RH_Server.Server
                 reader.Close();
                 reader = null;
             }
+        }
+
+        public void HandlePullPacket(JObject json)
+        {
+            JToken userId;
+            JToken username;
+            JToken measurementID;
+            JToken measurmentStart;
+
+            json.TryGetValue("userID", out userId);
+            json.TryGetValue("username", out username);
+            json.TryGetValue("measurementID", out measurementID);
+            json.TryGetValue("measurmentStart", out measurmentStart);
+
+            _dbConnect.getMeasurement(userId, username, measurementID, measurmentStart);
+
+        }
+
+        public void HandleLsmPacket(JObject json)
+        {
+            // moet nog code komen
+        }
+
+        public void HandleLsuPacket(JObject json)
+        {
+            // moet nog code komen
         }
     }
 }

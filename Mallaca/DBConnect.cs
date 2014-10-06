@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Mallaca.Usertypes;
 using MySql.Data.MySqlClient;
 using System.Globalization;
+using Newtonsoft.Json.Linq;
 namespace Mallaca
 {
     public class DBConnect
@@ -451,6 +452,64 @@ namespace Mallaca
                 throw;
             }
 
+        }
+
+        public Measurement getMeasurement(JToken userId, JToken username, JToken measurementID, JToken measurmentStart)
+        {
+            OpenConnection();
+            try
+            {
+
+                string query;
+
+                if (userId != null)
+                {
+                    query = String.Format("select measurement.id, session_id, RPM, speed, distance, power, energy, pulse, user_id, datetime, time from `{1}`.`measurments` where id ='{0}' ", userId, _database);
+                }
+                else
+                {
+                    query = String.Format("SELECT measurement.id, session_id, RPM, speed, distance, power, energy, pulse, user_id, datetime, time FROM `{1}`.`measurement` LEFT JOIN users on `measurement`.`id` = `users`.`id` WHERE `username` = '{0}' ", username, _database);
+                }
+
+                if (measurmentStart == null)
+                {
+                    query += String.Format(" AND `measurement`.`id`= '{0}'", measurementID);
+                }
+                else
+                {
+                    query += String.Format(" AND `measurement`.`` = '{0}'", measurmentStart);
+                    throw new InvalidOperationException("niet gesupport");
+                }
+
+                _selectCommand = new MySqlCommand(query);
+                _reader = _selectCommand.ExecuteReader();
+                
+                while (_reader.Read())
+                {
+                    Measurement m = new Measurement();
+                    m.RPM = _reader.GetInt32(2);
+                    m.SPEED = _reader.GetInt32(3);
+                    m.DISTANCE = _reader.GetInt32(4);
+                    m.ACT_POWER = _reader.GetInt32(5);
+                    m.POWER = _reader.GetInt32(5);
+                    m.ENERGY = _reader.GetInt32(6);
+                    m.PULSE = _reader.GetInt32(7);
+                    m.DATE = _reader.GetDateTime(9);
+                }
+
+            }
+            catch (MySqlException e)
+            {
+                Console.WriteLine("Could not validate user. " + e.Message);
+            }
+            finally
+            {
+                Connection.Close();
+            }
+
+
+
+            return null;
         }
     }
 }
