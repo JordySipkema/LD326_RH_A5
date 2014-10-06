@@ -58,17 +58,8 @@ namespace Mallaca.Network
 
         public static void Send(String data)
         {
-            if (_client == null && !Busy)
-            {
-                RunClient();
-            }
-            else if (_client == null && Busy)
-            {
-                while (Busy)
-                {
-                    Thread.Sleep(10);
-                }
-            }
+            if (_client == null)
+                return;
 
             // Convert the string data to byte data using ASCII encoding.
             var byteData = Encoding.ASCII.GetBytes(data);

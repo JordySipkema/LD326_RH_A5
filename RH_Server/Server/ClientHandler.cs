@@ -148,7 +148,7 @@ namespace RH_Server.Server
                 ))
             {
                 _measurementsList.Add(m);
-                Console.WriteLine(_measurementsList.Count);
+                Console.WriteLine("Recieved: \n {0}", json["measurements"]);
             }
 
         }
