@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Newtonsoft.Json.Linq;
 using RH_Server.Classes;
 using RH_Server.Server;
 using System;
@@ -12,8 +11,8 @@ namespace RH_Server
     {
         static void Main()
         {
-            TestCode();
-            //RunServer();
+            //TestCode();
+            RunServer();
         }
 
         static void TestCode()
@@ -38,9 +37,9 @@ namespace RH_Server
             serverListener.Start();
             while (true)
             {
-                var newSocket = serverListener.AcceptSocket();
-                Console.WriteLine("Socket accepted");
-                var client = new ClientHandler() {Socket = newSocket};
+                var tcpclient = serverListener.AcceptTcpClient();
+                Console.WriteLine("TCP Client accepted");
+                var client = new ClientHandler(tcpclient);
             }
         }
     }
