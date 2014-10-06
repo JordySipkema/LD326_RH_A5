@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Mallaca.Network;
 using RH_APP.Classes;
 using RH_APP.Controller;
+using System.Drawing;
 
 
 namespace RH_APP.GUI
@@ -23,6 +24,8 @@ namespace RH_APP.GUI
             _writeToFile = true;
             InitializeComponent();
             writeRealTime(path);
+
+            updateGraph();
         }
 
         public RH_BIKE_GUI(IBike b)
@@ -31,6 +34,8 @@ namespace RH_APP.GUI
             _controller.UpdatedList += updateGUI;
             _writeToFile = false;
             InitializeComponent();
+
+            updateGraph();
         }
 
         public void writeRealTime(string file)
@@ -49,6 +54,22 @@ namespace RH_APP.GUI
             Application.Exit();
         }
 
+        public void updateGraph()
+        {
+
+            _graph.Series["RPM"].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
+            _graph.Series["RPM"].Color = Color.Blue;
+            _graph.Series["RPM"].Points.AddXY(_controller.LatestMeasurement.TIME, _controller.LatestMeasurement.RPM);
+
+            
+
+            _graph.ChartAreas[0].AxisY.Maximum = 200;
+            _graph.ChartAreas[0].AxisY.Minimum = 0;
+            //_graph.Series["PULSE"].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
+            //_graph.Series["PULSE"].Color = Color.Green;
+            //_graph.Series["PULSE"].Points.AddY(_controller.LatestMeasurement.PULSE);
+        }
+
         public void updateGUI(object sender, EventArgs args)
         {
             dataRPM.Text = _controller.LatestMeasurement.RPM + "";
@@ -60,6 +81,8 @@ namespace RH_APP.GUI
             dataTIME.Text = _controller.LatestMeasurement.TIME;
             dataPULSE.Text = _controller.LatestMeasurement.PULSE + "";
 
+            updateGraph();
+
             if (!_writeToFile) return;
             var protoLine = _controller.LatestMeasurement.toProtocolString();
             _writer.WriteLine(protoLine);
@@ -67,7 +90,7 @@ namespace RH_APP.GUI
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            _controller.ChangeSpeed(numericUpDown1.Value);
+            _controller.SetPower((int)numericUpDown1.Value);
         }
 
         ~RH_BIKE_GUI()

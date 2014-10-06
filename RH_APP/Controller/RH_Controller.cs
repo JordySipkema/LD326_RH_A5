@@ -44,10 +44,9 @@ namespace RH_APP.Controller
 
         }
 
-        public void ChangeSpeed(decimal speed)
+        public void SetPower(int power)
         {
-            var speedInt = Convert.ToInt32(speed);
-            _bike.SendData(String.Format("PW {0}", speedInt));
+            _bike.SendData(String.Format("PW {0}", power));
         }
 
         public event EventHandler UpdatedList;
