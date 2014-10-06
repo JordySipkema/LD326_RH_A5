@@ -28,10 +28,15 @@ namespace Mallaca.Network.Packet
 
         public override string ToString()
         {
+            return ToJsonObject().ToString();
+        }
+
+        public override JObject ToJsonObject()
+        {
             return new JObject(
                 new JProperty("CMD", "LOGIN"),
                 new JProperty("username", username),
-                new JProperty("password", password)).ToString();
+                new JProperty("password", password));
         }
     }
 }
