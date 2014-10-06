@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Mallaca.Network;
 using RH_Server.Classes;
 using RH_Server.Server;
 using System;
@@ -24,7 +25,7 @@ namespace RH_Server
         static void RunServer()
         {
             Console.WriteLine("RH_Server initializing");
-            var serverListener = new TcpListener(IPAddress.Any, 9001); //Its over 9000!!!
+            var serverListener = new TcpListener(IPAddress.Any, NetworkSettings.ServerPort); //Its over 9000!!!
 
             //Code for getting server IP
             var serverip = Dns.GetHostEntry(Dns.GetHostName())

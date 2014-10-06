@@ -130,6 +130,7 @@ namespace RH_Server.Server
 
                 returnJson =
                     new JObject(
+                        new JProperty("CMD", "resp-login"),
                         new JProperty("STATUS", Statuscode.GetCode(Statuscode.Status.Ok)),
                         new JProperty("DESC", Statuscode.GetDescription(Statuscode.Status.Ok)),
                         new JProperty("AUTHTOKEN", Authentication.GetUser(username).AuthToken)
@@ -140,6 +141,7 @@ namespace RH_Server.Server
             {
                 returnJson =
                     new JObject(
+                        new JProperty("CMD", "resp-login"),
                         new JProperty("STATUS", Statuscode.GetCode(Statuscode.Status.InvalidUsernameOrPassword)),
                         new JProperty("DESC", Statuscode.GetDescription(Statuscode.Status.InvalidUsernameOrPassword))
                         );

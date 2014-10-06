@@ -9,7 +9,7 @@ namespace Mallaca.Network.Packet
 {
     public class ErrorPacket : Packet
     {
-        private Statuscode.Status _status;
+        private readonly Statuscode.Status _status;
 
         public ErrorPacket(Statuscode.Status status)
         {
