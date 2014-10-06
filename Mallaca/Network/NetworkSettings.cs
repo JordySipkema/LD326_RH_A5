@@ -1,11 +1,11 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Net;
 
 namespace Mallaca.Network
 {
     public static class NetworkSettings
     {
-        public static string ServerIP = "127.0.0.1";
+        public static string ServerIP = "145.48.205.97";
         public static int ServerPort = 9001;
 
         public static string ClientIP

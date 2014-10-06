@@ -1,5 +1,10 @@
-﻿using Mallaca;
+﻿using System.Net.Security;
+using System.Runtime.Versioning;
+using System.Security.Cryptography.X509Certificates;
+using Mallaca;
 using Mallaca.Network;
+using Mallaca.Network.Packet;
+using Mallaca.Properties;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -9,14 +14,15 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using Mallaca.Network.Packet;
+
 namespace RH_Server.Server
 {
     class ClientHandler
     {
-        public readonly byte[] Buffer = new byte[1024];
-        public int BufferSize = 1024;
-        public Socket Socket;
+        private readonly byte[] Buffer = new byte[1024];
+        private int _bufferSize = 1024;
+        private readonly TcpClient _tcpclient;
+        private readonly SslStream _sslStream;
 
         private string _totalBuffer = "";
 
@@ -25,13 +31,19 @@ namespace RH_Server.Server
         //private string username;
         //private Boolean isLoggedIn;
 
-        public ClientHandler()
+        public ClientHandler(TcpClient client)
         {
+            _tcpclient = client;
+            var certificate = new X509Certificate2(Resources._23tia5_centificate, "AvansHogeschool23ti2a5");
+            //var certificate = new X509Certificate2(Resources.invalid_certificate, "apeture");
+
+            _sslStream = new SslStream(_tcpclient.GetStream());
+            _sslStream.AuthenticateAsServer(certificate);
+
             var thread = new Thread(ThreadLoop);
             thread.Start();
-        }
 
-    
+        }
 
         private void ThreadLoop()
         {
@@ -39,15 +51,15 @@ namespace RH_Server.Server
             {
                 try
                 {
-
-
-                    var receiveCount = Socket.Receive(Buffer);
+                    //new Socket().Receive(Buffer);
+                    var receiveCount = _sslStream.Read(Buffer, 0, _bufferSize);
                     _totalBuffer += ASCIIEncoding.Default.GetString(Buffer, 0, receiveCount);
 
 
                     var packetSize = Packet.getLengthOfPacket(_totalBuffer);
                     if (packetSize == -1)
                         continue;
+
                     JObject json = Packet.RetrieveJSON(packetSize, _totalBuffer);
 
                     if (json == null)
@@ -88,7 +100,7 @@ namespace RH_Server.Server
                 }
                 catch (SocketException e)
                 {
-                    Console.WriteLine("Client with IP-address: " + Socket.RemoteEndPoint.ToString() + " has been disconnected.");
+                    Console.WriteLine("Client with IP-address: " + _tcpclient.Client.LocalEndPoint + " has been disconnected.");
                     Console.WriteLine(e.Message);
                 }
             }
@@ -98,7 +110,7 @@ namespace RH_Server.Server
         private void SendPacket(String packet)
         {
             packet = packet.Length.ToString().PadRight(4, ' ') + packet;
-            Socket.Send(ASCIIEncoding.Default.GetBytes(packet));
+            _sslStream.Write(ASCIIEncoding.Default.GetBytes(packet));
         }
 
         private void HandlePingPacket(JObject json)
@@ -163,41 +175,43 @@ namespace RH_Server.Server
         {
             var message = json.ToString();
 
+            StreamWriter writer = null;
             //StreamWriter writer = new StreamWriter();
-            //try
-            //{
-            //    writer.WriteLine(message);
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine(e);
-            //}
-            //finally
-            //{
-            //    writer.Flush();
-            //    writer.Close();
-            //    writer = null;
-            //}
+            try
+            {
+                writer.WriteLine(message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                writer.Flush();
+                writer.Close();
+                writer = null;
+            }
         }
 
         public void HandleResponseChatPacket(JObject json)
         {
-        //    String message;
-        //    StreamReader reader = new StreamReader();
+            String message;
+            StreamReader reader = null;
+            //StreamReader reader = new StreamReader();
 
-        //    try
-        //    {
-        //         message = reader.ReadLine();
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Console.WriteLine(e);
-        //    }
-        //    finally
-        //    {
-        //        reader.Close();
-        //        reader = null;
-        //    }
+            try
+            {
+                 message = reader.ReadLine();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                reader.Close();
+                reader = null;
+            }
         }
     }
 }

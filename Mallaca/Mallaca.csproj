@@ -46,8 +46,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Network\Chat_Controller.cs" />
+    <Compile Include="Network\NetworkSettings.cs" />
     <Compile Include="Network\Packet\LoginPacket.cs" />
     <Compile Include="Network\Packet\Packet.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Usertypes\Client.cs" />
     <Compile Include="DBConnect.cs" />
     <Compile Include="Hashing.cs" />
@@ -58,6 +64,16 @@
     <Compile Include="Network\TCPController.cs" />
     <Compile Include="Usertypes\User.cs" />
     <Compile Include="Network\Statuscode.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="23tia5_centificate.pfx" />
+    <None Include="invalid_certificate.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

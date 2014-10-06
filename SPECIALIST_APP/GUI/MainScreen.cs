@@ -62,7 +62,7 @@ namespace Application_Specialist.GUI
                 _chatLogBox.AppendText("You say: " + message);
                 _chatLogBox.AppendText(Environment.NewLine);
 
-                //_chatController.SendMessage(message);
+                Chat_Controller.SendMessage(message);
 
                 _textBox.Text = "";
             }
@@ -84,7 +84,7 @@ namespace Application_Specialist.GUI
                     _chatLogBox.AppendText("You say: " + message);
                     _chatLogBox.AppendText(Environment.NewLine);
 
-                    //_chatController.SendMessage(message);
+                    Chat_Controller.SendMessage(message);
 
                     _textBox.Text = "";
                 }
