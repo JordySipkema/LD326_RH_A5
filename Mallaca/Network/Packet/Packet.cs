@@ -61,6 +61,11 @@ namespace Mallaca.Network.Packet
                     p = new LoginPacket(json["username"].ToString(), json["passowrd"].ToString());
                     break;
 
+                case LoginResponsePacket.cmd:
+                    string stat = json["STATUS"].ToString();
+                    p = new LoginResponsePacket(stat ,json["DESC"].ToString(),json["AUTHTOKEN"].ToString());
+                    break;
+
                 default:
                     p = null;
                     break;

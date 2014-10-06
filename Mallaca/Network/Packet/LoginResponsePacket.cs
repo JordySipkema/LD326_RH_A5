@@ -9,7 +9,7 @@ namespace Mallaca.Network.Packet
 {
     public class LoginResponsePacket : ResponsePacket
     {
-        private const string cmd = "RESP-LOGIN";
+        public const string cmd = "RESP-LOGIN";
         public string authtoken { get; set; }
 
         public LoginResponsePacket()

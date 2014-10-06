@@ -23,7 +23,7 @@ namespace RH_Server.Server
         private const int _bufferSize = 1024;
         private readonly TcpClient _tcpclient;
         private readonly SslStream _sslStream;
-
+        private DBConnect database;
         private string _totalBuffer = "";
 
         private readonly List<Measurement> _measurementsList = new List<Measurement>();
@@ -39,7 +39,7 @@ namespace RH_Server.Server
 
             _sslStream = new SslStream(_tcpclient.GetStream());
             _sslStream.AuthenticateAsServer(certificate);
-
+            database = new DBConnect();
             var thread = new Thread(ThreadLoop);
             thread.Start();
 
@@ -67,7 +67,7 @@ namespace RH_Server.Server
 
                     var packetType = (string)json["CMD"];
 
-                    switch (packetType)
+                    switch (packetType.ToLower())
                     {
                         case "login":
                             HandleLoginPacket(json);
@@ -106,8 +106,12 @@ namespace RH_Server.Server
 
         private void SendPacket(String packet)
         {
-            packet = packet.Length.ToString().PadRight(4, ' ') + packet;
-            _sslStream.Write(ASCIIEncoding.Default.GetBytes(packet));
+            //packet = packet.Length.ToString().PadRight(4, ' ') + packet;
+            byte[] length = BitConverter.GetBytes(packet.Length);
+            byte[] data = length.Concat(ASCIIEncoding.Default.GetBytes(packet)).ToArray();
+
+            _sslStream.Write(data);
+
         }
 
         private void HandlePingPacket(JObject json)
