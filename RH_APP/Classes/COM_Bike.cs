@@ -23,6 +23,8 @@ namespace RH_APP.Classes
             serial.WriteTimeout = 50;
 
             serial.Open();
+
+            serial.WriteLine("CM");
         }
 
         public override Measurement RecieveData()
