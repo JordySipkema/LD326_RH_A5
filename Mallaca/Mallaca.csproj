@@ -47,7 +47,9 @@
   <ItemGroup>
     <Compile Include="Network\Chat_Controller.cs" />
     <Compile Include="Network\Packet\LoginPacket.cs" />
+    <Compile Include="Network\Packet\LoginResponsePacket.cs" />
     <Compile Include="Network\Packet\Packet.cs" />
+    <Compile Include="Network\Packet\ResponsePacket.cs" />
     <Compile Include="Usertypes\Client.cs" />
     <Compile Include="DBConnect.cs" />
     <Compile Include="Hashing.cs" />
