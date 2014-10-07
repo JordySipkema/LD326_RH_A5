@@ -76,10 +76,10 @@ namespace Mallaca
             { 
                 if (!passIsHashedWithSha256)
                     password = Hashing.CreateSHA256(password);
-
-                _selectCommand = new MySqlCommand(
-                    String.Format("SELECT * FROM {0}.users WHERE Username='{1}' AND password='{2}';", _database, username
-                        , password) , Connection);
+                var query = String.Format("SELECT * FROM {0}.users WHERE Username='{1}' AND password='{2}';", _database,
+                    username
+                    , password);
+                _selectCommand = new MySqlCommand(query, Connection);
                 _reader = _selectCommand.ExecuteReader();
                 var rows = 0;
                 var usertypeInt = -2;
@@ -241,7 +241,7 @@ namespace Mallaca
                 }
                 catch(InvalidOperationException)
                 {
-                    //client does not exist in the list, try to get it from the db
+                    //client does not exist in the List, try to get it from the db
                     client = getUser(clientId);
                     string test = "";
                 }

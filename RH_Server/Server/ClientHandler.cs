@@ -1,4 +1,5 @@
 ﻿using System.Net.Security;
+using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography.X509Certificates;
 using Mallaca;
 using Mallaca.Network;
@@ -28,7 +29,7 @@ namespace RH_Server.Server
 
         private readonly List<Measurement> _measurementsList = new List<Measurement>();
 
-        //private string username;
+        //private string Username;
         //private Boolean isLoggedIn;
 
         public ClientHandler(TcpClient client)
@@ -53,7 +54,10 @@ namespace RH_Server.Server
                 {
                     //new Socket().Receive(Buffer);
                     var receiveCount = _sslStream.Read(Buffer, 0, _bufferSize);
-                    _totalBuffer += ASCIIEncoding.Default.GetString(Buffer, 0, receiveCount);
+
+
+
+                    _totalBuffer += Encoding.UTF8.GetString(Buffer, 0, receiveCount); 
 
 
                     var packetSize = Packet.getLengthOfPacket(_totalBuffer);
@@ -65,9 +69,16 @@ namespace RH_Server.Server
                     if (json == null)
                         continue;
 
-                    var packetType = (string)json["CMD"];
+                    JToken cmd;
+                    if (!json.TryGetValue("CMD", out cmd))
+                    {
+                        Console.WriteLine("Got JSON that does not define a command.");
+                        continue;
+                    }
 
-                    switch (packetType.ToLower())
+                    var packetType = cmd.ToString().ToLower();
+
+                    switch (packetType)
                     {
                         case "login":
                             HandleLoginPacket(json);
@@ -84,6 +95,8 @@ namespace RH_Server.Server
                         case "chat":
                             HandleChatPacket(json);
                             break;
+                        case "lsu":
+                            break;
                         default:
                             Console.WriteLine("Unknown packet");
                             break;
@@ -92,7 +105,7 @@ namespace RH_Server.Server
 
 
 
-                    _totalBuffer = _totalBuffer.Substring(packetSize + 4);
+                    //_totalBuffer = _totalBuffer.Substring(packetSize + 4);
                     //_totalBuffer = String.Empty;
                 }
                 catch (SocketException e)
@@ -103,15 +116,16 @@ namespace RH_Server.Server
             }
         }
 
-
-        private void SendPacket(String packet)
+        private void Send(String s)
         {
-            //packet = packet.Length.ToString().PadRight(4, ' ') + packet;
-            byte[] length = BitConverter.GetBytes(packet.Length);
-            byte[] data = length.Concat(ASCIIEncoding.Default.GetBytes(packet)).ToArray();
+            byte[] data = Encoding.UTF8.GetBytes(s.Length.ToString("0000") + s).ToArray();
 
             _sslStream.Write(data);
+        }
 
+        private void Send(Packet s)
+        {
+            Send(s.ToString());
         }
 
         private void HandlePingPacket(JObject json)
@@ -121,11 +135,18 @@ namespace RH_Server.Server
 
         }
 
+
+        private void HandleListUsersPacket(JObject j)
+        {
+            var p = new ListUsersResponsePacket(database.GetAllUsers());
+            Send(p);
+        }
+
         private void HandleLoginPacket(JObject json)
         {
             //Recieve the username and password from json.
-            var username = (string)json["USER"];
-            var password = (string)json["PASSWORD"];
+            var username = json["USERNAME"].ToString();
+            var password = json["PASSWORD"].ToString();
 
             JObject returnJson;
             //Code to check user/pass here
@@ -136,7 +157,7 @@ namespace RH_Server.Server
                     new JObject(
                         new JProperty("CMD", "resp-login"),
                         new JProperty("STATUS", Statuscode.GetCode(Statuscode.Status.Ok)),
-                        new JProperty("DESC", Statuscode.GetDescription(Statuscode.Status.Ok)),
+                        new JProperty("DESCRIPTION", Statuscode.GetDescription(Statuscode.Status.Ok)),
                         new JProperty("AUTHTOKEN", Authentication.GetUser(username).AuthToken)
                         );
 
@@ -147,13 +168,13 @@ namespace RH_Server.Server
                     new JObject(
                         new JProperty("CMD", "resp-login"),
                         new JProperty("STATUS", Statuscode.GetCode(Statuscode.Status.InvalidUsernameOrPassword)),
-                        new JProperty("DESC", Statuscode.GetDescription(Statuscode.Status.InvalidUsernameOrPassword))
+                        new JProperty("DESCRIPTION", Statuscode.GetDescription(Statuscode.Status.InvalidUsernameOrPassword))
                         );
             }
 
             //Send the result back to the client.
             Console.WriteLine(returnJson.ToString());
-            SendPacket(returnJson.ToString());
+            Send(returnJson.ToString());
         }
 
         private void HandlePushPacket(JObject json)

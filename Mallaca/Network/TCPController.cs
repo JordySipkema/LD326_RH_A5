@@ -32,12 +32,13 @@ namespace Mallaca.Network
         private static string _response = String.Empty;
         public  delegate void ReceivedPacket(Packet.Packet p);
         public static event ReceivedPacket OnPacketReceived;
-
+        public static bool IsReading { get; private set; }
         private static ManualResetEvent sendDone =
             new ManualResetEvent(false);
 
         public static void RunClient()
         {
+            IsReading = false;
             _client = new TcpClient();
             _client.Connect(NetworkSettings.ServerIP, NetworkSettings.ServerPort);
 
@@ -84,8 +85,8 @@ namespace Mallaca.Network
 
             
             // Convert the string data to byte data using ASCII encoding.
-            byte[] byteData = Encoding.ASCII.GetBytes(data);
-            byte[] length = BitConverter.GetBytes(byteData.Length);
+            byte[] byteData = Encoding.UTF8.GetBytes(data); //Encoding.ASCII.GetBytes(data);
+            byte[] length = Encoding.UTF8.GetBytes(data.Length.ToString("0000"));
 
             // Begin sending the data
             Busy = true;
@@ -124,11 +125,12 @@ namespace Mallaca.Network
         {
             try
             {
+                IsReading = true;
                 // Create the state object.
                 StateObject state = new StateObject();
 
                 // Begin receiving the data from the remote device.
-                _sslStream.BeginRead(state.buffer, 0, StateObject.BufferSize, new AsyncCallback(ReceiveCallback),
+                _sslStream.BeginRead(state.buffer, 0, StateObject.BufferSize, ReceiveCallback,
                     state);
             }
             catch (Exception e)
@@ -152,7 +154,8 @@ namespace Mallaca.Network
                 if (bytesRead > 0)
                 {
                     // There might be more data, so store the data received so far.
-                    state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
+                    //state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
+                    state.sb.Append(Encoding.UTF8.GetString(state.buffer, 0, bytesRead));
 
                     if (state.sb.Length > 1)
                     {
@@ -160,24 +163,22 @@ namespace Mallaca.Network
 
 
                         int length = Packet.Packet.getLengthOfPacket(_response);
-                        if (length == -1)
-                            return;
-                        Packet.Packet p = Packet.Packet.RetrievePacket(length, ref  _response);
-                        if (p == null)
-                            return;
-                        OnPacketReceived(p);
-
-
-                        // Signal that all bytes have been received.
+                        if (length != -1)
+                        {
+                            Packet.Packet p = Packet.Packet.RetrievePacket(length, ref _response);
+                            if (p != null)
+                                OnPacketReceived(p);
+                        }
                     }
 
-                    // Get the rest of the data.
-                    // Begin receiving the data from the remote device.
-                    _sslStream.BeginRead(state.buffer, 0, StateObject.BufferSize, new AsyncCallback(ReceiveCallback),
+                    _sslStream.BeginRead(state.buffer, 0, StateObject.BufferSize, ReceiveCallback,
                         state);
                 }
+                else
+                {
+                    IsReading = false;
+                }
 
-                // All the data has arrived; put it in response.
                 
             }
             catch (Exception e)
