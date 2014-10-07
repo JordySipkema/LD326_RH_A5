@@ -19,8 +19,8 @@ namespace RH_Server.Server
 {
     class ClientHandler
     {
-        private readonly byte[] Buffer = new byte[1024];
-        private const int _bufferSize = 1024;
+        private readonly byte[] _buffer = new byte[1024];
+        private const int BufferSize = 1024;
         private readonly TcpClient _tcpclient;
         private readonly SslStream _sslStream;
         private DBConnect database;
@@ -52,8 +52,8 @@ namespace RH_Server.Server
                 try
                 {
                     //new Socket().Receive(Buffer);
-                    var receiveCount = _sslStream.Read(Buffer, 0, _bufferSize);
-                    _totalBuffer += ASCIIEncoding.Default.GetString(Buffer, 0, receiveCount);
+                    var receiveCount = _sslStream.Read(_buffer, 0, BufferSize);
+                    _totalBuffer += ASCIIEncoding.Default.GetString(_buffer, 0, receiveCount);
 
 
                     var packetSize = Packet.getLengthOfPacket(_totalBuffer);
