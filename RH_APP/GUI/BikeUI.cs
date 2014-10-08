@@ -161,5 +161,14 @@ namespace RH_APP.GUI
             _graph.ChartAreas[0].AxisY.Maximum = 300;
             _graph.ChartAreas[0].AxisY.Minimum = 50;
         }
+
+        private void _quitButton_Click(object sender, EventArgs e)
+        {
+            DialogResult dialog = dialog = MessageBox.Show("Are you sure you want to quit the training?", "Alert", MessageBoxButtons.YesNo);
+            if (dialog == DialogResult.Yes)
+            {
+                
+            }
+        }
     }
 }
