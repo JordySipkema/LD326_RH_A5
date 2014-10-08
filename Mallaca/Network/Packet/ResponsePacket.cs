@@ -52,7 +52,6 @@ namespace Mallaca.Network.Packet
 
     public class ResponsePacket : ResponseFields
     {
-        private string cmd;
 
         public ResponsePacket()
         {
@@ -63,7 +62,7 @@ namespace Mallaca.Network.Packet
         {
             Description = desc;
             this.Status = status;
-            this.cmd = cmd;
+            this.CMD = cmd;
         }
     }
 }
