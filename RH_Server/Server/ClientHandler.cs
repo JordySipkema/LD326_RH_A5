@@ -118,7 +118,6 @@ namespace RH_Server.Server
         {
             //String time = json.time;
             Console.WriteLine("PING: Packet recieved");
-
         }
 
         private void HandleLoginPacket(JObject json)
