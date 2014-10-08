@@ -217,9 +217,7 @@ namespace RH_Server.Server
                 Status = Statuscode.GetCode(Statuscode.Status.Ok).ToString(),
                 CMD = "resp-dc"
             };
-            
-
-
+            Send(resp);
         }
 
         public void HandleChatPacket(JObject json)
