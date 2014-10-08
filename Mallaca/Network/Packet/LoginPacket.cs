@@ -35,8 +35,8 @@ namespace Mallaca.Network.Packet
         {
             return new JObject(
                 new JProperty("CMD", "LOGIN"),
-                new JProperty("username", username),
-                new JProperty("password", password));
+                new JProperty("USERNAME", username),
+                new JProperty("PASSWORD", password));
         }
     }
 }

@@ -17,6 +17,14 @@ namespace Mallaca.Network.Packet
             
         }
 
+        public LoginResponsePacket(JObject j) : base(j)
+        {
+            JToken auth;
+            if (j.TryGetValue("AUTHTOKEN", out auth))
+                authtoken = auth.ToString();
+
+        }
+
         public LoginResponsePacket(string status, string desc, string authToken) : base(status, desc)
         {
             this.authtoken = authToken;
@@ -26,7 +34,9 @@ namespace Mallaca.Network.Packet
         {
             JObject json = base.GetJsonObject();
             json.Add("CMD", cmd);
-            json.Add("authToken", authtoken);
+            if(authtoken != null)
+                json.Add("AUTHTOKEN", authtoken);
+            
             return json.ToString();
         }
     }

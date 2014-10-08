@@ -23,20 +23,15 @@ namespace Application_Specialist.GUI
         {
             InitializeComponent();
             _passwordBox.UseSystemPasswordChar = true;
-            
+            TCPController.RunClient();
+            TCPController.OnPacketReceived += onLoginPacketResponse;
+            TCPController.ReceiveTransmission();
         }
 
         private void _loginButton_Click(object sender, EventArgs e)
         { 
-            LoginPacket p = new LoginPacket(_usernameBox.Text, _passwordBox.Text);
-
-            TCPController.RunClient();
-            TCPController.OnPacketReceived += onLoginPacketResponse;
+            LoginPacket p = new LoginPacket(_usernameBox.Text, Hashing.CreateSHA256(_passwordBox.Text));
             TCPController.Send(p.ToString());
-
-            TCPController.ReceiveTransmission();
-
-
         }
 
         private void onLoginPacketResponse(Packet p)
@@ -54,8 +49,10 @@ namespace Application_Specialist.GUI
             }
             else
             {
-                MessageBox.Show("Invalid username/password!");
+                MessageBox.Show("Valid papers are required to open the Specialist Application. The server/inspector gave the following reasons for rejecting your documents: " + Environment.NewLine + resp.description, "Your application has been reviewed");
             }
+
+            
 
         }
 

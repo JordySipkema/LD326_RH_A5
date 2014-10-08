@@ -32,7 +32,7 @@ namespace RH_Server.Classes
             var hash = Hashing.CreateSHA256(aboutToHash);
 
             //3. Create the user :D
-            var u = new User {Name = user, PasswordToBeSaved = passhash, AuthToken = hash};
+            var u = new User {Username = user, PasswordToBeSaved = passhash, AuthToken = hash};
 
             //4. Add the user to the AuthUsers class.
             AuthUsers.GetOrAdd(u, socketStream);

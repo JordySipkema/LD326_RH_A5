@@ -1,4 +1,5 @@
 ﻿using System.Net.Security;
+using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography.X509Certificates;
 using Mallaca;
 using Mallaca.Network;
@@ -14,19 +15,22 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using RH_Server.Classes;
+using Mallaca.Usertypes;
 
 namespace RH_Server.Server
 {
     class ClientHandler
     {
-        private readonly byte[] _buffer = new byte[1024];
-        private const int BufferSize = 1024;
+        private readonly byte[] Buffer = new byte[1024];
+        private const int _bufferSize = 1024;
         private readonly TcpClient _tcpclient;
         private readonly SslStream _sslStream;
         private DBConnect database;
-        private string _totalBuffer = "";
+        private List<byte> _totalBuffer;
 
         private readonly List<Measurement> _measurementsList = new List<Measurement>();
+
+        private DBConnect _dbConnect = new DBConnect();
 
         //private string username;
         //private Boolean isLoggedIn;
@@ -39,6 +43,7 @@ namespace RH_Server.Server
 
             _sslStream = new SslStream(_tcpclient.GetStream());
             _sslStream.AuthenticateAsServer(certificate);
+            _totalBuffer = new List<byte>();
             database = new DBConnect();
             var thread = new Thread(ThreadLoop);
             thread.Start();
@@ -52,11 +57,14 @@ namespace RH_Server.Server
                 try
                 {
                     //new Socket().Receive(Buffer);
-                    var receiveCount = _sslStream.Read(_buffer, 0, BufferSize);
-                    _totalBuffer += ASCIIEncoding.Default.GetString(_buffer, 0, receiveCount);
+                    var receiveCount = _sslStream.Read(Buffer, 0, _bufferSize);
+
+                    byte[] rawData = new byte[receiveCount];
+                    Array.Copy(Buffer, 0, rawData, 0, receiveCount);
+                    _totalBuffer = _totalBuffer.Concat(rawData).ToList();
 
 
-                    var packetSize = Packet.getLengthOfPacket(_totalBuffer);
+                    int packetSize = Packet.getLengthOfPacket(_totalBuffer);
                     if (packetSize == -1)
                         continue;
 
@@ -65,9 +73,16 @@ namespace RH_Server.Server
                     if (json == null)
                         continue;
 
-                    var packetType = (string)json["CMD"];
+                    JToken cmd;
+                    if (!json.TryGetValue("CMD", out cmd))
+                    {
+                        Console.WriteLine("Got JSON that does not define a command.");
+                        continue;
+                    }
 
-                    switch (packetType.ToLower())
+                    var packetType = cmd.ToString().ToLower();
+
+                    switch (packetType)
                     {
                         case "login":
                             HandleLoginPacket(json);
@@ -84,6 +99,16 @@ namespace RH_Server.Server
                         case "chat":
                             HandleChatPacket(json);
                             break;
+                        case "pull":
+                            HandlePullPacket(json);
+                            break;
+                        case "lsm":
+                            HandleLsmPacket(json);
+                            break;
+                        case "lsu":
+                            HandleLsuPacket(json);
+                            break;
+
                         default:
                             Console.WriteLine("Unknown packet");
                             break;
@@ -92,7 +117,7 @@ namespace RH_Server.Server
 
 
 
-                    _totalBuffer = _totalBuffer.Substring(packetSize + 4);
+                    //_totalBuffer = _totalBuffer.Substring(packetSize + 4);
                     //_totalBuffer = String.Empty;
                 }
                 catch (SocketException e)
@@ -103,15 +128,16 @@ namespace RH_Server.Server
             }
         }
 
-
-        private void SendPacket(String packet)
+        private void Send(String s)
         {
-            //packet = packet.Length.ToString().PadRight(4, ' ') + packet;
-            byte[] length = BitConverter.GetBytes(packet.Length);
-            byte[] data = length.Concat(ASCIIEncoding.Default.GetBytes(packet)).ToArray();
+            //byte[] data = Encoding.UTF8.GetBytes(s.Length.ToString("0000") + s).ToArray();
 
-            _sslStream.Write(data);
+            _sslStream.Write(Packet.CreateByteData(s));
+        }
 
+        private void Send(Packet s)
+        {
+            Send(s.ToString());
         }
 
         private void HandlePingPacket(JObject json)
@@ -120,11 +146,18 @@ namespace RH_Server.Server
             Console.WriteLine("PING: Packet recieved");
         }
 
+
+        private void HandleListUsersPacket(JObject j)
+        {
+            var p = new ListUsersPacket(database.GetAllUsers());
+            Send(p);
+        }
+
         private void HandleLoginPacket(JObject json)
         {
             //Recieve the username and password from json.
-            var username = (string)json["USER"];
-            var password = (string)json["PASSWORD"];
+            var username = json["USERNAME"].ToString();
+            var password = json["PASSWORD"].ToString();
 
             JObject returnJson;
             //Code to check user/pass here
@@ -135,7 +168,7 @@ namespace RH_Server.Server
                     new JObject(
                         new JProperty("CMD", "resp-login"),
                         new JProperty("STATUS", Statuscode.GetCode(Statuscode.Status.Ok)),
-                        new JProperty("DESC", Statuscode.GetDescription(Statuscode.Status.Ok)),
+                        new JProperty("DESCRIPTION", Statuscode.GetDescription(Statuscode.Status.Ok)),
                         new JProperty("AUTHTOKEN", Authentication.GetUser(username).AuthToken)
                         );
 
@@ -146,13 +179,13 @@ namespace RH_Server.Server
                     new JObject(
                         new JProperty("CMD", "resp-login"),
                         new JProperty("STATUS", Statuscode.GetCode(Statuscode.Status.InvalidUsernameOrPassword)),
-                        new JProperty("DESC", Statuscode.GetDescription(Statuscode.Status.InvalidUsernameOrPassword))
+                        new JProperty("DESCRIPTION", Statuscode.GetDescription(Statuscode.Status.InvalidUsernameOrPassword))
                         );
             }
 
             //Send the result back to the client.
             Console.WriteLine(returnJson.ToString());
-            SendPacket(returnJson.ToString());
+            Send(returnJson.ToString());
         }
 
         private void HandlePushPacket(JObject json)
@@ -220,6 +253,78 @@ namespace RH_Server.Server
                 reader.Close();
                 reader = null;
             }
+        }
+
+        public void HandlePullPacket(JObject json)
+        {
+            JObject returnJson;
+            JToken userId;
+            JToken username;
+            JToken measurementID;
+            JToken measurmentStart;
+
+            json.TryGetValue("userID", out userId);
+            json.TryGetValue("username", out username);
+            json.TryGetValue("measurementID", out measurementID);
+            json.TryGetValue("measurmentStart", out measurmentStart);
+
+            
+
+            returnJson =
+                    new JObject(
+                        new JProperty("CMD", "resp-pull"),
+                        new JProperty("COUNT", 1),
+                        new JProperty("MEASURMENTS", _dbConnect.getMeasurement(userId, username, measurementID, measurmentStart))
+                        );
+
+            //Send the result back to the specialist.
+            Console.WriteLine(returnJson.ToString());
+            Send(returnJson.ToString());
+
+
+        }
+
+        public void HandleLsmPacket(JObject json)
+        {
+            JObject returnJson;
+            List<Measurement> measurements = new List<Measurement>();
+
+            measurements = _dbConnect.getMeasurementsOfUser((string)json["username"]);
+            int i=measurements.Count;
+            JArray m = JArray.FromObject(measurements);
+
+            returnJson =
+                    new JObject(
+                        new JProperty("CMD", "resp-lsm"),
+                        new JProperty("COUNT", i),
+                        new JProperty("MEASURMENTS", m)
+                        );
+
+            //Send the result back to the specialist.
+            Console.WriteLine(returnJson.ToString());
+            Send(returnJson.ToString());
+        }
+
+        public void HandleLsuPacket(JObject json)
+        {
+            JObject returnJson;
+            List<User> users = new List<User>();
+
+
+
+            int i = users.Count;
+            JArray u = JArray.FromObject(users);
+
+            returnJson =
+                    new JObject(
+                        new JProperty("CMD", "resp-lsu"),
+                        new JProperty("COUNT", i),
+                        new JProperty("MEASURMENTS", u)
+                        );
+
+            //Send the result back to the specialist.
+            Console.WriteLine(returnJson.ToString());
+            Send(returnJson.ToString());
         }
     }
 }
