@@ -14,6 +14,13 @@ namespace Mallaca.Network.Packet
             
         }
 
+        public ResponsePacket(JObject json)
+        {
+            status = json["STATUS"].ToString();
+            description = json["DESCRIPTION"].ToString();
+
+        }
+
         public ResponsePacket(string status, string disc)
         {
             this.status = status;
@@ -22,8 +29,8 @@ namespace Mallaca.Network.Packet
 
         public JObject GetJsonObject()
         {
-            return new JObject(new JProperty("status", status),
-                                new JProperty("description", description));
+            return new JObject(new JProperty("STATUS", status),
+                                new JProperty("DESCRIPTION", description));
         }
 
         public string status { get; set; }

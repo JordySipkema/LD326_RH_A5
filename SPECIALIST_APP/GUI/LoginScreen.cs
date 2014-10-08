@@ -11,7 +11,7 @@ using Mallaca;
 using Mallaca.Network;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-
+using Mallaca.Network.Packet;
 
 namespace Application_Specialist.GUI
 {
@@ -23,35 +23,41 @@ namespace Application_Specialist.GUI
         {
             InitializeComponent();
             _passwordBox.UseSystemPasswordChar = true;
-            
+            TCPController.RunClient();
+            TCPController.OnPacketReceived += onLoginPacketResponse;
+            TCPController.ReceiveTransmission();
         }
 
         private void _loginButton_Click(object sender, EventArgs e)
         { 
-            JObject loginPacket = new JObject(
-                new JProperty("CMD", "LOGIN"),
-                new JProperty("username", _usernameBox.Text),
-                new JProperty("password", Hashing.CreateSHA256(_passwordBox.Text)));
+            LoginPacket p = new LoginPacket(_usernameBox.Text, Hashing.CreateSHA256(_passwordBox.Text));
 
-            //if (_connection.ValidateUser(_usernameBox.Text, _passwordBox.Text))
-            //TODO: send username and hashed password to server for authentication.
-            
+
+            TCPController.Send(p.ToString());
+
+
         }
 
-        private void onLoginPacketResponse()
+        private void onLoginPacketResponse(Packet p)
         {
-            if (true)
+            LoginResponsePacket resp = p as LoginResponsePacket;
+            if (resp != null && resp.status == "200")
             {
-                this.Hide();
+                this.BeginInvoke((Action)(this.Hide));
+
+                //TODO: Store auth token.
+                TCPController.OnPacketReceived -= onLoginPacketResponse;
                 var _mainScreen = new MainScreen();
-                this.Hide();
                 _mainScreen.ShowDialog();
 
             }
             else
             {
-                MessageBox.Show("Invalid username/password!");
+
+                MessageBox.Show("Valid papers are required to open the Specialist Application. The server/inspector gave the following reasons for rejecting your documents: " + Environment.NewLine + resp.description, "Your application has been reviewed");
             }
+
+            
 
         }
 

@@ -29,13 +29,15 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.dataRPM = new System.Windows.Forms.Label();
+            this.measurementBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.dataSPEED = new System.Windows.Forms.Label();
             this.dataDISTANCE = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -53,10 +55,11 @@
             this._sendButton = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this._graph = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.measurementBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.measurementBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._graph)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.measurementBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -97,6 +100,10 @@
             this.dataRPM.TabIndex = 3;
             this.dataRPM.Text = "---";
             this.dataRPM.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // measurementBindingSource
+            // 
+            this.measurementBindingSource.DataSource = typeof(Mallaca.Measurement);
             // 
             // dataSPEED
             // 
@@ -286,32 +293,55 @@
             // 
             // _graph
             // 
-            chartArea1.Name = "ChartArea1";
-            this._graph.ChartAreas.Add(chartArea1);
+            chartArea3.Name = "ChartArea1";
+            this._graph.ChartAreas.Add(chartArea3);
             this._graph.Cursor = System.Windows.Forms.Cursors.Arrow;
             this._graph.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            legend1.Name = "Legend1";
-            this._graph.Legends.Add(legend1);
+            legend3.Name = "Legend1";
+            this._graph.Legends.Add(legend3);
             this._graph.Location = new System.Drawing.Point(40, 362);
             this._graph.Name = "_graph";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Legend = "Legend1";
-            series1.Name = "RPM";
-            series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Time;
-            this._graph.Series.Add(series1);
+            series5.ChartArea = "ChartArea1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series5.Legend = "Legend1";
+            series5.Name = "SPEED";
+            series5.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Time;
+            series6.ChartArea = "ChartArea1";
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series6.Legend = "Legend1";
+            series6.Name = "PULSE";
+            this._graph.Series.Add(series5);
+            this._graph.Series.Add(series6);
             this._graph.Size = new System.Drawing.Size(828, 300);
             this._graph.TabIndex = 20;
             // 
-            // measurementBindingSource
+            // button1
             // 
-            this.measurementBindingSource.DataSource = typeof(Mallaca.Measurement);
+            this.button1.Location = new System.Drawing.Point(63, 327);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 21;
+            this.button1.Text = "SPEED";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(176, 327);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 22;
+            this.button2.Text = "PULSE";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // RH_BIKE_GUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(905, 690);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this._graph);
             this.Controls.Add(this.label4);
             this.Controls.Add(this._sendButton);
@@ -336,9 +366,9 @@
             this.Name = "RH_BIKE_GUI";
             this.Text = "Remote Healthcare - Client Edition";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.RH_BIKE_GUI_FormClosing);
+            ((System.ComponentModel.ISupportInitialize)(this.measurementBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._graph)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.measurementBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -368,6 +398,8 @@
         private System.Windows.Forms.Button _sendButton;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.DataVisualization.Charting.Chart _graph;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }
 

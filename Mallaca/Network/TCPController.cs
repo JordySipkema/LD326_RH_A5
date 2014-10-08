@@ -6,18 +6,39 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using Mallaca.Properties;
-
+using Mallaca.Network.Packet;
 namespace Mallaca.Network
 {
+    // State object for receiving data from remote device.
+    public class StateObject
+    {
+        // Size of receive buffer.
+        public const int BufferSize = 256;
+        // Receive buffer.
+        public byte[] buffer = new byte[BufferSize];
+        // Received data string.
+        public StringBuilder sb = new StringBuilder();
+
+
+
+    }
+
     // ReSharper disable once InconsistentNaming
     public class TCPController
     {
         private static TcpClient _client;
         private static SslStream _sslStream;
         public static Boolean Busy { get; private set; }
+        private static string _response = String.Empty;
+        public  delegate void ReceivedPacket(Packet.Packet p);
+        public static event ReceivedPacket OnPacketReceived;
+        public static bool IsReading { get; private set; }
+        private static ManualResetEvent sendDone =
+            new ManualResetEvent(false);
 
         public static void RunClient()
         {
+            IsReading = false;
             _client = new TcpClient();
             _client.Connect(NetworkSettings.ServerIP, NetworkSettings.ServerPort);
 
@@ -58,18 +79,22 @@ namespace Mallaca.Network
 
         public static void Send(String data)
         {
+            sendDone.Reset();
             if (_client == null)
                 return;
 
-            data = data.Length.ToString().PadRight(4, ' ') + data;
+            
             // Convert the string data to byte data using ASCII encoding.
-            var byteData = Encoding.ASCII.GetBytes(data);
+            byte[] byteData = Encoding.UTF8.GetBytes(data); //Encoding.ASCII.GetBytes(data);
+            byte[] length = Encoding.UTF8.GetBytes(data.Length.ToString("0000"));
 
             // Begin sending the data
             Busy = true;
+            _sslStream.BeginWrite(length, 0, 4, SendCallback, _sslStream);
+            sendDone.WaitOne();
             _sslStream.BeginWrite(byteData, 0, byteData.Length, SendCallback, _sslStream);
+            
             _sslStream.Flush();
-
             Console.WriteLine("Data sent: " + data);
         }
 
@@ -82,7 +107,8 @@ namespace Mallaca.Network
 
                 //Complete sending the data to the remote device
                 sslstream.EndWrite(ar);
-
+                sendDone.Set();
+                
                 Busy = false;
                 Console.WriteLine("Sent to server...");
 
@@ -91,6 +117,73 @@ namespace Mallaca.Network
             catch (Exception exception)
             {
                 Console.WriteLine("ERROR!!: " + exception);
+            }
+        }
+
+
+        public static void ReceiveTransmission()
+        {
+            try
+            {
+                IsReading = true;
+                // Create the state object.
+                StateObject state = new StateObject();
+
+                // Begin receiving the data from the remote device.
+                _sslStream.BeginRead(state.buffer, 0, StateObject.BufferSize, ReceiveCallback,
+                    state);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+
+        private static void ReceiveCallback(IAsyncResult ar)
+        {
+            try
+            {
+                // Retrieve the state object and the client socket 
+                // from the asynchronous state object.
+                StateObject state = (StateObject)ar.AsyncState;
+                
+
+                // Read data from the remote device.
+                int bytesRead = _sslStream.EndRead(ar);
+
+                if (bytesRead > 0)
+                {
+                    // There might be more data, so store the data received so far.
+                    //state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
+                    state.sb.Append(Encoding.UTF8.GetString(state.buffer, 0, bytesRead));
+
+                    if (state.sb.Length > 1)
+                    {
+                        _response += state.sb.ToString();
+
+
+                        int length = Packet.Packet.getLengthOfPacket(_response);
+                        if (length != -1)
+                        {
+                            Packet.Packet p = Packet.Packet.RetrievePacket(length, ref _response);
+                            if (p != null)
+                                OnPacketReceived(p);
+                        }
+                    }
+
+                    _sslStream.BeginRead(state.buffer, 0, StateObject.BufferSize, ReceiveCallback,
+                        state);
+                }
+                else
+                {
+                    IsReading = false;
+                }
+
+                
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
             }
         }
 

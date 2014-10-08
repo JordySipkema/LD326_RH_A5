@@ -4,39 +4,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-namespace Mallaca.Network.Packet
+namespace Mallaca.Network.Packets
 {
-    public class LoginPacket : Packet
+    class LoginPacket : Packet
     {
-        public LoginPacket(string username, string password)
+        public LoginPacket(string username, string password) : base(cmd)
         {
-            this.username = username;
-            this.password = password;
+
         }
 
         public LoginPacket(JObject j)
+            : base(cmd)
         {
             if (j["CMD"].ToString() != cmd)
-                throw new InvalidOperationException("Given JSON defines the wrong packet.");
+                throw new InvalidOperationException();
             username = j["username"].ToString();
             password = j["password"].ToString();
         }
 
-        public const string cmd = "LOGIN";
+        public static const string cmd = "LOGIN";
         public string username { get; set; }
         public string password { get; set; }
 
         public override string ToString()
         {
-            return ToJsonObject().ToString();
-        }
-
-        public override JObject ToJsonObject()
-        {
             return new JObject(
                 new JProperty("CMD", "LOGIN"),
-                new JProperty("USERNAME", username),
-                new JProperty("PASSWORD", password));
+                new JProperty("username", username),
+                new JProperty("password", password)).ToString();
         }
     }
 }
