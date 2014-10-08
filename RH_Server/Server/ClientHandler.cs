@@ -15,6 +15,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using RH_Server.Classes;
+using Mallaca.Usertypes;
 
 namespace RH_Server.Server
 {
@@ -256,6 +257,7 @@ namespace RH_Server.Server
 
         public void HandlePullPacket(JObject json)
         {
+            JObject returnJson;
             JToken userId;
             JToken username;
             JToken measurementID;
@@ -266,18 +268,63 @@ namespace RH_Server.Server
             json.TryGetValue("measurementID", out measurementID);
             json.TryGetValue("measurmentStart", out measurmentStart);
 
-            _dbConnect.getMeasurement(userId, username, measurementID, measurmentStart);
+            
+
+            returnJson =
+                    new JObject(
+                        new JProperty("CMD", "resp-pull"),
+                        new JProperty("COUNT", 1),
+                        new JProperty("MEASURMENTS", _dbConnect.getMeasurement(userId, username, measurementID, measurmentStart))
+                        );
+
+            //Send the result back to the specialist.
+            Console.WriteLine(returnJson.ToString());
+            Send(returnJson.ToString());
+
 
         }
 
         public void HandleLsmPacket(JObject json)
         {
-            // moet nog code komen
+            JObject returnJson;
+            List<Measurement> measurements = new List<Measurement>();
+
+            measurements = _dbConnect.getMeasurementsOfUser((string)json["username"]);
+            int i=measurements.Count;
+            JArray m = JArray.FromObject(measurements);
+
+            returnJson =
+                    new JObject(
+                        new JProperty("CMD", "resp-lsm"),
+                        new JProperty("COUNT", i),
+                        new JProperty("MEASURMENTS", m)
+                        );
+
+            //Send the result back to the specialist.
+            Console.WriteLine(returnJson.ToString());
+            Send(returnJson.ToString());
         }
 
         public void HandleLsuPacket(JObject json)
         {
-            // moet nog code komen
+            JObject returnJson;
+            List<User> users = new List<User>();
+
+
+
+            int i = users.Count;
+            JArray u = JArray.FromObject(users);
+
+            returnJson =
+                    new JObject(
+                        new JProperty("CMD", "resp-lsu"),
+                        new JProperty("COUNT", i),
+                        new JProperty("MEASURMENTS", u)
+                        );
+
+            //Send the result back to the specialist.
+            Console.WriteLine(returnJson.ToString());
+            Send(returnJson.ToString());
         }
     }
 }

@@ -457,6 +457,7 @@ namespace Mallaca
         public Measurement getMeasurement(JToken userId, JToken username, JToken measurementID, JToken measurmentStart)
         {
             OpenConnection();
+            Measurement m = new Measurement();
             try
             {
 
@@ -464,11 +465,11 @@ namespace Mallaca
 
                 if (userId != null)
                 {
-                    query = String.Format("select measurement.id, session_id, RPM, speed, distance, power, energy, pulse, user_id, datetime, time from `{1}`.`measurments` where id ='{0}' ", userId, _database);
+                    query = String.Format("select measurement.RPM, speed, distance, power, energy, pulse, user_id, datetime, time from `{1}`.`measurments` where id ='{0}' ", userId, _database);
                 }
                 else
                 {
-                    query = String.Format("SELECT measurement.id, session_id, RPM, speed, distance, power, energy, pulse, user_id, datetime, time FROM `{1}`.`measurement` LEFT JOIN users on `measurement`.`id` = `users`.`id` WHERE `username` = '{0}' ", username, _database);
+                    query = String.Format("SELECT measurementRPM, speed, distance, power, energy, pulse, user_id, datetime, time FROM `{1}`.`measurement` LEFT JOIN users on `measurement`.`id` = `users`.`id` WHERE `username` = '{0}' ", username, _database);
                 }
 
                 if (measurmentStart == null)
@@ -484,17 +485,18 @@ namespace Mallaca
                 _selectCommand = new MySqlCommand(query);
                 _reader = _selectCommand.ExecuteReader();
                 
+
                 while (_reader.Read())
                 {
-                    Measurement m = new Measurement();
-                    m.RPM = _reader.GetInt32(2);
-                    m.SPEED = _reader.GetInt32(3);
-                    m.DISTANCE = _reader.GetInt32(4);
-                    m.ACT_POWER = _reader.GetInt32(5);
-                    m.POWER = _reader.GetInt32(5);
-                    m.ENERGY = _reader.GetInt32(6);
-                    m.PULSE = _reader.GetInt32(7);
-                    m.DATE = _reader.GetDateTime(9);
+
+                    m.RPM = _reader.GetInt32(0);
+                    m.SPEED = _reader.GetInt32(1);
+                    m.DISTANCE = _reader.GetInt32(2);
+                    m.ACT_POWER = _reader.GetInt32(3);
+                    m.POWER = _reader.GetInt32(3);
+                    m.ENERGY = _reader.GetInt32(4);
+                    m.PULSE = _reader.GetInt32(5);
+                    m.DATE = _reader.GetDateTime(7);
                 }
 
             }
@@ -509,7 +511,48 @@ namespace Mallaca
 
 
 
-            return null;
+            return m;
+        }
+
+        public List<Measurement> getMeasurementsOfUser(String username)
+        {
+            List<Measurement> measurements = new List<Measurement>();
+
+            string query;
+            query = String.Format("select measurement. RPM, speed, distance, power, energy, pulse, user_id, datetime, time from `{0}`.`measurments` ", _database);
+            
+            
+
+            _selectCommand = new MySqlCommand(query);
+                _reader = _selectCommand.ExecuteReader();
+                
+            try {
+                while (_reader.Read())
+                {
+                    Measurement m = new Measurement();
+
+                    m.RPM = _reader.GetInt32(0);
+                    m.SPEED = _reader.GetInt32(1);
+                    m.DISTANCE = _reader.GetInt32(2);
+                    m.ACT_POWER = _reader.GetInt32(3);
+                    m.POWER = _reader.GetInt32(3);
+                    m.ENERGY = _reader.GetInt32(4);
+                    m.PULSE = _reader.GetInt32(5);
+                    m.DATE = _reader.GetDateTime(7);
+
+                    measurements.Add(m);
+                }
+
+            }
+            catch (MySqlException e)
+            {
+                Console.WriteLine("Could not validate user. " + e.Message);
+            }
+            finally
+            {
+                Connection.Close();
+            }
+            return measurements;
         }
     }
 }
