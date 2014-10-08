@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using Mallaca.Usertypes;
 
 namespace Mallaca.Network.Packet
 {
-    public class LoginResponsePacket : ResponsePacket
+    public class LoginResponsePacket : ResponseFields
     {
         public const string cmd = "RESP-LOGIN";
         public string authtoken { get; set; }
+        public UserType type { get; set; }
 
         public LoginResponsePacket()
         {
@@ -25,9 +27,10 @@ namespace Mallaca.Network.Packet
 
         }
 
-        public LoginResponsePacket(string status, string desc, string authToken) : base(status, desc)
+        public LoginResponsePacket(string status, string desc, UserType u, string authToken) : base(status, desc)
         {
             this.authtoken = authToken;
+            this.type = u;
         }
 
         public override string ToString()
