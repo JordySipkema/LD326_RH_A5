@@ -245,7 +245,7 @@ namespace RH_APP.GUI
 
         private void _printButton_Click(object sender, EventArgs e)
         {
-            // Kevin's code
+            _graph.Printing.Print(true);
         }
     }
 }
