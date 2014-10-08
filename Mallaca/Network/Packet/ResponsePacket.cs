@@ -54,10 +54,15 @@ namespace Mallaca.Network.Packet
     {
         private string cmd;
 
+        public ResponsePacket()
+        {
+            
+        }
+
         public ResponsePacket(string cmd, string status, string desc)
         {
-            description = desc;
-            this.status = status;
+            Description = desc;
+            this.Status = status;
             this.cmd = cmd;
         }
     }
