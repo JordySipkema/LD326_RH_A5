@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Newtonsoft.Json.Linq;
 using System;
 
@@ -19,41 +21,47 @@ namespace Mallaca.Network.Packet
             return int.Parse(buffer.Substring(0, 4));
         }
 
-        public static int getLengthOfPacket(byte[] buffer)
+        public static int getLengthOfPacket(List<byte> buffer )
         {
-            if (buffer.Length < 4) return -1;
-
-            int t = BitConverter.ToInt32(buffer, 0);
-            
+            if (buffer.Count < 4) return -1;
+            int t = BitConverter.ToInt32(buffer.ToArray(), 0);
             return t;
         }
 
         /// <summary>
-        ///  Tries to retrieve exactly one packet as a JSON object from a string.
+        ///  Tries to retrieve exactly one packet as a JSON object from a byte list.
         /// </summary>
-        public static JObject RetrieveJSON(int packetSize, ref string buffer)
+        public static JObject RetrieveJSON(int packetSize, ref List<byte> buffer)
         {
-
-            if (buffer.Length < packetSize + 4) return null;
-            //Continue means: if statement == true, DO NOT PROCEED
-
-            var jsonData = buffer.Substring(4, packetSize);
-            buffer = buffer.Remove(0, packetSize + 4);
-            return JObject.Parse(jsonData);
+            if (buffer.Count < packetSize + 4) return null;
+            return JObject.Parse(Encoding.UTF8.GetString(GetPacketBytes(packetSize, ref buffer).ToArray()));
         }
 
-        public static Packet RetrievePacket(int packetSize, ref string buffer)
+        private static List<byte> GetPacketBytes(int packetSize, ref List<byte> buffer)
+        {
+            List<byte> jsonData = buffer.GetRange(4, packetSize);
+            buffer.RemoveRange(0, packetSize + 4);
+            return jsonData;
+        }
+
+        /// <summary>
+        ///  Creates a byte array from the specified string. First four bytes contains the lengh the data. The remainder of the bytes is the data bytes created from the given string.
+        /// </summary>
+        public static byte[] CreateByteData(string s)
+        {
+            // 4 bytes  1 - 2,147,483,647 byte(s) 
+            // lenght   data
+            //[][][][] [][][][][][][][][][]][][][][]
+            byte[] bytes = Encoding.UTF8.GetBytes(s);
+            byte[] length = BitConverter.GetBytes(bytes.Length);
+            byte[] data = length.Concat(bytes).ToArray();
+            return data;
+        }
+
+        public static Packet RetrievePacket(int packetSize, ref List<byte> buffer)
         {
 
-            if (buffer.Length < packetSize + 4) return null;
-            //Continue means: if statement == true, DO NOT PROCEED
-
-
-            var jsonData = buffer.Substring(4, packetSize);
-            buffer = buffer.Remove(0, packetSize + 4);
-            //Console.WriteLine(jsonData);
-
-            JObject json = JObject.Parse(jsonData);
+            JObject json = RetrieveJSON(packetSize, ref buffer);
             Packet p;
             switch(json["CMD"].ToString().ToUpper())
             {
