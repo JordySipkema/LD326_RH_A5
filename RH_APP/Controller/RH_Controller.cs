@@ -76,6 +76,11 @@ namespace RH_APP.Controller
 
         }
 
+        public List<Measurement> getList()
+        {
+            return _data;
+        }
+
         private void SendToServer(object sender, EventArgs args)
         {
             var jsonObject = new JObject(

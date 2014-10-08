@@ -13,12 +13,15 @@ namespace RH_APP.GUI
     {
         private readonly RH_Controller _controller;
         private bool _writeToFile;
+
+        private bool _inTraining = true;
         private StreamWriter _writer;
 
         public RH_BIKE_GUI(IBike b, string path)
         {
 
             _controller = new RH_Controller(b);
+
             _controller.UpdatedList += updateGUI;
 
             _writeToFile = true;
@@ -64,20 +67,24 @@ namespace RH_APP.GUI
 
         public void updateGUI(object sender, EventArgs args)
         {
-            dataRPM.Text = _controller.LatestMeasurement.RPM + "";
-            dataSPEED.Text = String.Format("{0:0.0}", _controller.LatestMeasurement.SPEED / 10.0);
-            dataDISTANCE.Text = String.Format("{0:0.00}", _controller.LatestMeasurement.DISTANCE / 10.0);
-            dataPOWER.Text = _controller.LatestMeasurement.POWER + "";
-            dataPOWERPCT.Text = _controller.LatestMeasurement.POWERPCT + "%";
-            dataENERGY.Text = _controller.LatestMeasurement.ENERGY + "";
-            dataTIME.Text = _controller.LatestMeasurement.TIME;
-            dataPULSE.Text = _controller.LatestMeasurement.PULSE + "";
+            while (_inTraining)
+            {
+                dataRPM.Text = _controller.LatestMeasurement.RPM + "";
+                dataSPEED.Text = String.Format("{0:0.0}", _controller.LatestMeasurement.SPEED / 10.0);
+                dataDISTANCE.Text = String.Format("{0:0.00}", _controller.LatestMeasurement.DISTANCE / 10.0);
+                dataPOWER.Text = _controller.LatestMeasurement.POWER + "";
+                dataPOWERPCT.Text = _controller.LatestMeasurement.POWERPCT + "%";
+                dataENERGY.Text = _controller.LatestMeasurement.ENERGY + "";
+                dataTIME.Text = _controller.LatestMeasurement.TIME;
+                dataPULSE.Text = _controller.LatestMeasurement.PULSE + "";
 
-            updateGraph();
+                updateGraph();
 
-            if (!_writeToFile) return;
-            var protoLine = _controller.LatestMeasurement.toProtocolString();
-            _writer.WriteLine(protoLine);
+                if (!_writeToFile) return;
+                var protoLine = _controller.LatestMeasurement.toProtocolString();
+                _writer.WriteLine(protoLine);
+            }
+            
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
@@ -167,7 +174,13 @@ namespace RH_APP.GUI
             DialogResult dialog = dialog = MessageBox.Show("Are you sure you want to quit the training?", "Alert", MessageBoxButtons.YesNo);
             if (dialog == DialogResult.Yes)
             {
+                _inTraining = false;
+                this.Dispose();
+                GraphResultUI resultUI = new GraphResultUI();
                 
+                resultUI.receiveMeasurements(_controller.getList());
+                resultUI.updateGraph();
+                resultUI.Show();
             }
         }
     }

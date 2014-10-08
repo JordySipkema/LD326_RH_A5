@@ -19,26 +19,30 @@ namespace Mallaca.Network.Packet
 
         protected ResponseFields(JObject json)
         {
-            status = json["STATUS"].ToString();
-            description = json["DESCRIPTION"].ToString();
+            Status = json["STATUS"].ToString();
+            Description = json["DESCRIPTION"].ToString();
 
         }
 
         protected ResponseFields(string status, string disc)
         {
-            this.status = status;
-            this.description = disc;
+            this.Status = status;
+            this.Description = disc;
         }
 
         public JObject GetJsonObject()
         {
-            return new JObject(new JProperty("STATUS", status),
-                                new JProperty("DESCRIPTION", description));
+            return new JObject(
+                new JProperty("CMD", CMD),
+                new JProperty("STATUS", Status),
+                new JProperty("DESCRIPTION", Description)
+                );
         }
 
-        public string status { get; set; }
-        public string description { get; set; }
-        public string cmd { get; set; }
+        public string Status { get; set; }
+        public string Description { get; set; }
+        // ReSharper disable once InconsistentNaming
+        public string CMD { get; set; }
 
         public override JObject ToJsonObject()
         {

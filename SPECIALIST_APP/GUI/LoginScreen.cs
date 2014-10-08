@@ -38,7 +38,7 @@ namespace Application_Specialist.GUI
         private void onLoginPacketResponse(Packet p )
         {
             LoginResponsePacket resp = p as LoginResponsePacket;
-            if (resp != null && resp.status == "200")
+            if (resp != null && resp.Status == "200")
             {
                 this.BeginInvoke((Action)(this.Hide));
 
@@ -50,7 +50,7 @@ namespace Application_Specialist.GUI
             }
             else
             {
-                MessageBox.Show("Valid papers are required to open the Specialist Application. The server/inspector gave the following reasons for rejecting your documents: " + Environment.NewLine + resp.description, "Your application has been reviewed");
+                MessageBox.Show("Valid papers are required to open the Specialist Application. The server/inspector gave the following reasons for rejecting your documents: " + Environment.NewLine + resp.Description, "Your application has been reviewed");
             }
 
             
