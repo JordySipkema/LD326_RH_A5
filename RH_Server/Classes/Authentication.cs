@@ -21,7 +21,7 @@ namespace RH_Server.Classes
             if (!tuple.Item1) // if the tuple.Item1 equals false, return false and exit this method.
                 return false;
 
-            //Creating the hash
+            //Creating the hash (AuthToken)
             //1. Prepare the string for hashing (user-passhash-milliseconds_since_epoch)
             var millis = DateTime.Now.ToUniversalTime().Subtract(
                 new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
@@ -39,9 +39,19 @@ namespace RH_Server.Classes
             return true;
         }
 
+
         public static Boolean Authenticate(String authToken)
         {
             return (AuthUsers.Count(x => x.Key.AuthToken == authToken) == 1);
+        }
+        public static void ReleaseAuthToken(String authToken)
+        {
+            var users = AuthUsers.Keys.Where(user => user.AuthToken == authToken);
+            foreach (var user in users)
+            {
+                Stream s;
+                AuthUsers.TryRemove(user, out s);
+            }
         }
 
         public static Stream GetStream(String username)

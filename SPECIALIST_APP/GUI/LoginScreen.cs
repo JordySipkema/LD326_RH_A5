@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Application_Specialist.Properties;
 using Mallaca;
 using Mallaca.Network;
 using Newtonsoft.Json;
@@ -31,21 +32,17 @@ namespace Application_Specialist.GUI
         private void _loginButton_Click(object sender, EventArgs e)
         { 
             LoginPacket p = new LoginPacket(_usernameBox.Text, Hashing.CreateSHA256(_passwordBox.Text));
-
-
             TCPController.Send(p.ToString());
-
-
         }
 
-        private void onLoginPacketResponse(Packet p)
+        private void onLoginPacketResponse(Packet p )
         {
             LoginResponsePacket resp = p as LoginResponsePacket;
-            if (resp != null && resp.status == "200")
+            if (resp != null && resp.Status == "200")
             {
                 this.BeginInvoke((Action)(this.Hide));
 
-                //TODO: Store auth token.
+                RH_APP.Classes.Settings.getInstance().authToken = resp.authtoken;
                 TCPController.OnPacketReceived -= onLoginPacketResponse;
                 var _mainScreen = new MainScreen();
                 _mainScreen.ShowDialog();
@@ -53,8 +50,7 @@ namespace Application_Specialist.GUI
             }
             else
             {
-
-                MessageBox.Show("Valid papers are required to open the Specialist Application. The server/inspector gave the following reasons for rejecting your documents: " + Environment.NewLine + resp.description, "Your application has been reviewed");
+                MessageBox.Show("Valid papers are required to open the Specialist Application. The server/inspector gave the following reasons for rejecting your documents: " + Environment.NewLine + resp.Description, "Your application has been reviewed");
             }
 
             

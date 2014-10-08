@@ -144,13 +144,12 @@ namespace RH_Server.Server
         {
             //String time = json.time;
             Console.WriteLine("PING: Packet recieved");
-
         }
 
 
         private void HandleListUsersPacket(JObject j)
         {
-            var p = new ListUsersResponsePacket(database.GetAllUsers());
+            var p = new ListUsersPacket(database.GetAllUsers());
             Send(p);
         }
 
@@ -206,20 +205,19 @@ namespace RH_Server.Server
 
         public void HandleDisconnectPacket(JObject json)
         {
-            //var authtoken = (string)json["AUTHTOKEN"];
+            var authtoken = (string)json["AUTHTOKEN"];
 
-            var filepath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            using (var writer = new StreamWriter(filepath + "\\RH_SERVER_DATA.txt", append: false))
+            //Release the authtoken
+            Authentication.ReleaseAuthToken(authtoken);
+
+            //Send a response:
+            var resp = new ResponsePacket
             {
-                foreach (var measurement in _measurementsList)
-                {
-                    writer.WriteLine(measurement.toProtocolString());
-                }
-                writer.Flush();
-            }
-            Console.WriteLine("Written {0} measurements to file", _measurementsList.Count);
-
-            //code to release the authtoken
+                Description = Statuscode.GetDescription(Statuscode.Status.Ok),
+                Status = Statuscode.GetCode(Statuscode.Status.Ok).ToString(),
+                CMD = "resp-dc"
+            };
+            Send(resp);
         }
 
         public void HandleChatPacket(JObject json)
@@ -231,7 +229,13 @@ namespace RH_Server.Server
             //Check if the authToken is valid:
             if (Authentication.Authenticate(authToken))
             {
-                
+                var s = Authentication.GetStream(username);
+                // Create Json-object for sending to destination
+                // Send Json-object to destination (use: Stream s)
+            }
+            else
+            {
+                Send(new ErrorPacket(Statuscode.Status.Unauthorized));
             }
         }
 

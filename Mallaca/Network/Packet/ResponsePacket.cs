@@ -7,38 +7,63 @@ using Newtonsoft.Json.Linq;
 
 namespace Mallaca.Network.Packet
 {
-    public class ResponsePacket : Packet
+    public abstract class ResponseFields : Packet
     {
+
+
+        protected ResponseFields()
+        {
+            
+        }
+
+
+        protected ResponseFields(JObject json)
+        {
+            Status = json["STATUS"].ToString();
+            Description = json["DESCRIPTION"].ToString();
+
+        }
+
+        protected ResponseFields(string status, string disc)
+        {
+            this.Status = status;
+            this.Description = disc;
+        }
+
+        public JObject GetJsonObject()
+        {
+            return new JObject(
+                new JProperty("CMD", CMD),
+                new JProperty("STATUS", Status),
+                new JProperty("DESCRIPTION", Description)
+                );
+        }
+
+        public string Status { get; set; }
+        public string Description { get; set; }
+        // ReSharper disable once InconsistentNaming
+        public string CMD { get; set; }
+
+        public override JObject ToJsonObject()
+        {
+            return GetJsonObject();
+        }
+    }
+
+    public class ResponsePacket : ResponseFields
+    {
+        private string cmd;
+
         public ResponsePacket()
         {
             
         }
 
-        public ResponsePacket(JObject json)
+        public ResponsePacket(string cmd, string status, string desc)
         {
-            status = json["STATUS"].ToString();
-            description = json["DESCRIPTION"].ToString();
-
-        }
-
-        public ResponsePacket(string status, string disc)
-        {
-            this.status = status;
-            this.description = disc;
-        }
-
-        public JObject GetJsonObject()
-        {
-            return new JObject(new JProperty("STATUS", status),
-                                new JProperty("DESCRIPTION", description));
-        }
-
-        public string status { get; set; }
-        public string description { get; set; }
-
-        public override JObject ToJsonObject()
-        {
-            return GetJsonObject();
+            Description = desc;
+            this.Status = status;
+            this.cmd = cmd;
         }
     }
 }

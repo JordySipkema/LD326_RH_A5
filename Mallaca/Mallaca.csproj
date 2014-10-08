@@ -48,11 +48,12 @@
     <Compile Include="Network\Chat_Controller.cs" />
     <Compile Include="Network\NetworkSettings.cs" />
     <Compile Include="Network\Packet\AuthenticatedPacket.cs" />
-    <Compile Include="Network\Packet\ListResponsePacket.cs" />
+    <Compile Include="Network\Packet\ChatPacket.cs" />
+    <Compile Include="Network\Packet\ListPacket.cs" />
     <Compile Include="Network\Packet\PushResponsePacket.cs" />
     <Compile Include="Network\Packet\ErrorPacket.cs" />
     <Compile Include="Network\Packet\ListMeasurementsPacket.cs" />
-    <Compile Include="Network\Packet\ListUsersResponsePacket.cs" />
+    <Compile Include="Network\Packet\ListUsersPacket.cs" />
     <Compile Include="Network\Packet\LoginPacket.cs" />
     <Compile Include="Network\Packet\LoginResponsePacket.cs" />
     <Compile Include="Network\Packet\Packet.cs" />

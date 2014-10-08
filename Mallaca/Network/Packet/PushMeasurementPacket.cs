@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Mallaca.Network.Packet
 {
-    public class PushMeasurementsPacket : ListResponsePacket<Measurement>
+    public class PushMeasurementsPacket : ListPacket<Measurement>
     {
         public const string cmd = "PUSH";
         public const string serverCmd = "RESP-LSM";

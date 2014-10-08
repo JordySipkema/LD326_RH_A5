@@ -8,20 +8,20 @@ using Newtonsoft.Json.Linq;
 
 namespace Mallaca.Network.Packet
 {
-    public class ListUsersResponsePacket : ListResponsePacket<User>
+    public class ListUsersPacket : ListPacket<User>
     {
         public const string Cmd = "RESP-LSU";
         public const string fieldName = "users";
-        public ListUsersResponsePacket(string authToken) : base(authToken)
+        public ListUsersPacket(string authToken) : base(authToken)
         {
         }
 
-        public ListUsersResponsePacket(List<User> users)
+        public ListUsersPacket(List<User> users)
             : base(users, fieldName)
         {
         }
 
-        public ListUsersResponsePacket(JObject j) : base(j,fieldName)
+        public ListUsersPacket(JObject j) : base(j,fieldName)
         {
             List = new List<User>();
             foreach (JToken token in j[fieldName].Children())
@@ -42,7 +42,7 @@ namespace Mallaca.Network.Packet
             }
         }
 
-        public ListUsersResponsePacket() : base("")
+        public ListUsersPacket() : base("")
         {
         }
 

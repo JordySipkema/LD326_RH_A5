@@ -8,6 +8,11 @@ namespace Mallaca.Network.Packet
 {
     public class LoginPacket : Packet
     {
+        public const string cmd = "LOGIN";
+        public string username { get; set; }
+        public string password { get; set; }
+
+
         public LoginPacket(string username, string password)
         {
             this.username = username;
@@ -22,9 +27,6 @@ namespace Mallaca.Network.Packet
             password = j["password"].ToString();
         }
 
-        public const string cmd = "LOGIN";
-        public string username { get; set; }
-        public string password { get; set; }
 
         public override string ToString()
         {
