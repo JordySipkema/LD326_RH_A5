@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Mallaca.Network.Packet
 {
-    class PushResponsePacket : ResponsePacket
+    class PushResponsePacket : ResponseFields
     {
         public const string cmd = "RESP-PUSH";
 

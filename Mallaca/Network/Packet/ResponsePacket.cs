@@ -7,21 +7,24 @@ using Newtonsoft.Json.Linq;
 
 namespace Mallaca.Network.Packet
 {
-    public class ResponsePacket : Packet
+    public abstract class ResponseFields : Packet
     {
-        public ResponsePacket()
+
+
+        protected ResponseFields()
         {
             
         }
 
-        public ResponsePacket(JObject json)
+
+        protected ResponseFields(JObject json)
         {
             Status = json["STATUS"].ToString();
             Description = json["DESCRIPTION"].ToString();
 
         }
 
-        public ResponsePacket(string status, string disc)
+        protected ResponseFields(string status, string disc)
         {
             this.Status = status;
             this.Description = disc;
@@ -44,6 +47,18 @@ namespace Mallaca.Network.Packet
         public override JObject ToJsonObject()
         {
             return GetJsonObject();
+        }
+    }
+
+    public class ResponsePacket : ResponseFields
+    {
+        private string cmd;
+
+        public ResponsePacket(string cmd, string status, string desc)
+        {
+            description = desc;
+            this.status = status;
+            this.cmd = cmd;
         }
     }
 }
