@@ -29,6 +29,7 @@ namespace Mallaca.Network.Packet
 
         public override JObject ToJsonObject()
         {
+
             if(AuthToken != null)
                 return new JObject(new JProperty("authToken", AuthToken));
             else

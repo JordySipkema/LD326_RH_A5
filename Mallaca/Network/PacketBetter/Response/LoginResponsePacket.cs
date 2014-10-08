@@ -13,16 +13,31 @@ namespace Mallaca.Network.PacketBetter.Response
 
         public string AuthToken { get; set; }
 
-        public LoginResponsePacket()
+        #region Constructors
+        public LoginResponsePacket() : base(LoginRcmd)
         {
-            CMD = LoginRcmd;
+            Initialize(String.Empty); //Initialize without an authtoken.
+        }
+
+        public LoginResponsePacket(Statuscode.Status status, String authtoken)
+            : base(status, LoginRcmd)
+        {
+            Initialize(authtoken);
         }
 
         public LoginResponsePacket(String status, String description, String authtoken) 
             : base(status, description, LoginRcmd)
         {
+            Initialize(authtoken);
+        }
+        #endregion
+
+        #region Initializers
+        private void Initialize(String authtoken)
+        {
             AuthToken = authtoken;
         }
+        #endregion
 
         public override JObject ToJsonObject()
         {

@@ -12,7 +12,6 @@ namespace Mallaca.Network.Packet
         public string username { get; set; }
         public string password { get; set; }
 
-
         public LoginPacket(string username, string password)
         {
             this.username = username;

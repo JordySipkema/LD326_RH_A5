@@ -42,6 +42,7 @@ namespace Mallaca.Network.Packet
         {
             JObject json = GetJsonObject();
             json.Add("CMD", cmd);
+            return null;
         }
     }
 }

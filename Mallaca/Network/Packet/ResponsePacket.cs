@@ -10,7 +10,6 @@ namespace Mallaca.Network.Packet
     public abstract class ResponseFields : Packet
     {
 
-
         protected ResponseFields()
         {
             

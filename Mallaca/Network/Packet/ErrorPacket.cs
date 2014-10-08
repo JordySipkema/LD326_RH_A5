@@ -7,6 +7,8 @@ using Newtonsoft.Json.Linq;
 
 namespace Mallaca.Network.Packet
 {
+    //Deprecated, Error packet will be removed
+    //Use Packet>Response>ResponsePacket instead (constructor accepts input type Statuscode.Status)
     public class ErrorPacket : Packet
     {
         private readonly Statuscode.Status _status;

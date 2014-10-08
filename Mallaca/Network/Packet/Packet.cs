@@ -10,7 +10,6 @@ namespace Mallaca.Network.Packet
     {        
         protected Packet()
         { 
-        
         }
 
         

@@ -12,8 +12,7 @@ namespace Mallaca.Network.Packet
         public const string cmd = "RESP-PUSH";
 
         public PushResponsePacket()
-        {
-            
+        { 
         }
 
         public PushResponsePacket(JObject j) : base(j)
