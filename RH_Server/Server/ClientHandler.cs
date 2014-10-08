@@ -25,7 +25,7 @@ namespace RH_Server.Server
         private readonly TcpClient _tcpclient;
         private readonly SslStream _sslStream;
         private DBConnect database;
-        private string _totalBuffer = "";
+        private List<byte> _totalBuffer;
 
         private readonly List<Measurement> _measurementsList = new List<Measurement>();
 
@@ -40,6 +40,7 @@ namespace RH_Server.Server
 
             _sslStream = new SslStream(_tcpclient.GetStream());
             _sslStream.AuthenticateAsServer(certificate);
+            _totalBuffer = new List<byte>();
             database = new DBConnect();
             var thread = new Thread(ThreadLoop);
             thread.Start();
@@ -55,12 +56,12 @@ namespace RH_Server.Server
                     //new Socket().Receive(Buffer);
                     var receiveCount = _sslStream.Read(Buffer, 0, _bufferSize);
 
+                    byte[] rawData = new byte[receiveCount];
+                    Array.Copy(Buffer, 0, rawData, 0, receiveCount);
+                    _totalBuffer = _totalBuffer.Concat(rawData).ToList();
 
 
-                    _totalBuffer += Encoding.UTF8.GetString(Buffer, 0, receiveCount); 
-
-
-                    var packetSize = Packet.getLengthOfPacket(_totalBuffer);
+                    int packetSize = Packet.getLengthOfPacket(_totalBuffer);
                     if (packetSize == -1)
                         continue;
 
@@ -118,9 +119,9 @@ namespace RH_Server.Server
 
         private void Send(String s)
         {
-            byte[] data = Encoding.UTF8.GetBytes(s.Length.ToString("0000") + s).ToArray();
+            //byte[] data = Encoding.UTF8.GetBytes(s.Length.ToString("0000") + s).ToArray();
 
-            _sslStream.Write(data);
+            _sslStream.Write(Packet.CreateByteData(s));
         }
 
         private void Send(Packet s)
