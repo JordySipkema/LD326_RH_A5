@@ -23,9 +23,9 @@ namespace UnitTests
             
             List<User> users = db.GetAllUsers();
             users.RemoveRange(10, users.Count - 10);
-            var p = new ListUsersResponsePacket(users);
+            var p = new ListUsersPacket(users);
 
-            var newPacket = new ListUsersResponsePacket(JObject.Parse(p.ToString()));
+            var newPacket = new ListUsersPacket(JObject.Parse(p.ToString()));
 
             Assert.True(newPacket.List.Count == 10);
         }

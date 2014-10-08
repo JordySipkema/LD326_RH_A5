@@ -139,7 +139,7 @@ namespace RH_Server.Server
 
         private void HandleListUsersPacket(JObject j)
         {
-            var p = new ListUsersResponsePacket(database.GetAllUsers());
+            var p = new ListUsersPacket(database.GetAllUsers());
             Send(p);
         }
 
