@@ -310,9 +310,7 @@ namespace RH_Server.Server
         {
             JObject returnJson;
             List<User> users = new List<User>();
-
-
-
+            users = _dbConnect.GetAllUsers();
             int i = users.Count;
             JArray u = JArray.FromObject(users);
 
