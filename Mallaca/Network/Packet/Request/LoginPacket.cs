@@ -30,7 +30,7 @@ namespace Mallaca.Network.Packet.Request
             var json = base.ToJsonObject();
             json.Add("username", Username);
             json.Add("password", Passhash);
-            return base.ToJsonObject();
+            return json;
         }
 
         public override string ToString()

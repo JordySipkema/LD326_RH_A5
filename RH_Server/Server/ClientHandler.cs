@@ -155,9 +155,10 @@ namespace RH_Server.Server
 
         private void HandleLoginPacket(JObject json)
         {
+            Console.WriteLine("HandleLoginPacket:");
             //Recieve the username and password from json.
-            var username = json["USERNAME"].ToString();
-            var password = json["PASSWORD"].ToString();
+            var username = json["username"].ToString();
+            var password = json["password"].ToString();
 
             JObject returnJson;
             //Code to check user/pass here

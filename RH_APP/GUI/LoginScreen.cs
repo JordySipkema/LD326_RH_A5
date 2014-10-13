@@ -46,6 +46,7 @@ namespace RH_APP.GUI
 
                 RH_APP.Classes.Settings.GetInstance().authToken = resp.AuthToken;
                 TCPController.OnPacketReceived -= onLoginPacketResponse;
+
                 var _mainScreen = new MainScreen();
                 _mainScreen.ShowDialog();
                 
@@ -66,6 +67,11 @@ namespace RH_APP.GUI
         {
            if(e.KeyChar == (Char)Keys.Return)
                 _loginButton_Click(this, null);
+        }
+
+        private void LoginScreen_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
