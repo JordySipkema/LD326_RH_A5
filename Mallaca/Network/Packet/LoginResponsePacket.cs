@@ -5,7 +5,7 @@ namespace Mallaca.Network.Packet
 {
     public class LoginResponsePacket : ResponseFields
     {
-        private const string cmd = "RESP-LOGIN";
+        public const string cmd = "RESP-LOGIN";
         public string authtoken { get; set; }
         public UserType type { get; set; }
 
