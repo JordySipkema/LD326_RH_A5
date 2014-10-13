@@ -51,34 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationSpecialist.cs" />
-    <Compile Include="GUI\CreateScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\CreateScreen.Designer.cs">
-      <DependentUpon>CreateScreen.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\MainScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\MainScreen.Designer.cs">
-      <DependentUpon>MainScreen.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\LoginScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\LoginScreen.Designer.cs">
-      <DependentUpon>LoginScreen.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="GUI\CreateScreen.resx">
-      <DependentUpon>CreateScreen.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\MainScreen.resx">
-      <DependentUpon>MainScreen.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\LoginScreen.resx">
-      <DependentUpon>LoginScreen.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -111,6 +84,9 @@
       <Project>{7b8617db-470d-424a-843a-8b2aedbb3369}</Project>
       <Name>RH_APP</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GUI\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

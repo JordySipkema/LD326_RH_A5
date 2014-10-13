@@ -1,21 +1,20 @@
-﻿using System.Net.Security;
-using System.Runtime.Remoting.Messaging;
-using System.Security.Cryptography.X509Certificates;
-using Mallaca;
+﻿using Mallaca;
 using Mallaca.Network;
 using Mallaca.Network.Packet;
+using Mallaca.Network.Packet.Response;
 using Mallaca.Properties;
+using Mallaca.Usertypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using RH_Server.Classes;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Security;
 using System.Net.Sockets;
-using System.Text;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
-using RH_Server.Classes;
-using Mallaca.Usertypes;
 
 namespace RH_Server.Server
 {
@@ -25,12 +24,12 @@ namespace RH_Server.Server
         private const int _bufferSize = 1024;
         private readonly TcpClient _tcpclient;
         private readonly SslStream _sslStream;
-        private DBConnect database;
+        private readonly DBConnect database;
         private List<byte> _totalBuffer;
 
         private readonly List<Measurement> _measurementsList = new List<Measurement>();
 
-        private DBConnect _dbConnect = new DBConnect();
+        private readonly DBConnect _dbConnect = new DBConnect();
 
         //private string username;
         //private Boolean isLoggedIn;
@@ -64,11 +63,11 @@ namespace RH_Server.Server
                     _totalBuffer = _totalBuffer.Concat(rawData).ToList();
 
 
-                    int packetSize = Packet.getLengthOfPacket(_totalBuffer);
+                    int packetSize = Packet.GetLengthOfPacket(_totalBuffer);
                     if (packetSize == -1)
                         continue;
 
-                    JObject json = Packet.RetrieveJSON(packetSize, ref _totalBuffer);
+                    JObject json = Packet.RetrieveJson(packetSize, ref _totalBuffer);
 
                     if (json == null)
                         continue;
@@ -149,28 +148,27 @@ namespace RH_Server.Server
 
         private void HandleListUsersPacket(JObject j)
         {
-            var p = new ListUsersPacket(database.GetAllUsers());
-            Send(p);
+            throw new NotImplementedException();
+            //var p = new ListUsersPacket();
+            //Send(p);
         }
 
         private void HandleLoginPacket(JObject json)
         {
+            Console.WriteLine("HandleLoginPacket:");
             //Recieve the username and password from json.
-            var username = json["USERNAME"].ToString();
-            var password = json["PASSWORD"].ToString();
+            var username = json["username"].ToString();
+            var password = json["password"].ToString();
 
             JObject returnJson;
             //Code to check user/pass here
             if (Authentication.Authenticate(username, password, _sslStream))
             {
-
-                returnJson =
-                    new JObject(
-                        new JProperty("CMD", "resp-login"),
-                        new JProperty("STATUS", Statuscode.GetCode(Statuscode.Status.Ok)),
-                        new JProperty("DESCRIPTION", Statuscode.GetDescription(Statuscode.Status.Ok)),
-                        new JProperty("AUTHTOKEN", Authentication.GetUser(username).AuthToken)
-                        );
+                returnJson = new LoginResponsePacket(
+                    Statuscode.Status.Ok,
+                    Authentication.GetUser(username).UserType.ToString(),
+                    Authentication.GetUser(username).AuthToken
+                    ).ToJsonObject();
 
             }
             else //If the code reaches this point, the authentification has failed.
@@ -211,12 +209,7 @@ namespace RH_Server.Server
             Authentication.ReleaseAuthToken(authtoken);
 
             //Send a response:
-            var resp = new ResponsePacket
-            {
-                Description = Statuscode.GetDescription(Statuscode.Status.Ok),
-                Status = Statuscode.GetCode(Statuscode.Status.Ok).ToString(),
-                CMD = "resp-dc"
-            };
+            var resp = new ResponsePacket(Statuscode.Status.Ok, "resp-dc");
             Send(resp);
         }
 
@@ -235,7 +228,7 @@ namespace RH_Server.Server
             }
             else
             {
-                Send(new ErrorPacket(Statuscode.Status.Unauthorized));
+                Send(new ResponsePacket(Statuscode.Status.Unauthorized));
             }
         }
 

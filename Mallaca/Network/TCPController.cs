@@ -159,7 +159,7 @@ namespace Mallaca.Network
                     _totalBuffer = _totalBuffer.Concat(rawData).ToList();
 
 
-                    int packetSize = Packet.Packet.getLengthOfPacket(_totalBuffer);
+                    int packetSize = Packet.Packet.GetLengthOfPacket(_totalBuffer);
                     if (packetSize != -1)
                     {
 

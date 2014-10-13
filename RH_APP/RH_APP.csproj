@@ -69,11 +69,29 @@
     <Compile Include="GUI\chooseYourBikeUI.Designer.cs">
       <DependentUpon>chooseYourBikeUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\CreateScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\CreateScreen.Designer.cs">
+      <DependentUpon>CreateScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\GraphResultUI.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI\GraphResultUI.Designer.cs">
       <DependentUpon>GraphResultUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\LoginScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\LoginScreen.Designer.cs">
+      <DependentUpon>LoginScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\MainScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\MainScreen.Designer.cs">
+      <DependentUpon>MainScreen.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -83,8 +101,17 @@
     <EmbeddedResource Include="GUI\chooseYourBikeUI.resx">
       <DependentUpon>chooseYourBikeUI.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\CreateScreen.resx">
+      <DependentUpon>CreateScreen.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\GraphResultUI.resx">
       <DependentUpon>GraphResultUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\LoginScreen.resx">
+      <DependentUpon>LoginScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\MainScreen.resx">
+      <DependentUpon>MainScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
