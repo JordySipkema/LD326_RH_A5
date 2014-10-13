@@ -7,6 +7,7 @@ namespace Mallaca.Network.Packet.Response
     {
         private const string LoginRcmd = "RESP-LOGIN";
 
+        public string Usertype { get; set; }
         public string AuthToken { get; set; }
 
         #region Constructors
@@ -15,22 +16,23 @@ namespace Mallaca.Network.Packet.Response
             Initialize(String.Empty); //Initialize without an authtoken.
         }
 
-        public LoginResponsePacket(Statuscode.Status status, String authtoken)
+        public LoginResponsePacket(Statuscode.Status status, String usertype, String authtoken)
             : base(status, LoginRcmd)
         {
-            Initialize(authtoken);
+            Initialize(usertype, authtoken);
         }
 
-        public LoginResponsePacket(String status, String description, String authtoken) 
+        public LoginResponsePacket(String status, String description, String usertype, String authtoken) 
             : base(status, description, LoginRcmd)
         {
-            Initialize(authtoken);
+            Initialize(usertype, authtoken);
         }
         #endregion
 
         #region Initializers
-        private void Initialize(String authtoken)
+        private void Initialize(String usertype, String authtoken)
         {
+            Usertype = usertype;
             AuthToken = authtoken;
         }
         #endregion
@@ -38,6 +40,7 @@ namespace Mallaca.Network.Packet.Response
         public override JObject ToJsonObject()
         {
             var returnJson = base.ToJsonObject();
+            returnJson.Add("USERTYPE", Usertype);
             returnJson.Add("AUTHTOKEN", AuthToken);
 
             return returnJson;

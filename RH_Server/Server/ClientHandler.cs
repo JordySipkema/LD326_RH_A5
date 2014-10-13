@@ -165,6 +165,7 @@ namespace RH_Server.Server
             {
                 returnJson = new LoginResponsePacket(
                     Statuscode.Status.Ok,
+                    Authentication.GetUser(username).UserType.ToString(),
                     Authentication.GetUser(username).AuthToken
                     ).ToJsonObject();
 
