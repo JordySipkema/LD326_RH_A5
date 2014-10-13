@@ -12,11 +12,11 @@ namespace RH_Server.Classes
         //ConcurrentDictionary to enhance thread safety.
         private static readonly ConcurrentDictionary<User, Stream> AuthUsers = new ConcurrentDictionary<User, Stream>();
 
-        public static Boolean Authenticate(String user, String passhash, Stream socketStream)
+        public static Boolean Authenticate(String username, String passhash, Stream socketStream)
         {
             //check that user and passhash are valid.
             var database = new DBConnect();
-            var tuple = database.ValidateUser(user, passhash, true);
+            var tuple = database.ValidateUser(username, passhash, true);
 
             if (!tuple.Item1) // if the tuple.Item1 equals false, return false and exit this method.
                 return false;
@@ -26,16 +26,22 @@ namespace RH_Server.Classes
             var millis = DateTime.Now.ToUniversalTime().Subtract(
                 new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
                 ).TotalMilliseconds;
-            var aboutToHash = String.Format("{0}-{1}-{2}", user, passhash, millis);
+            var aboutToHash = String.Format("{0}-{1}-{2}", username, passhash, millis);
 
             //2. Hash the string.
             var hash = Hashing.CreateSHA256(aboutToHash);
 
             //3. Create the user :D
-            var u = new User {Username = user, PasswordToBeSaved = passhash, AuthToken = hash};
+            var user = database.GetAllUsers().First(dbuser => dbuser.Username == username);
+
+            if (user == null) return false;
+            //if user == null, exit this method!
+
+
+            user.AuthToken = hash;
+            AuthUsers.GetOrAdd(user, socketStream);
 
             //4. Add the user to the AuthUsers class.
-            AuthUsers.GetOrAdd(u, socketStream);
             return true;
         }
 

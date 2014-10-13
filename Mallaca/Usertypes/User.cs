@@ -2,7 +2,7 @@
 
 namespace Mallaca.Usertypes
 {
-    public  enum UserType
+    public enum UserType
     {
         None = -2, User = -1, Client = 0, Specialist = 1, Administrator = 2, Govenor = 3, Commissioner = 4, HighCommissioner = 5
     }
