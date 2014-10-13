@@ -45,6 +45,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Network\PacketBetter\Request\RequestPacket.cs" />
+    <Compile Include="Network\PacketBetter\Request\ChatPacket.cs" />
+    <Compile Include="Network\PacketBetter\Request\ListPacket.cs" />
+    <Compile Include="Network\PacketBetter\Request\LoginPacket.cs" />
+    <Compile Include="Network\PacketBetter\Request\PushMeasurementPacket.cs" />
+
+    <Compile Include="Network\PacketBetter\Response\LoginResponsePacket.cs" />
+    <Compile Include="Network\PacketBetter\Response\PushResponsePacket.cs" />
+    <Compile Include="Network\PacketBetter\Response\ResponsePacket.cs" />
+
     <Compile Include="Network\Chat_Controller.cs" />
     <Compile Include="Network\NetworkSettings.cs" />
     <Compile Include="Network\Packet\AuthenticatedPacket.cs" />
