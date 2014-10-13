@@ -45,30 +45,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Network\PacketBetter\Request\RequestPacket.cs" />
-    <Compile Include="Network\PacketBetter\Request\ChatPacket.cs" />
-    <Compile Include="Network\PacketBetter\Request\ListPacket.cs" />
-    <Compile Include="Network\PacketBetter\Request\LoginPacket.cs" />
-    <Compile Include="Network\PacketBetter\Request\PushMeasurementPacket.cs" />
-
-    <Compile Include="Network\PacketBetter\Response\LoginResponsePacket.cs" />
-    <Compile Include="Network\PacketBetter\Response\PushResponsePacket.cs" />
-    <Compile Include="Network\PacketBetter\Response\ResponsePacket.cs" />
-
     <Compile Include="Network\Chat_Controller.cs" />
     <Compile Include="Network\NetworkSettings.cs" />
-    <Compile Include="Network\Packet\AuthenticatedPacket.cs" />
-    <Compile Include="Network\Packet\ChatPacket.cs" />
-    <Compile Include="Network\Packet\ListPacket.cs" />
-    <Compile Include="Network\Packet\PushResponsePacket.cs" />
-    <Compile Include="Network\Packet\ErrorPacket.cs" />
-    <Compile Include="Network\Packet\ListMeasurementsPacket.cs" />
-    <Compile Include="Network\Packet\ListUsersPacket.cs" />
-    <Compile Include="Network\Packet\LoginPacket.cs" />
-    <Compile Include="Network\Packet\LoginResponsePacket.cs" />
     <Compile Include="Network\Packet\Packet.cs" />
-    <Compile Include="Network\Packet\PushMeasurementPacket.cs" />
-    <Compile Include="Network\Packet\ResponsePacket.cs" />
+    <Compile Include="Network\Packet\Request\AuthenticatedPacket.cs" />
+    <Compile Include="Network\Packet\Request\ChatPacket.cs" />
+    <Compile Include="Network\Packet\Request\ListPacket.cs" />
+    <Compile Include="Network\Packet\Request\LoginPacket.cs" />
+    <Compile Include="Network\Packet\Request\PushMeasurementPacket.cs" />
+    <Compile Include="Network\Packet\Request\RequestPacket.cs" />
+    <Compile Include="Network\Packet\Response\LoginResponsePacket.cs" />
+    <Compile Include="Network\Packet\Response\PushResponsePacket.cs" />
+    <Compile Include="Network\Packet\Response\ResponsePacket.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
