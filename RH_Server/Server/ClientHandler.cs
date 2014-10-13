@@ -263,30 +263,20 @@ namespace RH_Server.Server
         public void HandlePullPacket(JObject json)
         {
             JObject returnJson;
-            JToken userId;
-            JToken username;
-            JToken measurementID;
-            JToken measurmentStart;
-
-            json.TryGetValue("userID", out userId);
-            json.TryGetValue("username", out username);
-            json.TryGetValue("measurementID", out measurementID);
-            json.TryGetValue("measurmentStart", out measurmentStart);
-
-            
+            JToken userid;
+            json.TryGetValue("dataID", out userid);
+            int userID;
+            int.TryParse((string)userid,out userID);
 
             returnJson =
                     new JObject(
                         new JProperty("CMD", "resp-pull"),
-                        new JProperty("COUNT", 1),
-                        new JProperty("MEASURMENTS", _dbConnect.getMeasurement(userId, username, measurementID, measurmentStart))
+                        new JProperty("data", _dbConnect.getUser(userID))
                         );
 
-            //Send the result back to the specialist.
             Console.WriteLine(returnJson.ToString());
             Send(returnJson.ToString());
-
-
+            
         }
 
         public void HandleLsmPacket(JObject json)
@@ -294,7 +284,11 @@ namespace RH_Server.Server
             JObject returnJson;
             List<Measurement> measurements = new List<Measurement>();
 
-            measurements = _dbConnect.getMeasurementsOfUser((string)json["username"]);
+            JToken sessionID;
+
+            json.TryGetValue("sessionID", out sessionID);
+
+            measurements = _dbConnect.getMeasurementsOfUser((string)json["username"], (string)json["sessionID"]);
             int i=measurements.Count;
             JArray m = JArray.FromObject(measurements);
 

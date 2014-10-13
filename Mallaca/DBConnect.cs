@@ -469,7 +469,7 @@ namespace Mallaca
                 }
                 else
                 {
-                    query = String.Format("SELECT measurementRPM, speed, distance, power, energy, pulse, user_id, datetime, time FROM `{1}`.`measurement` LEFT JOIN users on `measurement`.`id` = `users`.`id` WHERE `username` = '{0}' ", username, _database);
+                    query = String.Format("SELECT measurement RPM, speed, distance, power, energy, pulse, user_id, datetime, time FROM `{1}`.`measurement` LEFT JOIN users on `measurement`.`id` = `users`.`id` WHERE `username` = '{0}' ", username, _database);
                 }
 
                 if (measurmentStart == null)
@@ -482,7 +482,7 @@ namespace Mallaca
                     throw new InvalidOperationException("niet gesupport");
                 }
 
-                _selectCommand = new MySqlCommand(query);
+                _selectCommand = new MySqlCommand(query,Connection);
                 _reader = _selectCommand.ExecuteReader();
                 
 
@@ -514,16 +514,27 @@ namespace Mallaca
             return m;
         }
 
-        public List<Measurement> getMeasurementsOfUser(String username)
+        public List<Measurement> getMeasurementsOfUser(String username, string sessionID)
         {
             List<Measurement> measurements = new List<Measurement>();
 
             string query;
-            query = String.Format("select measurement. RPM, speed, distance, power, energy, pulse, user_id, datetime, time from `{0}`.`measurments` ", _database);
+            query = String.Format("select RPM, speed, distance, power, energy, pulse, user_id, datetime, time from {0}.measurement ", _database);
 
+            int userID= -1;
+            Boolean check = Int32.TryParse(username, out userID);
+            if (check && userID > 0)
+            {
+                query += String.Format("WHERE user_id = {0} ",username);
+            }
+            else {
+                query += String.Format(" LEFT JOIN users on users.id = measurement.user_id WHERE username = '{0}' ", username);
+            }
+            int ID;
+            Int32.TryParse(sessionID,out ID);
+            query += String.Format("AND session_id = {0} ", ID);
 
-
-            _selectCommand = new MySqlCommand(query);
+            _selectCommand = new MySqlCommand(query, Connection);
             _reader = _selectCommand.ExecuteReader();
 
             try
@@ -553,6 +564,7 @@ namespace Mallaca
             {
                 Connection.Close();
             }
+
             return measurements;
         }
     }
