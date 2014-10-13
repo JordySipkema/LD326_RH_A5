@@ -32,16 +32,16 @@ namespace RH_Server.Classes
             var hash = Hashing.CreateSHA256(aboutToHash);
 
             //3. Create the user :D
-            var user = database.GetAllUsers().First(dbuser => dbuser.Username == username);
+            var user = database.getUser(username);
 
-            if (user == null) return false;
             //if user == null, exit this method!
-
+            if (user == null) return false;
 
             user.AuthToken = hash;
-            AuthUsers.GetOrAdd(user, socketStream);
 
             //4. Add the user to the AuthUsers class.
+            AuthUsers.GetOrAdd(user, socketStream);
+
             return true;
         }
 
