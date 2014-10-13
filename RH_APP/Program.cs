@@ -16,7 +16,8 @@ namespace RH_APP
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new GUI.chooseYourBikeUI());
+            //Application.Run(new GUI.chooseYourBikeUI());
+            Application.Run(new GUI.LoginScreen());
 
             
         }
