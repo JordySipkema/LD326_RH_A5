@@ -1,21 +1,19 @@
-﻿using System.Net.Security;
-using System.Runtime.Remoting.Messaging;
-using System.Security.Cryptography.X509Certificates;
-using Mallaca;
+﻿using Mallaca;
 using Mallaca.Network;
 using Mallaca.Network.Packet;
 using Mallaca.Properties;
+using Mallaca.Usertypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using RH_Server.Classes;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Security;
 using System.Net.Sockets;
-using System.Text;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
-using RH_Server.Classes;
-using Mallaca.Usertypes;
 
 namespace RH_Server.Server
 {
@@ -25,12 +23,12 @@ namespace RH_Server.Server
         private const int _bufferSize = 1024;
         private readonly TcpClient _tcpclient;
         private readonly SslStream _sslStream;
-        private DBConnect database;
+        private readonly DBConnect database;
         private List<byte> _totalBuffer;
 
         private readonly List<Measurement> _measurementsList = new List<Measurement>();
 
-        private DBConnect _dbConnect = new DBConnect();
+        private readonly DBConnect _dbConnect = new DBConnect();
 
         //private string username;
         //private Boolean isLoggedIn;
@@ -163,14 +161,12 @@ namespace RH_Server.Server
             //Code to check user/pass here
             if (Authentication.Authenticate(username, password, _sslStream))
             {
-
-                returnJson =
-                    new JObject(
-                        new JProperty("CMD", "resp-login"),
-                        new JProperty("STATUS", Statuscode.GetCode(Statuscode.Status.Ok)),
-                        new JProperty("DESCRIPTION", Statuscode.GetDescription(Statuscode.Status.Ok)),
-                        new JProperty("AUTHTOKEN", Authentication.GetUser(username).AuthToken)
-                        );
+                returnJson = new LoginResponsePacket
+                {
+                    Status = Statuscode.GetCode(Statuscode.Status.Ok).ToString(),
+                    Description = Statuscode.GetDescription(Statuscode.Status.Ok),
+                    authtoken = Authentication.GetUser(username).AuthToken
+                }.ToJsonObject();//TODO: CHECK THIS METHOD
 
             }
             else //If the code reaches this point, the authentification has failed.
@@ -217,9 +213,7 @@ namespace RH_Server.Server
                 Status = Statuscode.GetCode(Statuscode.Status.Ok).ToString(),
                 CMD = "resp-dc"
             };
-            
-
-
+            Send(resp);
         }
 
         public void HandleChatPacket(JObject json)
@@ -316,9 +310,7 @@ namespace RH_Server.Server
         {
             JObject returnJson;
             List<User> users = new List<User>();
-
-
-
+            users = _dbConnect.GetAllUsers();
             int i = users.Count;
             JArray u = JArray.FromObject(users);
 

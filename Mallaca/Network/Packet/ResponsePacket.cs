@@ -10,7 +10,6 @@ namespace Mallaca.Network.Packet
     public abstract class ResponseFields : Packet
     {
 
-
         protected ResponseFields()
         {
             
@@ -52,13 +51,17 @@ namespace Mallaca.Network.Packet
 
     public class ResponsePacket : ResponseFields
     {
-        private string cmd;
+
+        public ResponsePacket()
+        {
+            
+        }
 
         public ResponsePacket(string cmd, string status, string desc)
         {
-            description = desc;
-            this.status = status;
-            this.cmd = cmd;
+            Description = desc;
+            this.Status = status;
+            this.CMD = cmd;
         }
     }
 }

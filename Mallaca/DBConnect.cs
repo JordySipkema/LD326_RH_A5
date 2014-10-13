@@ -537,13 +537,14 @@ namespace Mallaca
 
             string query;
             query = String.Format("select measurement. RPM, speed, distance, power, energy, pulse, user_id, datetime, time from `{0}`.`measurments` ", _database);
-            
-            
+
+
 
             _selectCommand = new MySqlCommand(query);
-                _reader = _selectCommand.ExecuteReader();
-                
-            try {
+            _reader = _selectCommand.ExecuteReader();
+
+            try
+            {
                 while (_reader.Read())
                 {
                     Measurement m = new Measurement();

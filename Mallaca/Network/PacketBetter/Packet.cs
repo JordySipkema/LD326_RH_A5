@@ -1,26 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json.Linq;
-using System;
 
-namespace Mallaca.Network.Packet
+namespace Mallaca.Network.PacketBetter
 {
     public abstract class Packet
-    {        
-        protected Packet()
-        { 
-        }
+    {
 
-        
-        public static int getLengthOfPacket(string buffer)
+
+
+        public static int GetLengthOfPacket(string buffer)
         {
             if (buffer.Length < 4) return -1;
             //Continue means: if _totalBuffer.Lenght < 4, DO NOT PROCEED
             return int.Parse(buffer.Substring(0, 4));
         }
 
-        public static int getLengthOfPacket(List<byte> buffer )
+        public static int GetLengthOfPacket(List<byte> buffer)
         {
             if (buffer.Count < 4) return -1;
             int t = BitConverter.ToInt32(buffer.ToArray(), 0);
@@ -30,7 +28,7 @@ namespace Mallaca.Network.Packet
         /// <summary>
         ///  Tries to retrieve exactly one packet as a JSON object from a byte list.
         /// </summary>
-        public static JObject RetrieveJSON(int packetSize, ref List<byte> buffer)
+        public static JObject RetrieveJson(int packetSize, ref List<byte> buffer)
         {
             if (buffer.Count < packetSize + 4) return null;
             return JObject.Parse(Encoding.UTF8.GetString(GetPacketBytes(packetSize, ref buffer).ToArray()));
@@ -60,33 +58,7 @@ namespace Mallaca.Network.Packet
         public static Packet RetrievePacket(int packetSize, ref List<byte> buffer)
         {
 
-            JObject json = RetrieveJSON(packetSize, ref buffer);
-            Packet p;
-            switch(json["CMD"].ToString().ToUpper())
-            {
-                case LoginPacket.cmd:
-                    p = new LoginPacket(json["Username"].ToString(), json["passowrd"].ToString());
-                    break;
-
-                case LoginResponsePacket.cmd:
-
-                    p = new LoginResponsePacket(json);
-                    break;
-
-                case PushMeasurementsPacket.cmd:
-                    p = new PushMeasurementsPacket(json);
-                    break;
-                case PushMeasurementsPacket.serverCmd:
-                    goto case PushMeasurementsPacket.cmd;
-                    break;
-
-
-                default:
-                    p = null;
-                    break;
-            }
-
-            return p;
+            return null;
         }
 
         public abstract JObject ToJsonObject();
