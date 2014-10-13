@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
-namespace Mallaca.Network.PacketBetter.Request
+namespace Mallaca.Network.Packet.Request
 {
     public class AuthenticatedPacket : RequestPacket
     {

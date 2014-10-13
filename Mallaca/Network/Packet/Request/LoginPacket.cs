@@ -1,5 +1,5 @@
 ﻿
-namespace Mallaca.Network.PacketBetter.Request
+namespace Mallaca.Network.Packet.Request
 {
     public class LoginPacket : RequestPacket
     {

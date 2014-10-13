@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using Newtonsoft.Json.Linq;
 
-namespace Mallaca.Network.PacketBetter.Response
+namespace Mallaca.Network.Packet.Response
 {
     public class ResponsePacket : Packet
     {

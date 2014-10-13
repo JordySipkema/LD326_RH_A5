@@ -26,7 +26,6 @@ namespace Mallaca.Usertypes
 
         public User()
         {
-
         }
 
         public User(int id, string username, string password, string name, DateTime dob, string surname, string gender)
