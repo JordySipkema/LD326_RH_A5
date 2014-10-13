@@ -1,6 +1,7 @@
 ﻿using Mallaca;
 using Mallaca.Network;
 using Mallaca.Network.Packet;
+using Mallaca.Network.Packet.Response;
 using Mallaca.Properties;
 using Mallaca.Usertypes;
 using Newtonsoft.Json;
@@ -62,11 +63,11 @@ namespace RH_Server.Server
                     _totalBuffer = _totalBuffer.Concat(rawData).ToList();
 
 
-                    int packetSize = Packet.getLengthOfPacket(_totalBuffer);
+                    int packetSize = Packet.GetLengthOfPacket(_totalBuffer);
                     if (packetSize == -1)
                         continue;
 
-                    JObject json = Packet.RetrieveJSON(packetSize, ref _totalBuffer);
+                    JObject json = Packet.RetrieveJson(packetSize, ref _totalBuffer);
 
                     if (json == null)
                         continue;
@@ -147,8 +148,9 @@ namespace RH_Server.Server
 
         private void HandleListUsersPacket(JObject j)
         {
-            var p = new ListUsersPacket(database.GetAllUsers());
-            Send(p);
+            throw new NotImplementedException();
+            //var p = new ListUsersPacket();
+            //Send(p);
         }
 
         private void HandleLoginPacket(JObject json)
@@ -161,12 +163,10 @@ namespace RH_Server.Server
             //Code to check user/pass here
             if (Authentication.Authenticate(username, password, _sslStream))
             {
-                returnJson = new LoginResponsePacket
-                {
-                    Status = Statuscode.GetCode(Statuscode.Status.Ok).ToString(),
-                    Description = Statuscode.GetDescription(Statuscode.Status.Ok),
-                    authtoken = Authentication.GetUser(username).AuthToken
-                }.ToJsonObject();//TODO: CHECK THIS METHOD
+                returnJson = new LoginResponsePacket(
+                    Statuscode.Status.Ok,
+                    Authentication.GetUser(username).AuthToken
+                    ).ToJsonObject();
 
             }
             else //If the code reaches this point, the authentification has failed.
@@ -207,12 +207,7 @@ namespace RH_Server.Server
             Authentication.ReleaseAuthToken(authtoken);
 
             //Send a response:
-            var resp = new ResponsePacket
-            {
-                Description = Statuscode.GetDescription(Statuscode.Status.Ok),
-                Status = Statuscode.GetCode(Statuscode.Status.Ok).ToString(),
-                CMD = "resp-dc"
-            };
+            var resp = new ResponsePacket(Statuscode.Status.Ok, "resp-dc");
             Send(resp);
         }
 
@@ -231,7 +226,7 @@ namespace RH_Server.Server
             }
             else
             {
-                Send(new ErrorPacket(Statuscode.Status.Unauthorized));
+                Send(new ResponsePacket(Statuscode.Status.Unauthorized));
             }
         }
 

@@ -1,18 +1,41 @@
-﻿
+﻿using System;
+using Newtonsoft.Json.Linq;
+
 namespace Mallaca.Network.Packet.Request
 {
     public class LoginPacket : RequestPacket
     {
         //Inherited fields: CMD
-        //Introduced fields: -
+        //Introduced fields: Username, Password (hash)
 
-        private const string DefCmd = "LOGIN";
+        private const string Cmd = "LOGIN";
 
-        public LoginPacket()
-            : base(DefCmd)
+        public String Username { get; private set; }
+        public String Passhash { get; private set; }
+
+        public LoginPacket(string username, string passhash)
+            : base(Cmd)
         {
-
+            Initialize(username, passhash);
         }
 
+        private void Initialize(string user, string passhash)
+        {
+            Username = user;
+            Passhash = passhash;
+        }
+
+        public override JObject ToJsonObject()
+        {
+            var json = base.ToJsonObject();
+            json.Add("username", Username);
+            json.Add("password", Passhash);
+            return base.ToJsonObject();
+        }
+
+        public override string ToString()
+        {
+            return ToJsonObject().ToString();
+        }
     }
 }
