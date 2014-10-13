@@ -42,7 +42,7 @@ namespace Application_Specialist.GUI
             {
                 this.BeginInvoke((Action)(this.Hide));
 
-                RH_APP.Classes.Settings.getInstance().authToken = resp.authtoken;
+                RH_APP.Classes.Settings.GetInstance().authToken = resp.authtoken;
                 TCPController.OnPacketReceived -= onLoginPacketResponse;
                 var _mainScreen = new MainScreen();
                 _mainScreen.ShowDialog();
