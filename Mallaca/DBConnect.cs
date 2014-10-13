@@ -71,6 +71,23 @@ namespace Mallaca
             
          }
 
+        ///<returns>Returns a List of tuples with the user_id, session_id and datetime.</returns>
+        public List<Tuple<int, int, DateTime>> GetTrainingSessions()
+        {
+            string query = "SELECT session_id, datetime, user_id FROM `measurement` GROUP BY session_id, user_id";
+
+            var List = new List<Tuple<int, int, DateTime>>();
+            MySqlCommand command = new MySqlCommand(query, Connection);
+            MySqlDataReader dataReader = command.ExecuteReader();
+            while (dataReader.Read())
+            {
+                List.Add(new Tuple<int, int, DateTime>(dataReader.GetInt32(2), dataReader.GetInt32(0), dataReader.GetDateTime(1)));
+            }
+            dataReader.Close();
+           
+            return List;
+        }
+
         public Tuple<bool, UserType> ValidateUser(String username, String password, bool passIsHashedWithSha256) {
             OpenConnection();
             try
