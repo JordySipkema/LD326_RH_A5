@@ -11,11 +11,6 @@ namespace Mallaca.Network.Packet.Response
         public string AuthToken { get; set; }
 
         #region Constructors
-        public LoginResponsePacket() : base(LoginRcmd)
-        {
-            Initialize(String.Empty); //Initialize without an authtoken.
-        }
-
         public LoginResponsePacket(Statuscode.Status status, String usertype, String authtoken)
             : base(status, LoginRcmd)
         {
