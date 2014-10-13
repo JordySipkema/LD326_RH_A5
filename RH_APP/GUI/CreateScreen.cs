@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mallaca;
-namespace Application_Specialist.GUI
+namespace RH_APP.GUI
     //Test
 {
     public partial class CreateScreen : Form

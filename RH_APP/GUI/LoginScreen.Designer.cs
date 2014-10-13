@@ -1,4 +1,4 @@
-﻿namespace Application_Specialist.GUI
+﻿namespace RH_APP.GUI
 {
     partial class LoginScreen
     {

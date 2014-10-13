@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mallaca.Network;
+using RH_APP.GUI;
 
 namespace Application_Specialist
 {
@@ -21,7 +22,7 @@ namespace Application_Specialist
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Application_Specialist.GUI.LoginScreen());
+            Application.Run(new LoginScreen());
         }
     }
 }

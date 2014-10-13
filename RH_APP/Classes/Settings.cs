@@ -17,7 +17,7 @@ namespace RH_APP.Classes
 
         }
 
-        public static Settings getInstance()
+        public static Settings GetInstance()
         {
            if(settings == null)
                settings = new Settings();

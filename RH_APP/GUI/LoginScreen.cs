@@ -7,14 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Application_Specialist.Properties;
 using Mallaca;
 using Mallaca.Network;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Mallaca.Network.Packet;
 
-namespace Application_Specialist.GUI
+namespace RH_APP.GUI
 {
     public partial class LoginScreen : Form
     {
@@ -46,6 +45,7 @@ namespace Application_Specialist.GUI
                 TCPController.OnPacketReceived -= onLoginPacketResponse;
                 var _mainScreen = new MainScreen();
                 _mainScreen.ShowDialog();
+                
 
             }
             else
