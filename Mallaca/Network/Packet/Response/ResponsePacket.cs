@@ -38,9 +38,11 @@ namespace Mallaca.Network.Packet.Response
             if (!(json.TryGetValue("STATUS", out status) && json.TryGetValue("DESCRIPTION", out description)))
                 throw new InvalidOperationException("Neither status or description where found in the JObject.");
 
-            CMD = json.TryGetValue("CMD", out cmd) ? cmd.ToString() : null;
-            Status = status.ToString();
-            Description = description.ToString();
+            var cmdS = json.TryGetValue("CMD", out cmd) ? cmd.ToString() : null;
+            var statusS = status.ToString();
+            var descS = description.ToString();
+
+            Initialize(statusS, descS, cmdS);
         }
 
         public ResponsePacket(string status, string description, string cmd)
