@@ -5,8 +5,8 @@ namespace Mallaca.Network.Packet.Response
 {
     public class ResponsePacket : Packet
     {
-        public string Status { get; protected set; }
-        public string Description { get; protected set; }
+        public string Status { get; private set; }
+        public string Description { get; private set; }
         // ReSharper disable once InconsistentNaming
         public string CMD { get; private set; }
 
