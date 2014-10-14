@@ -154,19 +154,27 @@ namespace Mallaca.Network
 
                 if (bytesRead > 0)
                 {
-                    byte[] rawData = new byte[bytesRead];
-                    Array.Copy(state.buffer, 0, rawData, 0, bytesRead);
-                    _totalBuffer = _totalBuffer.Concat(rawData).ToList();
-
-
-                    int packetSize = Packet.Packet.GetLengthOfPacket(_totalBuffer);
-                    if (packetSize != -1)
+                    try
                     {
+                        byte[] rawData = new byte[bytesRead];
+                        Array.Copy(state.buffer, 0, rawData, 0, bytesRead);
+                        _totalBuffer = _totalBuffer.Concat(rawData).ToList();
 
-                        Packet.Packet p = Packet.Packet.RetrievePacket(packetSize, ref _totalBuffer);
-                        if (p != null)
-                            OnPacketReceived(p);
-                        
+
+                        int packetSize = Packet.Packet.GetLengthOfPacket(_totalBuffer);
+                        if (packetSize != -1)
+                        {
+
+                            Packet.Packet p = Packet.Packet.RetrievePacket(packetSize, ref _totalBuffer);
+                            if (p != null)
+                                OnPacketReceived(p);
+
+                        }
+
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("An exception occured in the TCPController.ReceiveCallback function: " + e.Message);    
                     }
 
                     _sslStream.BeginRead(state.buffer, 0, StateObject.BufferSize, ReceiveCallback,
