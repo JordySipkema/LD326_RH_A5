@@ -5,7 +5,7 @@ namespace Mallaca.Network.Packet.Response
 {
     public class LoginResponsePacket : ResponsePacket
     {
-        private const string LoginRcmd = "RESP-LOGIN";
+        public const string LoginRcmd = "RESP-LOGIN";
 
         public string Usertype { get; set; }
         public string AuthToken { get; set; }
@@ -21,6 +21,18 @@ namespace Mallaca.Network.Packet.Response
             : base(status, description, LoginRcmd)
         {
             Initialize(usertype, authtoken);
+        }
+
+        public LoginResponsePacket(JObject json) : base(json)
+        {
+            if(json["CMD"].ToString() != LoginRcmd)
+                throw new InvalidOperationException("Wrong command type.");
+
+            JToken token;
+            JToken userType;
+
+            Usertype = json.TryGetValue("USERTYPE", out userType) ? userType.ToString() : null;
+            AuthToken = json.TryGetValue("AUTHTOKEN", out token) ? token.ToString() : null;
         }
         #endregion
 

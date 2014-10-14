@@ -175,7 +175,7 @@ namespace RH_Server.Server
             {
                 returnJson =
                     new JObject(
-                        new JProperty("CMD", "resp-login"),
+                        new JProperty("CMD", "RESP-LOGIN"),
                         new JProperty("STATUS", Statuscode.GetCode(Statuscode.Status.InvalidUsernameOrPassword)),
                         new JProperty("DESCRIPTION", Statuscode.GetDescription(Statuscode.Status.InvalidUsernameOrPassword))
                         );

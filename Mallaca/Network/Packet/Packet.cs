@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Mallaca.Network.Packet.Response;
 using Newtonsoft.Json.Linq;
 
 namespace Mallaca.Network.Packet
@@ -54,9 +55,19 @@ namespace Mallaca.Network.Packet
         }
 
         public static Packet RetrievePacket(int packetSize, ref List<byte> buffer)
-        {
+        {   Packet p = null;
+            JObject json = RetrieveJson(packetSize, ref buffer);
 
-            return null;
+            
+            switch (json["CMD"].ToString().ToUpper())
+            {
+                case LoginResponsePacket.LoginRcmd:
+                    p = new LoginResponsePacket(json);
+                    break;
+            }
+                                
+
+            return p;
         }
 
         public abstract JObject ToJsonObject();

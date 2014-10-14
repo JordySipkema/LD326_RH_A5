@@ -5,8 +5,8 @@ namespace Mallaca.Network.Packet.Response
 {
     public class ResponsePacket : Packet
     {
-        public string Status { get; private set; }
-        public string Description { get; private set ; }
+        public string Status { get; protected set; }
+        public string Description { get; protected set; }
         // ReSharper disable once InconsistentNaming
         public string CMD { get; private set; }
 
@@ -27,6 +27,20 @@ namespace Mallaca.Network.Packet.Response
                 Statuscode.GetDescription(status),
                 cmd
                 );
+        }
+
+        public ResponsePacket(JObject json)
+        {
+            JToken status;
+            JToken description;
+            JToken cmd;
+
+            if (!(json.TryGetValue("STATUS", out status) && json.TryGetValue("DESCRIPTION", out description)))
+                throw new InvalidOperationException("Neither status or description where found in the JObject.");
+
+            CMD = json.TryGetValue("CMD", out cmd) ? cmd.ToString() : null;
+            Status = status.ToString();
+            Description = description.ToString();
         }
 
         public ResponsePacket(string status, string description, string cmd)
