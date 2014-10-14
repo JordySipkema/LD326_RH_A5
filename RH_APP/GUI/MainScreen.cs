@@ -19,12 +19,8 @@ namespace RH_APP.GUI
     public partial class MainScreen : Form
     {
         private Chat_Controller _chatController;
-        private List<User> users = new List<User>();
-
         public MainScreen()
         {
-            DBConnect db = new DBConnect();
-            users = db.GetAllUsers();
             
             InitializeComponent();
             _chatController = new Chat_Controller();
@@ -95,6 +91,11 @@ namespace RH_APP.GUI
                     _textBox.Text = "";
                 }
             }
+        }
+
+        private void createConnectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

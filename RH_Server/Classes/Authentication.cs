@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Mallaca;
@@ -68,6 +69,11 @@ namespace RH_Server.Classes
         public static User GetUser(String username)
         {
             return AuthUsers.First(x => x.Key.Username == username).Key;
+        }
+
+        public static List<User> GetClients()
+        {
+            return AuthUsers.Keys.ToList().Where(x => x.IsClient).ToList();
         }
     }
 }

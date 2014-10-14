@@ -255,19 +255,35 @@ namespace RH_Server.Server
 
         public void HandlePullPacket(JObject json)
         {
-            JObject returnJson;
-            JToken userid;
-            json.TryGetValue("dataID", out userid);
-            int userID;
-            int.TryParse((string)userid,out userID);
+            //WIP
+            JObject returnJson = new JObject(new JProperty("CMD", "RESP-PULL"));
+            switch (json["dataType"].ToString())
+            {
+                case "user":
+                    JToken userid;
+                    json.TryGetValue("dataID", out userid);
+                    int userID;
+                    int.TryParse((string)userid,out userID);
 
-            returnJson =
-                    new JObject(
-                        new JProperty("CMD", "resp-pull"),
-                        new JProperty("data", _dbConnect.getUser(userID))
-                        );
+                    returnJson =
+                            new JObject(
+                                new JProperty("CMD", "resp-pull"),
+                                new JProperty("data", _dbConnect.getUser(userID))
+                                );
+                    break;
 
-            Console.WriteLine(returnJson.ToString());
+                case "connectedclients":
+                    Authentication.GetClients();
+                    break;
+                default:
+                    return;
+                    break;
+            }
+
+
+
+            
+
             Send(returnJson.ToString());
             
         }
