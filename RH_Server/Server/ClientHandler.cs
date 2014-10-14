@@ -1,4 +1,6 @@
-﻿using Mallaca;
+﻿using System.Reflection.Emit;
+using System.Threading.Tasks;
+using Mallaca;
 using Mallaca.Network;
 using Mallaca.Network.Packet;
 using Mallaca.Network.Packet.Response;
@@ -44,17 +46,33 @@ namespace RH_Server.Server
             _sslStream.AuthenticateAsServer(certificate);
             _totalBuffer = new List<byte>();
             database = new DBConnect();
-            var thread = new Thread(ThreadLoop);
-            thread.Start();
 
+            Task task = new Task(ThreadLoop);
+            task.ContinueWith(ExceptionHandler, TaskContinuationOptions.OnlyOnFaulted);
+            task.Start();
+
+
+        }
+
+        private void ExceptionHandler(Task task)
+        {
+            var exception = task.Exception;
+
+            if (exception.InnerException is SocketException || exception.InnerException is IOException)
+            {
+                Console.WriteLine("Client with IP-address: " + _tcpclient.Client.LocalEndPoint + " has been disconnected.");
+            }
+            else
+            {
+                Console.WriteLine("Something has gone terribly wrong in ClientHandler.ThreadLoop(): " + exception.InnerException.Message);
+            }
         }
 
         private void ThreadLoop()
         {
             while (true)
             {
-                try
-                {
+
                     //new Socket().Receive(Buffer);
                     var receiveCount = _sslStream.Read(Buffer, 0, _bufferSize);
 
@@ -118,12 +136,7 @@ namespace RH_Server.Server
 
                     //_totalBuffer = _totalBuffer.Substring(packetSize + 4);
                     //_totalBuffer = String.Empty;
-                }
-                catch (SocketException e)
-                {
-                    Console.WriteLine("Client with IP-address: " + _tcpclient.Client.LocalEndPoint + " has been disconnected.");
-                    Console.WriteLine(e.Message);
-                }
+
             }
         }
 
