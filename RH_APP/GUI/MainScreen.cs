@@ -31,7 +31,7 @@ namespace RH_APP.GUI
             
             InitializeComponent();
 
-            if (!showElements)
+            if (!showMenu)
             {
                 menuStrip1.Visible = false;
                 this.Text = "Remote Healthcare - Client Edition";
@@ -130,6 +130,7 @@ namespace RH_APP.GUI
 
         private void numericUpDown1_Click(object sender, EventArgs e)
         {
+            
             _controller.SetPower((int)(numericUpDown1.Value));
         }
 
@@ -139,7 +140,7 @@ namespace RH_APP.GUI
             {
                 PullResponsePacket<User> response = p as PullResponsePacket<User>;
 
-                if(response.dataType == "connected_clients")
+                if(response.DataType == "connected_clients")
                     connectedClients = response.List;
             }
         }

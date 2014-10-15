@@ -3,6 +3,7 @@ using Mallaca.Network;
 using Mallaca.Network.Packet;
 using Mallaca.Network.Packet.Response;
 using Mallaca.Properties;
+using Mallaca.Usertypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RH_Server.Classes;
@@ -251,8 +252,7 @@ namespace RH_Server.Server
                     json.TryGetValue("dataID", out userid);
                     int userID;
                     int.TryParse((string)userid,out userID);
-                    List<User> useristList = new List<User>();
-                    useristList.Add(_dbConnect.getUser(userID));
+                    List<User> useristList = new List<User> {_dbConnect.getUser(userID)};
                     resp = new PullUsersResponsePacket(useristList, "user");
                     break;
 

@@ -11,7 +11,7 @@ namespace Mallaca.Network.Packet.Response
 
         public PullResponsePacket(List<T> lsit, string datatype) : base(Statuscode.Status.Ok, Cmd)
         {
-            dataType = datatype;
+            DataType = datatype;
             List = lsit;
         }
 
@@ -20,9 +20,9 @@ namespace Mallaca.Network.Packet.Response
             
         }
 
-        public PullResponsePacket(JObject json, bool dealWithContents = true)
+        public PullResponsePacket(JObject json, bool dealWithContents = true) : base (json)
         {
-            dataType = json["dataType"].ToString();
+            DataType = json["dataType"].ToString();
             if (!dealWithContents)
                 return;
             List = new List<T>();

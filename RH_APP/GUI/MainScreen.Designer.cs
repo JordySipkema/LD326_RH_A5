@@ -373,7 +373,7 @@
             this.setPowerLabel.Size = new System.Drawing.Size(72, 13);
             this.setPowerLabel.TabIndex = 35;
             this.setPowerLabel.Text = "SET POWER";
-            this.setPowerLabel.Click += new System.EventHandler(this.label4_Click_1);
+            this.setPowerLabel.Click += new System.EventHandler(this.label4_Click);
             // 
             // MainScreen
             // 
