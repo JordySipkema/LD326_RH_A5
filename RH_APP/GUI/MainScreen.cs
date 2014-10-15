@@ -25,9 +25,11 @@ namespace RH_APP.GUI
         private Chat_Controller _chatController;
         private List<User> connectedClients = new List<User>();
         private readonly RH_Controller _controller;
-        public MainScreen(Boolean showMenu)
+        public MainScreen(Boolean showMenu, IBike b)
         {
 
+            _controller = new RH_Controller(b);
+            _controller.UpdatedList += updateGUI;
             
             InitializeComponent();
 
@@ -40,6 +42,22 @@ namespace RH_APP.GUI
             
             _chatController = new Chat_Controller();
 
+            ListPacket p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
+            TCPController.OnPacketReceived += handleIncomingPackets;
+            TCPController.Send(p.ToString());
+        }
+
+        public MainScreen(bool showMenu)
+        {
+
+            InitializeComponent();
+
+            if (!showMenu)
+            {
+                menuStrip1.Visible = false;
+                numericUpDown1.Visible = false;
+                setPowerLabel.Visible = false;
+            }
             ListPacket p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
             TCPController.OnPacketReceived += handleIncomingPackets;
             TCPController.Send(p.ToString());
@@ -172,5 +190,24 @@ namespace RH_APP.GUI
         {
             MessageBox.Show("© 23TI2A5 \n Kevin van de Akkerveken \n Farid Amali \n Engin Can \n George de Coo \n Gerjan Holsappel \n Jordy Sipkema");
         }
+
+	        public void updateGUI(object sender, EventArgs args)
+        {
+                dataRPM.Text = _controller.LatestMeasurement.RPM + "";
+                dataSPEED.Text = String.Format("{0:0.0}", _controller.LatestMeasurement.SPEED / 10.0);
+                dataDISTANCE.Text = String.Format("{0:0.00}", _controller.LatestMeasurement.DISTANCE / 10.0);
+                dataPOWER.Text = _controller.LatestMeasurement.POWER + "";
+                dataPOWERPCT.Text = _controller.LatestMeasurement.POWERPCT + "%";
+                dataENERGY.Text = _controller.LatestMeasurement.ENERGY + "";
+                dataTIME.Text = _controller.LatestMeasurement.TIME;
+                dataPULSE.Text = _controller.LatestMeasurement.PULSE + "";
+
+                //if (!_writeToFile) return;
+                //var protoLine = _controller.LatestMeasurement.toProtocolString();
+                //_writer.WriteLine(protoLine);
+     
+
+        }
+
     }
 }

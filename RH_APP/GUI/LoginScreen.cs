@@ -51,20 +51,20 @@ namespace RH_APP.GUI
 
                 RH_APP.Classes.Settings.GetInstance().authToken = resp.AuthToken;
                 TCPController.OnPacketReceived -= onLoginPacketResponse;
-                bool stuff = false;
                 if (resp.Usertype.Equals("Specialist") || resp.Usertype.Equals("Administrator"))
                 {
-                    stuff = true;
+                    var mainScreen = new MainScreen(true);
+                    mainScreen.ShowDialog();
+                    this.Close();
                 }
                 else if (resp.Usertype.Equals("Client"))
                 {
-                    
+                    COM_Bike b = new COM_Bike(getCOMPort());
+                    var mainScreen = new MainScreen(false, b);
+                    mainScreen.Text = " Remote Healthcare - Client Edition";
+                    mainScreen.ShowDialog();
+                    this.Close();
                 }
-                var _mainScreen = new MainScreen(stuff);
-                //IAsyncResult result = this.BeginInvoke(new Action(() => _mainScreen.ShowDialog()));
-                //this.BeginInvoke((new Action(() =>_mainScreen.Show())));
-                //uiContext.Send((state => _mainScreen.Show()), null);
-                _mainScreen.ShowDialog();
             }
             else
             {
