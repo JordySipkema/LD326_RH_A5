@@ -35,8 +35,6 @@
             this.connectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadClientsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.trainingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.createConnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._welcomeLabel = new System.Windows.Forms.Label();
@@ -68,7 +66,6 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.trainingToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -93,48 +90,36 @@
             this.userToolStripMenuItem,
             this.connectionToolStripMenuItem});
             this.createClientToolStripMenuItem.Name = "createClientToolStripMenuItem";
-            this.createClientToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.createClientToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.createClientToolStripMenuItem.Text = "New";
             // 
             // userToolStripMenuItem
             // 
             this.userToolStripMenuItem.Name = "userToolStripMenuItem";
-            this.userToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.userToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.userToolStripMenuItem.Text = "User";
             this.userToolStripMenuItem.Click += new System.EventHandler(this.userToolStripMenuItem_Click);
             // 
             // connectionToolStripMenuItem
             // 
             this.connectionToolStripMenuItem.Name = "connectionToolStripMenuItem";
-            this.connectionToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.connectionToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.connectionToolStripMenuItem.Text = "Connection";
+            this.connectionToolStripMenuItem.Click += new System.EventHandler(this.connectionToolStripMenuItem_Click);
             // 
             // loadClientsToolStripMenuItem
             // 
             this.loadClientsToolStripMenuItem.Name = "loadClientsToolStripMenuItem";
-            this.loadClientsToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.loadClientsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.loadClientsToolStripMenuItem.Text = "Display data";
+            this.loadClientsToolStripMenuItem.Click += new System.EventHandler(this.loadClientsToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Exit";
-            // 
-            // trainingToolStripMenuItem
-            // 
-            this.trainingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.createConnectionToolStripMenuItem});
-            this.trainingToolStripMenuItem.Name = "trainingToolStripMenuItem";
-            this.trainingToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
-            this.trainingToolStripMenuItem.Text = "Training";
-            // 
-            // createConnectionToolStripMenuItem
-            // 
-            this.createConnectionToolStripMenuItem.Name = "createConnectionToolStripMenuItem";
-            this.createConnectionToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.createConnectionToolStripMenuItem.Text = "Create Connection";
-            this.createConnectionToolStripMenuItem.Click += new System.EventHandler(this.createConnectionToolStripMenuItem_Click);
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -143,6 +128,7 @@
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
+            this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -374,7 +360,7 @@
             this.setPowerLabel.Size = new System.Drawing.Size(72, 13);
             this.setPowerLabel.TabIndex = 35;
             this.setPowerLabel.Text = "SET POWER";
-            this.setPowerLabel.Click += new System.EventHandler(this.label4_Click_1);
+            this.setPowerLabel.Click += new System.EventHandler(this.label4_Click);
             // 
             // MainScreen
             // 
@@ -424,7 +410,6 @@
         private System.Windows.Forms.ToolStripMenuItem loadClientsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.Label _welcomeLabel;
-        private System.Windows.Forms.ToolStripMenuItem trainingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem userToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem connectionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
@@ -446,7 +431,6 @@
         private System.Windows.Forms.Button _sendButton;
         private System.Windows.Forms.TextBox _textBox;
         private System.Windows.Forms.TextBox _chatLogBox;
-        private System.Windows.Forms.ToolStripMenuItem createConnectionToolStripMenuItem;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Label setPowerLabel;
 

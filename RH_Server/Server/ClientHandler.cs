@@ -3,6 +3,7 @@ using Mallaca.Network;
 using Mallaca.Network.Packet;
 using Mallaca.Network.Packet.Response;
 using Mallaca.Properties;
+using Mallaca.Usertypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RH_Server.Classes;
@@ -72,13 +73,26 @@ namespace RH_Server.Server
                         continue;
 
                     JToken cmd;
+                    JToken authToken = null;
                     if (!json.TryGetValue("CMD", out cmd))
                     {
                         Console.WriteLine("Got JSON that does not define a command.");
                         continue;
                     }
 
+
                     var packetType = cmd.ToString().ToLower();
+
+                    if (packetType != "login" && !json.TryGetValue("AUTHTOKEN", out authToken))
+                    {
+                        Console.WriteLine("No authtoken found in packet.");
+                        continue;
+                    }
+                    if (packetType != "login" && !Authentication.Authenticate(authToken.ToString()))
+                    {
+                        Console.WriteLine("Got a packet with an invalid authentication token.");
+                        continue;
+                    }
 
                     switch (packetType)
                     {
@@ -120,6 +134,11 @@ namespace RH_Server.Server
                     Console.WriteLine("Client with IP-address: {0} has been disconnected", _tcpclient.Client.LocalEndPoint);
                     Console.WriteLine(e.Message);
                 }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    break;
+                }
             }
         }
 
@@ -128,6 +147,7 @@ namespace RH_Server.Server
             //byte[] data = Encoding.UTF8.GetBytes(s.Length.ToString("0000") + s).ToArray();
 
             _sslStream.Write(Packet.CreateByteData(s));
+            _sslStream.Flush();
         }
 
         private void Send(Packet s)
@@ -135,12 +155,6 @@ namespace RH_Server.Server
             Send(s.ToString());
         }
 
-        private void HandleListUsersPacket(JObject j)
-        {
-            throw new NotImplementedException();
-            //var p = new ListUsersPacket();
-            //Send(p);
-        }
 
         private void HandleLoginPacket(JObject json)
         {
@@ -229,25 +243,25 @@ namespace RH_Server.Server
 
         public void HandlePullPacket(JObject json)
         {
-            //WIP
-            var returnJson = new JObject(new JProperty("CMD", "RESP-PULL"));
+
+            Packet resp;
             switch (json["dataType"].ToString())
             {
                 case "user":
                     JToken userid;
                     json.TryGetValue("dataID", out userid);
-                    int userId;
-                    int.TryParse((string)userid,out userId);
-
-                    returnJson =
-                            new JObject(
-                                new JProperty("CMD", "resp-pull"),
-                                new JProperty("data", _dbConnect.getUser(userId))
-                                );
+                    int userID;
+                    int.TryParse((string)userid,out userID);
+                    List<User> useristList = new List<User> {_dbConnect.getUser(userID)};
+                    resp = new PullUsersResponsePacket(useristList, "user");
                     break;
 
-                case "connectedclients":
-                    Authentication.GetClients();
+                case "connected_clients":
+                    resp = new PullUsersResponsePacket(Authentication.GetClients(), "connected_clients");
+                    break;
+                case "user_sessions":
+                    resp = new PullResponsePacket<Tuple<int, int, DateTime>>(_database.GetTrainingSessions(),
+                        "user_sessions");
                     break;
                 default:
                     return;
@@ -256,8 +270,9 @@ namespace RH_Server.Server
 
 
             
-
-            Send(returnJson.ToString());
+            Console.WriteLine(json);
+            string data = resp.ToString();
+            Send(data);
             
         }
 

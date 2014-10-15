@@ -64,6 +64,21 @@ namespace Mallaca.Network.Packet
                 case LoginResponsePacket.LoginRcmd:
                     p = new LoginResponsePacket(json);
                     break;
+
+
+                case PullResponsePacket<string>.Cmd: 
+                switch (json["dataType"].ToString())
+                {
+                    case "users":
+                    case "connected_clients":
+                        p = new PullUsersResponsePacket(json);
+                        break;
+                    case "measurements":
+                        return new PullResponsePacket<Measurement>(json);
+                        break;
+
+                }
+                break;
             }
                                 
 

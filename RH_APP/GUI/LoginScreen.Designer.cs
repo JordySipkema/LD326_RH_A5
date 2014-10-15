@@ -43,6 +43,7 @@
             this._usernameBox.Name = "_usernameBox";
             this._usernameBox.Size = new System.Drawing.Size(127, 20);
             this._usernameBox.TabIndex = 0;
+            this._usernameBox.Text = "otto";
             // 
             // _passwordBox
             // 
@@ -50,6 +51,7 @@
             this._passwordBox.Name = "_passwordBox";
             this._passwordBox.Size = new System.Drawing.Size(127, 20);
             this._passwordBox.TabIndex = 1;
+            this._passwordBox.Text = "habeas corpus";
             this._passwordBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this._passwordBox_KeyPress);
             // 
             // _loginButton

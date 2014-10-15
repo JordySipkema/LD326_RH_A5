@@ -1,6 +1,10 @@
 ﻿using Mallaca;
 using Mallaca.Network;
+using Mallaca.Network.Packet;
+using Mallaca.Network.Packet.Request;
+using Mallaca.Network.Packet.Response;
 using Mallaca.Usertypes;
+using RH_APP.Classes;
 using RH_APP.Controller;
 using System;
 using System.Collections.Generic;
@@ -20,15 +24,16 @@ namespace RH_APP.GUI
     public partial class MainScreen : Form
     {
         private Chat_Controller _chatController;
+        private List<User> connectedClients = new List<User>();
         private readonly RH_Controller _controller;
-        public MainScreen(bool showElements, IBike b)
+        public MainScreen(Boolean showMenu)
         {
             _controller = new RH_Controller(b);
             _controller.UpdatedList += updateGUI;
             
             InitializeComponent();
 
-            if (!showElements)
+            if (!showMenu)
             {
                 menuStrip1.Visible = false;
                 numericUpDown1.Visible = false;
@@ -36,6 +41,10 @@ namespace RH_APP.GUI
             }
             
             _chatController = new Chat_Controller();
+
+            ListPacket p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
+            TCPController.OnPacketReceived += handleIncomingPackets;
+            TCPController.Send(p.ToString());
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -120,22 +129,53 @@ namespace RH_APP.GUI
 
         }
 
-        private void label4_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
         private void numericUpDown1_Click(object sender, EventArgs e)
         {
+            
             _controller.SetPower((int)(numericUpDown1.Value));
         }
 
-        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private void handleIncomingPackets(Packet p)
         {
+            if (p is PullResponsePacket<User>)
+            {
+                PullResponsePacket<User> response = p as PullResponsePacket<User>;
 
+                if(response.DataType == "connected_clients")
+                    connectedClients = response.List;
+            }
         }
 
-        public void updateGUI(object sender, EventArgs args)
+        private void connectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var createScreen = new CreateConnectionScreen();
+            createScreen.readClients(connectedClients);
+            
+            createScreen.ShowDialog();
+        }
+
+        private void loadClientsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var measurementScreen = new SelectMeasurementScreen();
+            measurementScreen.ShowDialog();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult dialog = dialog = MessageBox.Show("Are you sure you want to quit?", "Alert", MessageBoxButtons.YesNo);
+            if (dialog == DialogResult.Yes)
+            {
+                this.Close();
+                Application.Exit();
+            }
+        }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("© 23TI2A5 \n Kevin van de Akkerveken \n Farid Amali \n Engin Can \n George de Coo \n Gerjan Holsappel \n Jordy Sipkema");
+        }
+
+	        public void updateGUI(object sender, EventArgs args)
         {
             //while (true)
             {
@@ -154,5 +194,6 @@ namespace RH_APP.GUI
             }
 
         }
+
     }
 }

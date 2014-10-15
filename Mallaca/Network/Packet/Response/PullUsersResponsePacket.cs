@@ -12,12 +12,12 @@ namespace Mallaca.Network.Packet.Response
             
         }
 
-        public PullUsersResponsePacket(List<User> list) : base(list)
+        public PullUsersResponsePacket(List<User> list, string dataType) : base(list, dataType)
         {
             
         }
 
-        public PullUsersResponsePacket(JObject json)
+        public PullUsersResponsePacket(JObject json) : base(json, false)
         {
             List = new List<User>();
             foreach (var token in json["data"].Children())
