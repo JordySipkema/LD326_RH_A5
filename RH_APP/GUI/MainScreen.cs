@@ -153,13 +153,11 @@ namespace RH_APP.GUI
 
         private void handleIncomingPackets(Packet p)
         {
-            if (p is PullResponsePacket<User>)
-            {
-                PullResponsePacket<User> response = p as PullResponsePacket<User>;
+            if (!(p is PullResponsePacket<User>)) return;
+            var response = p as PullResponsePacket<User>;
 
-                if(response.DataType == "connected_clients")
-                    connectedClients = response.List;
-            }
+            if(response.DataType == "connected_clients")
+                connectedClients = response.List;
         }
 
         private void connectionToolStripMenuItem_Click(object sender, EventArgs e)
