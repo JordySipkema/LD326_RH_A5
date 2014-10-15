@@ -37,6 +37,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.dataRPM = new System.Windows.Forms.Label();
+            this.measurementBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.dataSPEED = new System.Windows.Forms.Label();
             this.dataDISTANCE = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -56,11 +57,10 @@
             this._graph = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.measurementBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this._quitButton = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.measurementBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._graph)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.measurementBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -101,6 +101,10 @@
             this.dataRPM.TabIndex = 3;
             this.dataRPM.Text = "---";
             this.dataRPM.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // measurementBindingSource
+            // 
+            this.measurementBindingSource.DataSource = typeof(Mallaca.Measurement);
             // 
             // dataSPEED
             // 
@@ -332,10 +336,6 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // measurementBindingSource
-            // 
-            this.measurementBindingSource.DataSource = typeof(Mallaca.Measurement);
-            // 
             // _quitButton
             // 
             this._quitButton.Location = new System.Drawing.Point(760, 628);
@@ -378,9 +378,10 @@
             this.Name = "RH_BIKE_GUI";
             this.Text = "Remote Healthcare - Client Edition";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.RH_BIKE_GUI_FormClosing);
+            this.Load += new System.EventHandler(this.RH_BIKE_GUI_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.measurementBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._graph)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.measurementBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

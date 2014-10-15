@@ -178,10 +178,15 @@ namespace RH_APP.GUI
                 this.Dispose();
                 GraphResultUI resultUI = new GraphResultUI();
                 
-                resultUI.receiveMeasurements(_controller.getList());
+                resultUI.receiveMeasurements(_controller.GetList());
                 resultUI.updateGraph();
                 resultUI.Show();
             }
+        }
+
+        private void RH_BIKE_GUI_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -24,16 +24,19 @@ namespace RH_APP.GUI
     {
         private Chat_Controller _chatController;
         private List<User> connectedClients = new List<User>();
+        private readonly RH_Controller _controller;
         public MainScreen(Boolean showMenu)
         {
 
             
             InitializeComponent();
 
-            if (!showMenu)
+            if (!showElements)
             {
                 menuStrip1.Visible = false;
                 this.Text = "Remote Healthcare - Client Edition";
+                numericUpDown1.Visible = false;
+                setPowerLabel.Visible = false;
             }
             
             _chatController = new Chat_Controller();
@@ -123,6 +126,11 @@ namespace RH_APP.GUI
         private void MainScreen_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void numericUpDown1_Click(object sender, EventArgs e)
+        {
+            _controller.SetPower((int)(numericUpDown1.Value));
         }
 
         private void handleIncomingPackets(Packet p)

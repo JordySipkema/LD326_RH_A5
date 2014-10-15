@@ -58,7 +58,10 @@
             this._sendButton = new System.Windows.Forms.Button();
             this._textBox = new System.Windows.Forms.TextBox();
             this._chatLogBox = new System.Windows.Forms.TextBox();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.setPowerLabel = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -334,11 +337,51 @@
             this._chatLogBox.Size = new System.Drawing.Size(414, 291);
             this._chatLogBox.TabIndex = 32;
             // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Location = new System.Drawing.Point(34, 259);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            400,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Minimum = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(63, 20);
+            this.numericUpDown1.TabIndex = 15;
+            this.numericUpDown1.Value = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Click += new System.EventHandler(this.numericUpDown1_Click);
+            // 
+            // setPowerLabel
+            // 
+            this.setPowerLabel.AutoSize = true;
+            this.setPowerLabel.Location = new System.Drawing.Point(104, 265);
+            this.setPowerLabel.Name = "setPowerLabel";
+            this.setPowerLabel.Size = new System.Drawing.Size(72, 13);
+            this.setPowerLabel.TabIndex = 35;
+            this.setPowerLabel.Text = "SET POWER";
+            this.setPowerLabel.Click += new System.EventHandler(this.label4_Click_1);
+            // 
             // MainScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(882, 365);
+            this.Controls.Add(this.setPowerLabel);
+            this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this._sendButton);
             this.Controls.Add(this._textBox);
             this.Controls.Add(this._chatLogBox);
@@ -365,6 +408,7 @@
             this.Load += new System.EventHandler(this.MainScreen_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -402,6 +446,8 @@
         private System.Windows.Forms.TextBox _textBox;
         private System.Windows.Forms.TextBox _chatLogBox;
         private System.Windows.Forms.ToolStripMenuItem createConnectionToolStripMenuItem;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Label setPowerLabel;
 
     }
 }

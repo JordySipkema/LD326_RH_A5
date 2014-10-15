@@ -53,13 +53,12 @@ namespace RH_APP.Controller
 
         private void OnUpdatedList(EventArgs e)
         {
-            EventHandler handler = UpdatedList;
+            var handler = UpdatedList;
             if (handler != null)
             {
                 handler(this, e);
             }
         }
-
 
         public void WriteAllDataToFile()
         {
@@ -76,7 +75,7 @@ namespace RH_APP.Controller
 
         }
 
-        public List<Measurement> getList()
+        public List<Measurement> GetList()
         {
             return _data;
         }
@@ -95,6 +94,7 @@ namespace RH_APP.Controller
 
             var json = jsonObject.ToString();
             //Johan's code line
+            // ReSharper disable once SpecifyACultureInStringConversionExplicitly
             json = json.Length.ToString().PadRight(4, ' ') + json;
             TCPController.Send(json);
         }
