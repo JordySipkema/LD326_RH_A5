@@ -47,7 +47,7 @@ namespace RH_APP.GUI
 
                 RH_APP.Classes.Settings.GetInstance().authToken = resp.AuthToken;
                 TCPController.OnPacketReceived -= onLoginPacketResponse;
-                if (resp.Usertype.Equals("Specialist"))
+                if (resp.Usertype.Equals("Specialist ") || resp.Usertype.Equals("Administrator"))
                 {
                     
                     var _mainScreen = new MainScreen(true);

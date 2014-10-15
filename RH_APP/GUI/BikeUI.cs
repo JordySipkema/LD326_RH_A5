@@ -183,5 +183,10 @@ namespace RH_APP.GUI
                 resultUI.Show();
             }
         }
+
+        private void RH_BIKE_GUI_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
