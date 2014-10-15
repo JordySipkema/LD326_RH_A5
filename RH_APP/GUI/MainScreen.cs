@@ -27,9 +27,10 @@ namespace RH_APP.GUI
 
             if (!showMenu)
             {
-                menuStrip1.Visible = false;                
+                menuStrip1.Visible = false;
+                this.Text = "Remote Healthcare - Client Edition";
             }
-            this.Text = "Remote Healthcare - Client Edition";
+            
             _chatController = new Chat_Controller();
 
 
