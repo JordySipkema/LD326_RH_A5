@@ -47,6 +47,22 @@ namespace RH_APP.GUI
             TCPController.Send(p.ToString());
         }
 
+        public MainScreen(bool showMenu)
+        {
+
+            InitializeComponent();
+
+            if (!showMenu)
+            {
+                menuStrip1.Visible = false;
+                numericUpDown1.Visible = false;
+                setPowerLabel.Visible = false;
+            }
+            ListPacket p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
+            TCPController.OnPacketReceived += handleIncomingPackets;
+            TCPController.Send(p.ToString());
+        }
+
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("This application is made by Group 23TI2A5! \n Farid Amali \n Jordy Sipkema \n Engin Can \n George de Coo \n Kevin van den Akkerveken \n Gerjan Holsappel ");

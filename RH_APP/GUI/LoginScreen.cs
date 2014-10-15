@@ -53,7 +53,7 @@ namespace RH_APP.GUI
                 TCPController.OnPacketReceived -= onLoginPacketResponse;
                 if (resp.Usertype.Equals("Specialist") || resp.Usertype.Equals("Administrator"))
                 {
-                    var mainScreen = new MainScreen(true,null);
+                    var mainScreen = new MainScreen(true);
                     mainScreen.ShowDialog();
                     this.Close();
                 }
@@ -64,7 +64,6 @@ namespace RH_APP.GUI
                     mainScreen.Text = " Remote Healthcare - Client Edition";
                     mainScreen.ShowDialog();
                     this.Close();
-                    
                 }
             }
             else
