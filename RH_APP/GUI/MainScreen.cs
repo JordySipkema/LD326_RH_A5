@@ -19,16 +19,19 @@ namespace RH_APP.GUI
     public partial class MainScreen : Form
     {
         private Chat_Controller _chatController;
-        public MainScreen(Boolean showMenu)
+        private readonly RH_Controller _controller;
+        public MainScreen(bool showElements)
         {
 
             
             InitializeComponent();
 
-            if (!showMenu)
+            if (!showElements)
             {
                 menuStrip1.Visible = false;
                 this.Text = "Remote Healthcare - Client Edition";
+                numericUpDown1.Visible = false;
+                setPowerLabel.Visible = false;
             }
             
             _chatController = new Chat_Controller();
@@ -116,6 +119,16 @@ namespace RH_APP.GUI
         private void MainScreen_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void label4_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown1_Click(object sender, EventArgs e)
+        {
+            _controller.SetPower((int)(numericUpDown1.Value));
         }
     }
 }
