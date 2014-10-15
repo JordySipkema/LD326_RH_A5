@@ -256,6 +256,10 @@ namespace RH_Server.Server
                     resp = new PullUsersResponsePacket(useristList, "user");
                     break;
 
+                case "users":
+                    resp = new PullUsersResponsePacket(_database.GetAllUsers(), "user");
+                    break;
+
                 case "connected_clients":
                     resp = new PullUsersResponsePacket(Authentication.GetClients(), "connected_clients");
                     break;
@@ -264,6 +268,7 @@ namespace RH_Server.Server
                         "user_sessions");
                     break;
                 default:
+                    Console.WriteLine("Non-implemented data type: " + json["dataType"].ToString());
                     return;
             }
 

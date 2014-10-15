@@ -58,6 +58,8 @@ namespace Mallaca.Network.Packet
         {   Packet p = null;
             JObject json = RetrieveJson(packetSize, ref buffer);
 
+            if (json == null)
+                return null;
             
             switch (json["CMD"].ToString().ToUpper())
             {
@@ -70,11 +72,15 @@ namespace Mallaca.Network.Packet
                 switch (json["dataType"].ToString())
                 {
                     case "users":
+                    case "user":
                     case "connected_clients":
                         p = new PullUsersResponsePacket(json);
                         break;
                     case "measurements":
                         return new PullResponsePacket<Measurement>(json);
+                        break;
+                    case "user_sessions":
+                        return new PullResponsePacket<Tuple<int,int, DateTime>>(json);
                         break;
 
                 }
