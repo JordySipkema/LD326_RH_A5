@@ -36,6 +36,7 @@
             this.loadClientsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.trainingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createConnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._welcomeLabel = new System.Windows.Forms.Label();
@@ -54,12 +55,9 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this._ipLabel = new System.Windows.Forms.Label();
             this._sendButton = new System.Windows.Forms.Button();
             this._textBox = new System.Windows.Forms.TextBox();
             this._chatLogBox = new System.Windows.Forms.TextBox();
-            this.createConnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -91,7 +89,7 @@
             this.userToolStripMenuItem,
             this.connectionToolStripMenuItem});
             this.createClientToolStripMenuItem.Name = "createClientToolStripMenuItem";
-            this.createClientToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.createClientToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.createClientToolStripMenuItem.Text = "New";
             // 
             // userToolStripMenuItem
@@ -110,13 +108,13 @@
             // loadClientsToolStripMenuItem
             // 
             this.loadClientsToolStripMenuItem.Name = "loadClientsToolStripMenuItem";
-            this.loadClientsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.loadClientsToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.loadClientsToolStripMenuItem.Text = "Display data";
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
             // trainingToolStripMenuItem
@@ -126,6 +124,13 @@
             this.trainingToolStripMenuItem.Name = "trainingToolStripMenuItem";
             this.trainingToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
             this.trainingToolStripMenuItem.Text = "Training";
+            // 
+            // createConnectionToolStripMenuItem
+            // 
+            this.createConnectionToolStripMenuItem.Name = "createConnectionToolStripMenuItem";
+            this.createConnectionToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.createConnectionToolStripMenuItem.Text = "Create Connection";
+            this.createConnectionToolStripMenuItem.Click += new System.EventHandler(this.createConnectionToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -138,7 +143,7 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -301,24 +306,6 @@
             this.label1.TabIndex = 15;
             this.label1.Text = "RPM";
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(33, 41);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(67, 13);
-            this.label4.TabIndex = 30;
-            this.label4.Text = "IP-Address : ";
-            // 
-            // _ipLabel
-            // 
-            this._ipLabel.AutoSize = true;
-            this._ipLabel.Location = new System.Drawing.Point(107, 41);
-            this._ipLabel.Name = "_ipLabel";
-            this._ipLabel.Size = new System.Drawing.Size(17, 13);
-            this._ipLabel.TabIndex = 31;
-            this._ipLabel.Text = "IP";
-            // 
             // _sendButton
             // 
             this._sendButton.Location = new System.Drawing.Point(788, 324);
@@ -347,13 +334,6 @@
             this._chatLogBox.Size = new System.Drawing.Size(414, 291);
             this._chatLogBox.TabIndex = 32;
             // 
-            // createConnectionToolStripMenuItem
-            // 
-            this.createConnectionToolStripMenuItem.Name = "createConnectionToolStripMenuItem";
-            this.createConnectionToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.createConnectionToolStripMenuItem.Text = "Create Connection";
-            this.createConnectionToolStripMenuItem.Click += new System.EventHandler(this.createConnectionToolStripMenuItem_Click);
-            // 
             // MainScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -362,8 +342,6 @@
             this.Controls.Add(this._sendButton);
             this.Controls.Add(this._textBox);
             this.Controls.Add(this._chatLogBox);
-            this.Controls.Add(this._ipLabel);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.dataPULSE);
             this.Controls.Add(this.dataENERGY);
             this.Controls.Add(this.dataPOWER);
@@ -384,6 +362,7 @@
             this.Name = "MainScreen";
             this.Text = "Remote Healthcare - Specialist Edition";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainScreen_FormClosing);
+            this.Load += new System.EventHandler(this.MainScreen_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -419,8 +398,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label _ipLabel;
         private System.Windows.Forms.Button _sendButton;
         private System.Windows.Forms.TextBox _textBox;
         private System.Windows.Forms.TextBox _chatLogBox;

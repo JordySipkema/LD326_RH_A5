@@ -19,11 +19,20 @@ namespace RH_APP.GUI
     public partial class MainScreen : Form
     {
         private Chat_Controller _chatController;
-        public MainScreen()
+        public MainScreen(Boolean showMenu)
         {
+
             
             InitializeComponent();
+
+            if (!showMenu)
+            {
+                menuStrip1.Visible = false;                
+            }
+            this.Text = "Remote Healthcare - Client Edition";
             _chatController = new Chat_Controller();
+
+
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -94,6 +103,16 @@ namespace RH_APP.GUI
         }
 
         private void createConnectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void MainScreen_Load(object sender, EventArgs e)
         {
 
         }
