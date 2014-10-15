@@ -153,6 +153,8 @@ namespace RH_APP.GUI
 
         private void handleIncomingPackets(Packet p)
         {
+            if (this.InvokeRequired)
+                this.Invoke((new Action(() => handleIncomingPackets(p))));
             if (p is PullResponsePacket<User>)
             {
                 PullResponsePacket<User> response = p as PullResponsePacket<User>;

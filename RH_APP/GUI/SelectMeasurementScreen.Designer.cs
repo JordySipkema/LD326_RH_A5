@@ -28,30 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.components = new System.ComponentModel.Container();
+            this.usersCombobox = new System.Windows.Forms.ComboBox();
+            this.datecombobox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this._cancelButton = new System.Windows.Forms.Button();
             this._displayButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
+            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
-            // comboBox1
+            // usersCombobox
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(12, 117);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(175, 21);
-            this.comboBox1.TabIndex = 0;
+            this.usersCombobox.FormattingEnabled = true;
+            this.usersCombobox.Location = new System.Drawing.Point(12, 117);
+            this.usersCombobox.Name = "usersCombobox";
+            this.usersCombobox.Size = new System.Drawing.Size(175, 21);
+            this.usersCombobox.TabIndex = 0;
             // 
-            // comboBox2
+            // datecombobox
             // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(206, 117);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(151, 21);
-            this.comboBox2.TabIndex = 1;
+            this.datecombobox.FormattingEnabled = true;
+            this.datecombobox.Location = new System.Drawing.Point(206, 117);
+            this.datecombobox.Name = "datecombobox";
+            this.datecombobox.Size = new System.Drawing.Size(151, 21);
+            this.datecombobox.TabIndex = 1;
             // 
             // label1
             // 
@@ -113,10 +116,11 @@
             this.Controls.Add(this._cancelButton);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.comboBox2);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.datecombobox);
+            this.Controls.Add(this.usersCombobox);
             this.Name = "SelectMeasurementScreen";
             this.Text = "Select Measurement";
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -124,12 +128,13 @@
 
         #endregion
 
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox usersCombobox;
+        private System.Windows.Forms.ComboBox datecombobox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button _cancelButton;
         private System.Windows.Forms.Button _displayButton;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.BindingSource bindingSource1;
     }
 }
