@@ -41,6 +41,7 @@
             this._clientList.Name = "_clientList";
             this._clientList.Size = new System.Drawing.Size(312, 212);
             this._clientList.TabIndex = 0;
+            this._clientList.SelectedIndexChanged += new System.EventHandler(this._clientList_SelectedIndexChanged);
             // 
             // _connectButton
             // 
