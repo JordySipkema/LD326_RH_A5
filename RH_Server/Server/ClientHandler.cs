@@ -258,7 +258,10 @@ namespace RH_Server.Server
 
                 case "connected_clients":
                     resp = new PullUsersResponsePacket(Authentication.GetClients(), "connected_clients");
-                    
+                    break;
+                case "user_sessions":
+                    resp = new PullResponsePacket<Tuple<int, int, DateTime>>(_database.GetTrainingSessions(),
+                        "user_sessions");
                     break;
                 default:
                     return;

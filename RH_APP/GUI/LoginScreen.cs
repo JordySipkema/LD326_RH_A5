@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mallaca;
@@ -21,8 +22,6 @@ namespace RH_APP.GUI
 {
     public partial class LoginScreen : Form
     {
-        
-
         public LoginScreen()
         {
             InitializeComponent();
@@ -41,6 +40,9 @@ namespace RH_APP.GUI
 
         private void onLoginPacketResponse(Packet p)
         {
+            if (this.InvokeRequired)
+                this.Invoke((new Action(() => onLoginPacketResponse(p))));
+
             var resp = p as LoginResponsePacket;
 
             if (resp != null && resp.Status == "200")
@@ -50,7 +52,7 @@ namespace RH_APP.GUI
                 RH_APP.Classes.Settings.GetInstance().authToken = resp.AuthToken;
                 TCPController.OnPacketReceived -= onLoginPacketResponse;
                 bool stuff = false;
-                if (resp.Usertype.Equals("Specialist ") || resp.Usertype.Equals("Administrator"))
+                if (resp.Usertype.Equals("Specialist") || resp.Usertype.Equals("Administrator"))
                 {
                     stuff = true;
                 }
@@ -59,9 +61,10 @@ namespace RH_APP.GUI
                     
                 }
                 var _mainScreen = new MainScreen(stuff);
-                IAsyncResult result = this.BeginInvoke(new Action(() => _mainScreen.ShowDialog()));
-               // this.EndInvoke(result);
-                //this.Invoke(new Action(() => this.Close()));
+                //IAsyncResult result = this.BeginInvoke(new Action(() => _mainScreen.ShowDialog()));
+                //this.BeginInvoke((new Action(() =>_mainScreen.Show())));
+                //uiContext.Send((state => _mainScreen.Show()), null);
+                _mainScreen.ShowDialog();
             }
             else
             {
