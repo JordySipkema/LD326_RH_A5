@@ -148,6 +148,7 @@ namespace RH_APP.GUI
         {
             var createScreen = new CreateConnectionScreen();
             createScreen.readClients(connectedClients);
+            
             createScreen.ShowDialog();
         }
 

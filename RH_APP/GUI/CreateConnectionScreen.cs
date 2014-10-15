@@ -20,10 +20,19 @@ namespace RH_APP.GUI
 
         public void readClients(List<User> clients)
         {
-            foreach (User user in clients)
+            bool isEmpty = !clients.Any();
+
+            if (isEmpty)
             {
-                _clientList.Items.Add(user.Username);
+                _clientList.Items.Add("No clients are connected!");
             }
+            else
+            {
+                foreach (User user in clients)
+                {
+                    _clientList.Items.Add(user);
+                }
+            }     
         }
 
         private void _cancelButton_Click(object sender, EventArgs e)
