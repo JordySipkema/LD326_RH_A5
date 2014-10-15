@@ -52,7 +52,7 @@ namespace RH_APP.GUI
                 if (resp.Usertype.Equals("Specialist") || resp.Usertype.Equals("Administrator"))
                 {
             
-                    var _mainScreen = new MainScreen(true);
+                    var _mainScreen = new MainScreen(true, null);
                     _mainScreen.ShowDialog();
                     this.Close();
 
@@ -61,8 +61,9 @@ namespace RH_APP.GUI
 
                 else if (resp.Usertype.Equals("Client"))
                 {
+                    Console.WriteLine("." + getCOMPort() + ".");
                     COM_Bike b = new COM_Bike(getCOMPort());
-                    var _mainScreen = new MainScreen(false);
+                    var _mainScreen = new MainScreen(false, b);
                     _mainScreen.Text = "Remote Healthcare - Client Edition";
                     _mainScreen.ShowDialog();
                     this.Close();

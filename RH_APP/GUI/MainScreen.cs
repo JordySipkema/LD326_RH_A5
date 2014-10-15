@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using RH_APP.GUI;
+using RH_APP.Classes;
 
 
 namespace RH_APP.GUI
@@ -20,9 +21,10 @@ namespace RH_APP.GUI
     {
         private Chat_Controller _chatController;
         private readonly RH_Controller _controller;
-        public MainScreen(bool showElements)
+        public MainScreen(bool showElements, IBike b)
         {
-
+            _controller = new RH_Controller(b);
+            _controller.UpdatedList += updateGUI;
             
             InitializeComponent();
 
@@ -126,6 +128,31 @@ namespace RH_APP.GUI
         private void numericUpDown1_Click(object sender, EventArgs e)
         {
             _controller.SetPower((int)(numericUpDown1.Value));
+        }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        public void updateGUI(object sender, EventArgs args)
+        {
+            //while (true)
+            {
+                //dataRPM.Text = _controller.LatestMeasurement.RPM + "";
+                dataSPEED.Text = String.Format("{0:0.0}", _controller.LatestMeasurement.SPEED / 10.0);
+                dataDISTANCE.Text = String.Format("{0:0.00}", _controller.LatestMeasurement.DISTANCE / 10.0);
+                dataPOWER.Text = _controller.LatestMeasurement.POWER + "";
+                dataPOWERPCT.Text = _controller.LatestMeasurement.POWERPCT + "%";
+                dataENERGY.Text = _controller.LatestMeasurement.ENERGY + "";
+                dataTIME.Text = _controller.LatestMeasurement.TIME;
+                dataPULSE.Text = _controller.LatestMeasurement.PULSE + "";
+
+                //if (!_writeToFile) return;
+                //var protoLine = _controller.LatestMeasurement.toProtocolString();
+                //_writer.WriteLine(protoLine);
+            }
+
         }
     }
 }
