@@ -3,13 +3,11 @@ using Mallaca.Network;
 using Mallaca.Network.Packet;
 using Mallaca.Network.Packet.Response;
 using Mallaca.Properties;
-using Mallaca.Usertypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RH_Server.Classes;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Security;
 using System.Net.Sockets;
@@ -64,11 +62,11 @@ namespace RH_Server.Server
                     _totalBuffer = _totalBuffer.Concat(rawData).ToList();
 
 
-                    int packetSize = Packet.GetLengthOfPacket(_totalBuffer);
+                    var packetSize = Packet.GetLengthOfPacket(_totalBuffer);
                     if (packetSize == -1)
                         continue;
 
-                    JObject json = Packet.RetrieveJson(packetSize, ref _totalBuffer);
+                    var json = Packet.RetrieveJson(packetSize, ref _totalBuffer);
 
                     if (json == null)
                         continue;
@@ -86,9 +84,6 @@ namespace RH_Server.Server
                     {
                         case "login":
                             HandleLoginPacket(json);
-                            break;
-                        case "ping":
-                            HandlePingPacket(json);
                             break;
                         case "dc":
                             HandleDisconnectPacket(json);
@@ -139,13 +134,6 @@ namespace RH_Server.Server
         {
             Send(s.ToString());
         }
-
-        private void HandlePingPacket(JObject json)
-        {
-            //String time = json.time;
-            Console.WriteLine("PING: Packet recieved");
-        }
-
 
         private void HandleListUsersPacket(JObject j)
         {
