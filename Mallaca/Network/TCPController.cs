@@ -162,16 +162,21 @@ namespace Mallaca.Network
                         Array.Copy(state.buffer, 0, rawData, 0, bytesRead);
                         _totalBuffer = _totalBuffer.Concat(rawData).ToList();
 
-
+                        Console.WriteLine("Reading input.");
                         int packetSize = Packet.Packet.GetLengthOfPacket(_totalBuffer);
+                        Console.WriteLine("Read input.");
+
                         if (packetSize != -1)
                         {
 
                             Packet.Packet p = Packet.Packet.RetrievePacket(packetSize, ref _totalBuffer);
                             if (p != null)
                             {
-                                
-                                OnPacketReceived(p);
+                                foreach(ReceivedPacket deleg in OnPacketReceived.GetInvocationList())
+                                {
+                                    deleg.BeginInvoke(p, null, null);
+                                }
+                                string f5 = "";
                             }
 
                         }
