@@ -18,13 +18,14 @@ using System.Threading;
 
 namespace RH_Server.Server
 {
+    // ReSharper disable LocalizableElement
     class ClientHandler
     {
-        private readonly byte[] Buffer = new byte[1024];
-        private const int _bufferSize = 1024;
+        private readonly byte[] _buffer = new byte[1024];
+        private const int BufferSize = 1024;
         private readonly TcpClient _tcpclient;
         private readonly SslStream _sslStream;
-        private readonly DBConnect database;
+        private readonly DBConnect _database;
         private List<byte> _totalBuffer;
 
         private readonly List<Measurement> _measurementsList = new List<Measurement>();
@@ -43,7 +44,7 @@ namespace RH_Server.Server
             _sslStream = new SslStream(_tcpclient.GetStream());
             _sslStream.AuthenticateAsServer(certificate);
             _totalBuffer = new List<byte>();
-            database = new DBConnect();
+            _database = new DBConnect();
             var thread = new Thread(ThreadLoop);
             thread.Start();
 
@@ -56,10 +57,10 @@ namespace RH_Server.Server
                 try
                 {
                     //new Socket().Receive(Buffer);
-                    var receiveCount = _sslStream.Read(Buffer, 0, _bufferSize);
+                    var receiveCount = _sslStream.Read(_buffer, 0, BufferSize);
 
-                    byte[] rawData = new byte[receiveCount];
-                    Array.Copy(Buffer, 0, rawData, 0, receiveCount);
+                    var rawData = new byte[receiveCount];
+                    Array.Copy(_buffer, 0, rawData, 0, receiveCount);
                     _totalBuffer = _totalBuffer.Concat(rawData).ToList();
 
 
@@ -121,7 +122,7 @@ namespace RH_Server.Server
                 }
                 catch (SocketException e)
                 {
-                    Console.WriteLine("Client with IP-address: " + _tcpclient.Client.LocalEndPoint + " has been disconnected.");
+                    Console.WriteLine("Client with IP-address: {0} has been disconnected", _tcpclient.Client.LocalEndPoint);
                     Console.WriteLine(e.Message);
                 }
             }
@@ -188,7 +189,7 @@ namespace RH_Server.Server
 
         private void HandlePushPacket(JObject json)
         {
-            var size = json["count"];
+            //var size = json["count"];
             var measurements = json["measurements"].Children();
 
             foreach (var m in measurements.Select(
@@ -217,14 +218,14 @@ namespace RH_Server.Server
         {
             var authToken = (string) json["AUTHTOKEN"];
             var username = (string) json["USERNAMEDESTINATION"];
-            var message = (string) json["MESSAGE"];
+            //var message = (string) json["MESSAGE"];
 
             //Check if the authToken is valid:
             if (Authentication.Authenticate(authToken))
             {
                 var s = Authentication.GetStream(username);
-                // Create Json-object for sending to destination
-                // Send Json-object to destination (use: Stream s)
+                //TODO: Create and send json-object to the destination
+                //HINT: use: Stream s
             }
             else
             {
@@ -234,41 +235,26 @@ namespace RH_Server.Server
 
         public void HandleResponseChatPacket(JObject json)
         {
-            String message;
-            StreamReader reader = null;
-            //StreamReader reader = new StreamReader();
-
-            try
-            {
-                 message = reader.ReadLine();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                reader.Close();
-                reader = null;
-            }
+            //TODO: Implement this method!
+            throw new NotImplementedException();
         }
 
         public void HandlePullPacket(JObject json)
         {
             //WIP
-            JObject returnJson = new JObject(new JProperty("CMD", "RESP-PULL"));
+            var returnJson = new JObject(new JProperty("CMD", "RESP-PULL"));
             switch (json["dataType"].ToString())
             {
                 case "user":
                     JToken userid;
                     json.TryGetValue("dataID", out userid);
-                    int userID;
-                    int.TryParse((string)userid,out userID);
+                    int userId;
+                    int.TryParse((string)userid,out userId);
 
                     returnJson =
                             new JObject(
                                 new JProperty("CMD", "resp-pull"),
-                                new JProperty("data", _dbConnect.getUser(userID))
+                                new JProperty("data", _dbConnect.getUser(userId))
                                 );
                     break;
 
@@ -277,7 +263,6 @@ namespace RH_Server.Server
                     break;
                 default:
                     return;
-                    break;
             }
 
 
@@ -290,23 +275,19 @@ namespace RH_Server.Server
 
         public void HandleLsmPacket(JObject json)
         {
-            JObject returnJson;
-            List<Measurement> measurements = new List<Measurement>();
+            JToken sessionId;
 
-            JToken sessionID;
+            json.TryGetValue("sessionID", out sessionId);
 
-            json.TryGetValue("sessionID", out sessionID);
+            var measurements = _dbConnect.getMeasurementsOfUser((string)json["username"], (string)json["sessionID"]);
+            var i = measurements.Count;
+            var m = JArray.FromObject(measurements);
 
-            measurements = _dbConnect.getMeasurementsOfUser((string)json["username"], (string)json["sessionID"]);
-            int i=measurements.Count;
-            JArray m = JArray.FromObject(measurements);
-
-            returnJson =
-                    new JObject(
-                        new JProperty("CMD", "resp-lsm"),
-                        new JProperty("COUNT", i),
-                        new JProperty("MEASURMENTS", m)
-                        );
+            var returnJson = new JObject(
+                new JProperty("CMD", "resp-lsm"),
+                new JProperty("COUNT", i),
+                new JProperty("MEASURMENTS", m)
+                );
 
             //Send the result back to the specialist.
             Console.WriteLine(returnJson.ToString());
@@ -315,22 +296,20 @@ namespace RH_Server.Server
 
         public void HandleLsuPacket(JObject json)
         {
-            JObject returnJson;
-            List<User> users = new List<User>();
-            users = _dbConnect.GetAllUsers();
-            int i = users.Count;
-            JArray u = JArray.FromObject(users);
+            var users = _dbConnect.GetAllUsers();
+            var i = users.Count;
+            var u = JArray.FromObject(users);
 
-            returnJson =
-                    new JObject(
-                        new JProperty("CMD", "resp-lsu"),
-                        new JProperty("COUNT", i),
-                        new JProperty("MEASURMENTS", u)
-                        );
+            var returnJson = new JObject(
+                new JProperty("CMD", "resp-lsu"),
+                new JProperty("COUNT", i),
+                new JProperty("MEASURMENTS", u)
+                );
 
             //Send the result back to the specialist.
             Console.WriteLine(returnJson.ToString());
             Send(returnJson.ToString());
         }
     }
+    // ReSharper restore LocalizableElement
 }
