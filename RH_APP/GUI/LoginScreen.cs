@@ -37,19 +37,33 @@ namespace RH_APP.GUI
             TCPController.Send(p.ToString());
         }
 
-        private void onLoginPacketResponse(Packet p )
+        private void onLoginPacketResponse(Packet p)
         {
             var resp = p as LoginResponsePacket;
+
             if (resp != null && resp.Status == "200")
             {
                 this.BeginInvoke((Action)(this.Hide));
 
                 RH_APP.Classes.Settings.GetInstance().authToken = resp.AuthToken;
                 TCPController.OnPacketReceived -= onLoginPacketResponse;
+                if (resp.Usertype.Equals("Specialist"))
+                {
+                    
+                    var _mainScreen = new MainScreen(true);
+                    _mainScreen.ShowDialog();
+                    this.Close();
 
-                var _mainScreen = new MainScreen();
-                _mainScreen.ShowDialog();
-                
+
+                }
+
+                else if (resp.Usertype.Equals("Client"))
+                {
+                    
+                    var _mainScreen = new MainScreen(false);
+                    _mainScreen.ShowDialog();
+                    this.Close();
+                }
 
             }
             else
