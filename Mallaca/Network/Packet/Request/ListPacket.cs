@@ -1,11 +1,39 @@
-﻿namespace Mallaca.Network.Packet.Request
+﻿using System.Security;
+using System.Security.Cryptography.X509Certificates;
+using Newtonsoft.Json.Linq;
+
+namespace Mallaca.Network.Packet.Request
 {
     public class ListPacket : AuthenticatedPacket
     {
-        private ListPacket(string cmd, string authtoken) : base(cmd, authtoken)
+        public const string Cmd = "PULL";
+        public string dataType { get; set; }
+        public int dataId { get; set; }
+
+        public ListPacket(string datatype, string authtoken, int id = -1) : base(Cmd, authtoken) // pull packet
         {
-//TODO: CREATE THIS CLASS
-            //TODO: DERIVE: ListUsers, ListMeasurements
+            dataType = datatype;
+            dataId = id;
+        }
+
+        public ListPacket(JObject json) : base(json, Cmd)
+        {
+            dataType = json["dataType"].ToString();
+            dataId = int.Parse(json["dataId"].ToString());
+        }
+
+        public override JObject ToJsonObject()
+        {
+            JObject json = base.ToJsonObject();
+            json.Add("dataType", dataType);
+            if (dataId > 0)
+                json.Add("dataId", dataId);
+            return json;
+        }
+
+        public override string ToString()
+        {
+            return ToJsonObject().ToString();
         }
     }
 }

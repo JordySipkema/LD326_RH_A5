@@ -14,6 +14,11 @@ namespace Mallaca.Network.Packet.Request
             Initialize(authtoken);
         }
 
+        protected AuthenticatedPacket(JObject json, string cmd) : base(cmd)
+        {
+            Initialize(json["AUTHTOKEN"].ToString());
+        }
+
         private void Initialize(string authtoken)
         {
             AuthToken = authtoken;

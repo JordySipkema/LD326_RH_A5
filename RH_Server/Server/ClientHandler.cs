@@ -73,13 +73,26 @@ namespace RH_Server.Server
                         continue;
 
                     JToken cmd;
+                    JToken authToken = null;
                     if (!json.TryGetValue("CMD", out cmd))
                     {
                         Console.WriteLine("Got JSON that does not define a command.");
                         continue;
                     }
 
+
                     var packetType = cmd.ToString().ToLower();
+
+                    if (packetType != "login" && !json.TryGetValue("AUTHTOKEN", out authToken))
+                    {
+                        Console.WriteLine("No authtoken found in packet.");
+                        continue;
+                    }
+                    if (packetType != "login" && !Authentication.Authenticate(authToken.ToString()))
+                    {
+                        Console.WriteLine("Got a packet with an invalid authentication token.");
+                        continue;
+                    }
 
                     switch (packetType)
                     {
@@ -121,8 +134,14 @@ namespace RH_Server.Server
                 }
                 catch (SocketException e)
                 {
-                    Console.WriteLine("Client with IP-address: " + _tcpclient.Client.LocalEndPoint + " has been disconnected.");
+                    Console.WriteLine("Client with IP-address: " + _tcpclient.Client.LocalEndPoint +
+                                      " has been disconnected.");
                     Console.WriteLine(e.Message);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    break;
                 }
             }
         }
@@ -132,6 +151,7 @@ namespace RH_Server.Server
             //byte[] data = Encoding.UTF8.GetBytes(s.Length.ToString("0000") + s).ToArray();
 
             _sslStream.Write(Packet.CreateByteData(s));
+            _sslStream.Flush();
         }
 
         private void Send(Packet s)
@@ -143,14 +163,6 @@ namespace RH_Server.Server
         {
             //String time = json.time;
             Console.WriteLine("PING: Packet recieved");
-        }
-
-
-        private void HandleListUsersPacket(JObject j)
-        {
-            throw new NotImplementedException();
-            //var p = new ListUsersPacket();
-            //Send(p);
         }
 
         private void HandleLoginPacket(JObject json)
@@ -255,8 +267,8 @@ namespace RH_Server.Server
 
         public void HandlePullPacket(JObject json)
         {
-            //WIP
-            JObject returnJson = new JObject(new JProperty("CMD", "RESP-PULL"));
+
+            Packet resp;
             switch (json["dataType"].ToString())
             {
                 case "user":
@@ -264,16 +276,14 @@ namespace RH_Server.Server
                     json.TryGetValue("dataID", out userid);
                     int userID;
                     int.TryParse((string)userid,out userID);
-
-                    returnJson =
-                            new JObject(
-                                new JProperty("CMD", "resp-pull"),
-                                new JProperty("data", _dbConnect.getUser(userID))
-                                );
+                    List<User> useristList = new List<User>();
+                    useristList.Add(_dbConnect.getUser(userID));
+                    resp = new PullUsersResponsePacket(useristList, "user");
                     break;
 
-                case "connectedclients":
-                    Authentication.GetClients();
+                case "connected_clients":
+                    resp = new PullUsersResponsePacket(Authentication.GetClients(), "connected_clients");
+                    
                     break;
                 default:
                     return;
@@ -283,8 +293,9 @@ namespace RH_Server.Server
 
 
             
-
-            Send(returnJson.ToString());
+            Console.WriteLine(json);
+            string data = resp.ToString();
+            Send(data);
             
         }
 

@@ -1,6 +1,10 @@
 ﻿using Mallaca;
 using Mallaca.Network;
+using Mallaca.Network.Packet;
+using Mallaca.Network.Packet.Request;
+using Mallaca.Network.Packet.Response;
 using Mallaca.Usertypes;
+using RH_APP.Classes;
 using RH_APP.Controller;
 using System;
 using System.Collections.Generic;
@@ -19,6 +23,7 @@ namespace RH_APP.GUI
     public partial class MainScreen : Form
     {
         private Chat_Controller _chatController;
+        private List<User> connectedClients = new List<User>();
         public MainScreen(Boolean showMenu)
         {
 
@@ -33,7 +38,9 @@ namespace RH_APP.GUI
             
             _chatController = new Chat_Controller();
 
-
+            ListPacket p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
+            TCPController.OnPacketReceived += handleIncomingPackets;
+            TCPController.Send(p.ToString());
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -116,6 +123,17 @@ namespace RH_APP.GUI
         private void MainScreen_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void handleIncomingPackets(Packet p)
+        {
+            if (p is PullResponsePacket<User>)
+            {
+                PullResponsePacket<User> response = p as PullResponsePacket<User>;
+
+                if(response.dataType == "connected_clients")
+                    connectedClients = response.List;
+            }
         }
     }
 }

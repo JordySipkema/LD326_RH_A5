@@ -13,8 +13,9 @@ namespace Mallaca.Network.Packet.Response
         public string dataType { get; protected set; }
         public List<T> List { get; set; }
 
-        public PullResponsePacket(List<T> lsit) : base(Statuscode.Status.Ok, Cmd)
+        public PullResponsePacket(List<T> lsit, string datatype) : base(Statuscode.Status.Ok, Cmd)
         {
+            dataType = datatype;
             List = lsit;
         }
 
@@ -23,8 +24,11 @@ namespace Mallaca.Network.Packet.Response
             
         }
 
-        public PullResponsePacket(JObject json)
+        public PullResponsePacket(JObject json, bool dealWithContents = true)
         {
+            dataType = json["dataType"].ToString();
+            if (!dealWithContents)
+                return;
             List = new List<T>();
             foreach (JToken token in json["data"].Children())
             {

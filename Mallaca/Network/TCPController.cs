@@ -124,6 +124,8 @@ namespace Mallaca.Network
 
         public static void ReceiveTransmission()
         {
+            if(IsReading)
+                return;
             try
             {
                 IsReading = true;
@@ -167,7 +169,10 @@ namespace Mallaca.Network
 
                             Packet.Packet p = Packet.Packet.RetrievePacket(packetSize, ref _totalBuffer);
                             if (p != null)
+                            {
+                                
                                 OnPacketReceived(p);
+                            }
 
                         }
 

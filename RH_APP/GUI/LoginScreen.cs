@@ -43,28 +43,24 @@ namespace RH_APP.GUI
 
             if (resp != null && resp.Status == "200")
             {
-                this.BeginInvoke((Action)(this.Hide));
+                this.Invoke((Action)(this.Hide));
 
                 RH_APP.Classes.Settings.GetInstance().authToken = resp.AuthToken;
                 TCPController.OnPacketReceived -= onLoginPacketResponse;
+
+                bool stuff  =false;
                 if (resp.Usertype.Equals("Specialist"))
                 {
-                    
-                    var _mainScreen = new MainScreen(true);
-                    _mainScreen.ShowDialog();
-                    this.Close();
-
-
+                    stuff = true;
                 }
-
                 else if (resp.Usertype.Equals("Client"))
                 {
                     
-                    var _mainScreen = new MainScreen(false);
-                    _mainScreen.ShowDialog();
-                    this.Close();
                 }
-
+                var _mainScreen = new MainScreen(stuff);
+                IAsyncResult result = this.BeginInvoke(new Action(() => _mainScreen.ShowDialog()));
+               // this.EndInvoke(result);
+                //this.Invoke(new Action(() => this.Close()));
             }
             else
             {
