@@ -143,5 +143,33 @@ namespace RH_APP.GUI
                     connectedClients = response.List;
             }
         }
+
+        private void connectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var createScreen = new CreateConnectionScreen();
+            createScreen.readClients(connectedClients);
+            createScreen.ShowDialog();
+        }
+
+        private void loadClientsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var measurementScreen = new SelectMeasurementScreen();
+            measurementScreen.ShowDialog();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult dialog = dialog = MessageBox.Show("Are you sure you want to quit?", "Alert", MessageBoxButtons.YesNo);
+            if (dialog == DialogResult.Yes)
+            {
+                this.Close();
+                Application.Exit();
+            }
+        }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("© 23TI2A5 \n Kevin van de Akkerveken \n Farid Amali \n Engin Can \n George de Coo \n Gerjan Holsappel \n Jordy Sipkema");
+        }
     }
 }

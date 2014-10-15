@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mallaca.Usertypes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,6 +18,14 @@ namespace RH_APP.GUI
             InitializeComponent();
         }
 
+        public void readClients(List<User> clients)
+        {
+            foreach (User user in clients)
+            {
+                _clientList.Items.Add(user.Username);
+            }
+        }
+
         private void _cancelButton_Click(object sender, EventArgs e)
         {
             DialogResult dialog = dialog = MessageBox.Show("Are you sure you want to cancel?", "Alert", MessageBoxButtons.YesNo);
@@ -33,6 +42,11 @@ namespace RH_APP.GUI
             {
                 this.Close();
             }
+        }
+
+        private void _clientList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
