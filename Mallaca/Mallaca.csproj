@@ -65,6 +65,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Usertypes\Administrator.cs" />
     <Compile Include="Usertypes\Client.cs" />
     <Compile Include="DBConnect.cs" />
     <Compile Include="Hashing.cs" />

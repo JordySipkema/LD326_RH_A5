@@ -171,7 +171,20 @@ namespace Mallaca
             while (_reader.Read())
             {
                 User u;
-                if (_reader.GetInt32(0) == 1)
+                int type = _reader.GetInt32(0);
+                if (type == 2)
+                {
+                    u = new Administrator()
+                    {
+                        Username = _reader.IsDBNull(2) ? null : _reader.GetString(2),
+                        Surname = _reader.IsDBNull(5) ? null : _reader.GetString(5),
+                        Name = _reader.IsDBNull(3) ? null : _reader.GetString(3),
+                        DateOfBirth = _reader.IsDBNull(4) ? DateTime.MinValue : (DateTime)_reader.GetMySqlDateTime(4),
+                        Id = _reader.IsDBNull(1) ? 0 : _reader.GetInt32(1),
+                        Gender = _reader.IsDBNull(6) ? null : _reader.GetString(6)
+                    };
+                }
+                else if (type == 1)
                 {
                     u = new Specialist
                     {
