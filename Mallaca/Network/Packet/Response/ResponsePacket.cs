@@ -23,6 +23,7 @@ namespace Mallaca.Network.Packet.Response
         public ResponsePacket(Statuscode.Status status, string cmd = null)
         {
             Initialize(
+                // ReSharper disable once SpecifyACultureInStringConversionExplicitly
                 Statuscode.GetCode(status).ToString(),
                 Statuscode.GetDescription(status),
                 cmd

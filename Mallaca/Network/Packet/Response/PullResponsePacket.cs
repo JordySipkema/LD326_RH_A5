@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
 namespace Mallaca.Network.Packet.Response
@@ -10,7 +6,7 @@ namespace Mallaca.Network.Packet.Response
     public class PullResponsePacket<T> : ResponsePacket
     {
         public const string Cmd = "RESP-PULL";
-        public string dataType { get; protected set; }
+        public string DataType { get; private set; }
         public List<T> List { get; set; }
 
         public PullResponsePacket(List<T> lsit) : base(Statuscode.Status.Ok, Cmd)
@@ -26,7 +22,7 @@ namespace Mallaca.Network.Packet.Response
         public PullResponsePacket(JObject json)
         {
             List = new List<T>();
-            foreach (JToken token in json["data"].Children())
+            foreach (var token in json["data"].Children())
             {
                 List.Add(token.ToObject<T>());
             }
@@ -41,7 +37,7 @@ namespace Mallaca.Network.Packet.Response
         {
             JObject json =  base.ToJsonObject();
             json.Add("data", JArray.FromObject(List));
-            json.Add("dataType", dataType);
+            json.Add("dataType", DataType);
             return json;
         }
     }
