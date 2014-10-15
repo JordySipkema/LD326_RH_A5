@@ -23,8 +23,6 @@ namespace RH_APP.Classes
             serial.WriteTimeout = 50;
 
             serial.Open();
-            serial.WriteLine("RS");
-            serial.WriteLine("PT5000");
             serial.WriteLine("CM");
         }
 
