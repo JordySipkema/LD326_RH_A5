@@ -24,7 +24,7 @@ namespace RH_APP.GUI
         {
             InitializeComponent();
 
-            TCPController.OnPacketReceived += handleIncomingPackets;
+            TCPController.PacketReceived += handleIncomingPackets;
             UpdateConnectedUsersList();
         }
 

@@ -1,4 +1,5 @@
-﻿using Mallaca;
+﻿using System.Text;
+using Mallaca;
 using Mallaca.Network;
 using Mallaca.Network.Packet;
 using Mallaca.Network.Packet.Response;
@@ -53,6 +54,8 @@ namespace RH_Server.Server
         {
             while (true)
             {
+                if (!_tcpclient.Connected)
+                    break;
                 try
                 {
                     //new Socket().Receive(Buffer);
@@ -67,7 +70,16 @@ namespace RH_Server.Server
                     if (packetSize == -1)
                         continue;
 
-                    var json = Packet.RetrieveJson(packetSize, ref _totalBuffer);
+                    JObject json = null;
+                    try
+                    {
+                        json = Packet.RetrieveJson(packetSize, ref _totalBuffer);
+                    }
+                    catch (JsonReaderException)
+                    {
+                        Console.WriteLine("Sending SyntaxError-packet to {0}", _tcpclient.Client.RemoteEndPoint);
+                        Send(new ResponsePacket(Statuscode.Status.SyntaxError));
+                    }
 
                     if (json == null)
                         continue;
@@ -131,7 +143,8 @@ namespace RH_Server.Server
                 }
                 catch (SocketException e)
                 {
-                    Console.WriteLine("Client with IP-address: {0} has been disconnected", _tcpclient.Client.LocalEndPoint);
+                    Console.WriteLine("Client with IP-address: {0} has been disconnected",
+                        _tcpclient.Client.LocalEndPoint);
                     Console.WriteLine(e.Message);
                 }
                 catch (Exception e)
