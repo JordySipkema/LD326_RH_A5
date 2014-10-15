@@ -14,6 +14,8 @@ using Mallaca.Network.Packet.Response;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Mallaca.Network.Packet;
+using System.IO.Ports;
+using RH_APP.Classes;
 
 namespace RH_APP.GUI
 {
@@ -81,6 +83,33 @@ namespace RH_APP.GUI
         private void LoginScreen_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private string getCOMPort()
+        {
+
+            var portNames = SerialPort.GetPortNames();
+            foreach(string i in portNames){
+               var serial = new SerialPort();
+                serial.PortName = i;
+
+                serial.DataBits = 8;
+                serial.StopBits = StopBits.One;
+                serial.ReadTimeout = 2000;
+                serial.WriteTimeout = 50;
+
+                serial.Open();
+
+                serial.WriteLine("ID");
+                var output = serial.ReadLine();
+                if (!String.IsNullOrEmpty(output))
+                {
+                    serial.Close();
+                    return i;
+                }
+            }
+            return null;
+          
         }
     }
 }

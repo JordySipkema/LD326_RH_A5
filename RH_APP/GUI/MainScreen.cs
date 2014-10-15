@@ -34,7 +34,6 @@ namespace RH_APP.GUI
             if (!showMenu)
             {
                 menuStrip1.Visible = false;
-                this.Text = "Remote Healthcare - Client Edition";
                 numericUpDown1.Visible = false;
                 setPowerLabel.Visible = false;
             }
