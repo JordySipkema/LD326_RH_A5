@@ -33,7 +33,8 @@ namespace Mallaca.Network.Packet
             return JObject.Parse(Encoding.UTF8.GetString(GetPacketBytes(packetSize, ref buffer).ToArray()));
         }
 
-        private static List<byte> GetPacketBytes(int packetSize, ref List<byte> buffer)
+        //TODO: BACK TO PRIVATE
+        public static List<byte> GetPacketBytes(int packetSize, ref List<byte> buffer)
         {
             List<byte> jsonData = buffer.GetRange(4, packetSize);
             buffer.RemoveRange(0, packetSize + 4);

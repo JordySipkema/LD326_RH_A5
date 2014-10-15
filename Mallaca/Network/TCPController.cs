@@ -35,8 +35,10 @@ namespace Mallaca.Network
         private static SslStream _sslStream;
         public static Boolean Busy { get; private set; }
         private static string _response = String.Empty;
-        public  delegate void ReceivedPacket(Packet.Packet p);
-        public static event ReceivedPacket OnPacketReceived;
+
+        public delegate void ReceivedPacket(Packet.Packet p);
+        public static event ReceivedPacket PacketReceived;
+
         public static bool IsReading { get; private set; }
         private static  List<byte> _totalBuffer = new List<byte>();
         private static ManualResetEvent sendDone =
@@ -130,7 +132,7 @@ namespace Mallaca.Network
             {
                 IsReading = true;
                 // Create the state object.
-                StateObject state = new StateObject();
+                var state = new StateObject();
 
                 // Begin receiving the data from the remote device.
                 _sslStream.BeginRead(state.buffer, 0, StateObject.BufferSize, ReceiveCallback,
@@ -148,17 +150,17 @@ namespace Mallaca.Network
             {
                 // Retrieve the state object and the client socket 
                 // from the asynchronous state object.
-                StateObject state = (StateObject)ar.AsyncState;
+                var state = (StateObject)ar.AsyncState;
                 
 
                 // Read data from the remote device.
-                int bytesRead = _sslStream.EndRead(ar);
+                var bytesRead = _sslStream.EndRead(ar);
 
                 if (bytesRead > 0)
                 {
                     try
                     {
-                        byte[] rawData = new byte[bytesRead];
+                        var rawData = new byte[bytesRead];
                         Array.Copy(state.buffer, 0, rawData, 0, bytesRead);
                         _totalBuffer = _totalBuffer.Concat(rawData).ToList();
 
@@ -166,10 +168,11 @@ namespace Mallaca.Network
                         int packetSize = Packet.Packet.GetLengthOfPacket(_totalBuffer);
                         Console.WriteLine("Read input.");
 
+                        int packetSize = Packet.Packet.GetLengthOfPacket(_totalBuffer);
                         if (packetSize != -1)
                         {
 
-                            Packet.Packet p = Packet.Packet.RetrievePacket(packetSize, ref _totalBuffer);
+                            var p = Packet.Packet.RetrievePacket(packetSize, ref _totalBuffer);
                             if (p != null)
                             {
                                 foreach(ReceivedPacket deleg in OnPacketReceived.GetInvocationList())

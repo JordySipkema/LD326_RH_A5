@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -8,18 +9,11 @@ namespace Mallaca
     {
         public static String CreateSHA256(String value)
         {
-            StringBuilder Sb = new StringBuilder();
+            var crypt = new SHA256Managed();
+            var hash = String.Empty;
+            var crypto = crypt.ComputeHash(Encoding.UTF8.GetBytes(value), 0, Encoding.UTF8.GetByteCount(value));
 
-            using (SHA256 hash = SHA256Managed.Create())
-            {
-                Encoding enc = Encoding.UTF8;
-                Byte[] result = hash.ComputeHash(enc.GetBytes(value));
-
-                foreach (Byte b in result)
-                    Sb.Append(b.ToString("x2"));
-            }
-
-            return Sb.ToString();
+            return crypto.Aggregate(hash, (current, bit) => current + bit.ToString("x2"));
         }
     }
 }

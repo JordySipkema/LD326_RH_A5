@@ -73,7 +73,11 @@ namespace RH_Server.Classes
 
         public static List<User> GetClients()
         {
-            return AuthUsers.Keys.ToList().Where(x => x.IsClient).ToList();
+            var z = AuthUsers.Keys.ToList().Where(x => x.IsClient).ToList();
+            var u = new Client {Name = "Henk", Username = "Henk2"};
+            z.Add(u);
+            return z;
+            //return AuthUsers.Keys.ToList().Where(x => x.IsClient).ToList();
         }
     }
 }

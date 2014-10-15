@@ -37,17 +37,20 @@
             // _clientList
             // 
             this._clientList.FormattingEnabled = true;
-            this._clientList.Location = new System.Drawing.Point(12, 68);
+            this._clientList.ItemHeight = 16;
+            this._clientList.Location = new System.Drawing.Point(16, 84);
+            this._clientList.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this._clientList.Name = "_clientList";
-            this._clientList.Size = new System.Drawing.Size(312, 212);
+            this._clientList.Size = new System.Drawing.Size(415, 260);
             this._clientList.TabIndex = 0;
             this._clientList.SelectedIndexChanged += new System.EventHandler(this._clientList_SelectedIndexChanged);
             // 
             // _connectButton
             // 
-            this._connectButton.Location = new System.Drawing.Point(211, 310);
+            this._connectButton.Location = new System.Drawing.Point(281, 382);
+            this._connectButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this._connectButton.Name = "_connectButton";
-            this._connectButton.Size = new System.Drawing.Size(113, 49);
+            this._connectButton.Size = new System.Drawing.Size(151, 60);
             this._connectButton.TabIndex = 1;
             this._connectButton.Text = "Connect";
             this._connectButton.UseVisualStyleBackColor = true;
@@ -56,17 +59,19 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(70, 25);
+            this.label1.Location = new System.Drawing.Point(93, 31);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(184, 26);
+            this.label1.Size = new System.Drawing.Size(229, 31);
             this.label1.TabIndex = 2;
             this.label1.Text = "Select connection";
             // 
             // _cancelButton
             // 
-            this._cancelButton.Location = new System.Drawing.Point(12, 310);
+            this._cancelButton.Location = new System.Drawing.Point(16, 382);
+            this._cancelButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this._cancelButton.Name = "_cancelButton";
-            this._cancelButton.Size = new System.Drawing.Size(113, 49);
+            this._cancelButton.Size = new System.Drawing.Size(151, 60);
             this._cancelButton.TabIndex = 3;
             this._cancelButton.Text = "Cancel";
             this._cancelButton.UseVisualStyleBackColor = true;
@@ -74,16 +79,16 @@
             // 
             // CreateConnectionScreen
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(336, 371);
+            this.ClientSize = new System.Drawing.Size(448, 457);
             this.Controls.Add(this._cancelButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this._connectButton);
             this.Controls.Add(this._clientList);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "CreateConnectionScreen";
             this.Text = "Create Connection";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CreateConnectionScreen_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
 

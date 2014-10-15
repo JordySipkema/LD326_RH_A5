@@ -27,7 +27,7 @@ namespace RH_APP.GUI
             InitializeComponent();
             _passwordBox.UseSystemPasswordChar = true;
             TCPController.RunClient();
-            TCPController.OnPacketReceived += onLoginPacketResponse;
+            TCPController.PacketReceived += LoginPacketResponse;
             TCPController.ReceiveTransmission();
         }
 
@@ -38,19 +38,20 @@ namespace RH_APP.GUI
             TCPController.Send(p.ToString());
         }
 
-        private void onLoginPacketResponse(Packet p)
+        private void LoginPacketResponse(Packet p)
         {
             if (this.InvokeRequired)
-                this.Invoke((new Action(() => onLoginPacketResponse(p))));
+                this.Invoke((new Action(() => LoginPacketResponse(p))));
 
             var resp = p as LoginResponsePacket;
+            Console.WriteLine(p.ToString());
 
             if (resp != null && resp.Status == "200")
             {
                 this.Invoke((Action)(this.Hide));
 
                 RH_APP.Classes.Settings.GetInstance().authToken = resp.AuthToken;
-                TCPController.OnPacketReceived -= onLoginPacketResponse;
+                TCPController.PacketReceived -= LoginPacketResponse;
                 if (resp.Usertype.Equals("Specialist") || resp.Usertype.Equals("Administrator"))
                 {
                     var mainScreen = new MainScreen(true);
