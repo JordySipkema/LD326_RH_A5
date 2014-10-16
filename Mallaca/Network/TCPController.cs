@@ -37,7 +37,7 @@ namespace Mallaca.Network
         private static string _response = String.Empty;
 
         public delegate void ReceivedPacket(Packet.Packet p);
-        public static event ReceivedPacket PacketReceived;
+        public static event ReceivedPacket OnPacketReceived;
 
         public static bool IsReading { get; private set; }
         private static  List<byte> _totalBuffer = new List<byte>();
@@ -163,10 +163,6 @@ namespace Mallaca.Network
                         var rawData = new byte[bytesRead];
                         Array.Copy(state.buffer, 0, rawData, 0, bytesRead);
                         _totalBuffer = _totalBuffer.Concat(rawData).ToList();
-
-                        Console.WriteLine("Reading input.");
-                        int packetSize = Packet.Packet.GetLengthOfPacket(_totalBuffer);
-                        Console.WriteLine("Read input.");
 
                         int packetSize = Packet.Packet.GetLengthOfPacket(_totalBuffer);
                         if (packetSize != -1)

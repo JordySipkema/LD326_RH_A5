@@ -159,8 +159,9 @@ namespace RH_APP.GUI
             {
                 PullResponsePacket<User> response = p as PullResponsePacket<User>;
 
-            if(response.DataType == "connected_clients")
-                connectedClients = response.List;
+                if (response.DataType == "connected_clients")
+                    connectedClients = response.List;
+            }
         }
 
         private void connectionToolStripMenuItem_Click(object sender, EventArgs e)
