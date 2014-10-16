@@ -10,6 +10,7 @@ namespace Mallaca.Network.Packet.Request
         public string dataType { get; set; }
         public int dataId { get; set; }
 
+
         public ListPacket(string datatype, string authtoken, int id = -1) : base(Cmd, authtoken) // pull packet
         {
             dataType = datatype;

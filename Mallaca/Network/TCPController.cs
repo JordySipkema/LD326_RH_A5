@@ -92,11 +92,25 @@ namespace Mallaca.Network
             if (_client == null)
                 return;
 
-            // Begin sending the data
             Busy = true;
-            byte[] bytes = Packet.Packet.CreateByteData(data);
-            _sslStream.BeginWrite(bytes, 0, bytes.Length, SendCallback, _sslStream);
             
+            byte[] bytes = Packet.Packet.CreateByteData(data);
+
+            //beginWrite is not thread safe.
+            Monitor.Enter(_sslStream);
+            try
+            {
+                _sslStream.BeginWrite(bytes, 0, bytes.Length, SendCallback, _sslStream);
+            }
+            catch (NotSupportedException e)
+            {
+                Console.WriteLine("Unable to write to socket: " + e.Message);
+            }
+            finally
+            {
+                Monitor.Exit(_sslStream);
+            }
+
             _sslStream.Flush();
             Console.WriteLine("Data sent: " + data);
         }

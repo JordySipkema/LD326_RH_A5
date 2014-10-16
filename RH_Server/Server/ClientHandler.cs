@@ -277,8 +277,12 @@ namespace RH_Server.Server
                     resp = new PullUsersResponsePacket(Authentication.GetClients(), "connected_clients");
                     break;
                 case "user_sessions":
-                    resp = new PullResponsePacket<Tuple<int, int, DateTime>>(_database.GetTrainingSessions(),
+                    resp = new PullResponsePacket<SessionData>(_database.GetTrainingSessions(),
                         "user_sessions");
+                    break;
+                case "measurements":
+                    HandleLsmPacket(json);
+                    return;
                     break;
                 default:
                     Console.WriteLine("Non-implemented data type: " + json["dataType"].ToString());
@@ -297,22 +301,21 @@ namespace RH_Server.Server
         public void HandleLsmPacket(JObject json)
         {
             JToken sessionId;
-
+            JToken username;
+            JToken UserId;
             json.TryGetValue("sessionID", out sessionId);
+            json.TryGetValue("username", out username);
+            json.TryGetValue("dataId", out UserId);
 
-            var measurements = _dbConnect.getMeasurementsOfUser((string)json["username"], (string)json["sessionID"]);
+            var measurements = _dbConnect.getMeasurementsOfUser(username == null ? UserId.ToString() : username.ToString(), json["sessionID"].ToString());
             var i = measurements.Count;
             var m = JArray.FromObject(measurements);
 
-            var returnJson = new JObject(
-                new JProperty("CMD", "resp-lsm"),
-                new JProperty("COUNT", i),
-                new JProperty("MEASURMENTS", m)
-                );
+            PullResponsePacket<Measurement> response = new PullResponsePacket<Measurement>(measurements,"measurements");
 
             //Send the result back to the specialist.
-            Console.WriteLine(returnJson.ToString());
-            Send(returnJson.ToString());
+            Console.WriteLine(response.ToString());
+            Send(response.ToString());
         }
 
         public void HandleLsuPacket(JObject json)

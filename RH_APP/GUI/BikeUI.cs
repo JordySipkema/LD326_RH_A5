@@ -176,9 +176,8 @@ namespace RH_APP.GUI
             {
                 _inTraining = false;
                 this.Dispose();
-                GraphResultUI resultUI = new GraphResultUI();
+                GraphResultUI resultUI = new GraphResultUI(_controller.GetList());
                 
-                resultUI.receiveMeasurements(_controller.GetList());
                 resultUI.updateGraph();
                 resultUI.Show();
             }

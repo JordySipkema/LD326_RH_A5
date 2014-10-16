@@ -72,16 +72,16 @@ namespace Mallaca
          }
 
         ///<returns>Returns a List of tuples with the user_id, session_id and datetime.</returns>
-        public List<Tuple<int, int, DateTime>> GetTrainingSessions()
+        public List<SessionData> GetTrainingSessions()
         {
             string query = "SELECT session_id, datetime, user_id FROM `measurement` GROUP BY session_id, user_id";
 
-            var List = new List<Tuple<int, int, DateTime>>();
+            var List = new List<SessionData>();
             MySqlCommand command = new MySqlCommand(query, Connection);
             MySqlDataReader dataReader = command.ExecuteReader();
             while (dataReader.Read())
             {
-                List.Add(new Tuple<int, int, DateTime>(dataReader.GetInt32(2), dataReader.GetInt32(0), dataReader.GetDateTime(1)));
+                List.Add(new SessionData(dataReader.GetInt32(2), dataReader.GetInt32(0), dataReader.GetDateTime(1)));
             }
             dataReader.Close();
            
@@ -553,7 +553,7 @@ namespace Mallaca
 
             int userID= -1;
             Boolean check = Int32.TryParse(username, out userID);
-            if (check && userID > 0)
+            if (check && userID > -1)
             {
                 query += String.Format("WHERE user_id = {0} ",username);
             }
@@ -581,7 +581,8 @@ namespace Mallaca
                     m.ENERGY = _reader.GetInt32(4);
                     m.PULSE = _reader.GetInt32(5);
                     m.DATE = _reader.GetDateTime(7);
-
+                    string dt = _reader.GetString(8);
+                    m.TIME = dt;
                     measurements.Add(m);
                 }
 
@@ -596,6 +597,25 @@ namespace Mallaca
             }
 
             return measurements;
+        }
+    }
+
+    public struct SessionData
+    {
+        public int userId;
+        public int sessionId;
+        public DateTime date;
+
+        public SessionData(int uId, int sId, DateTime d)
+        {
+            userId = uId;
+            sessionId = sId;
+            date = d;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("Session {0}, {1}", sessionId, date.ToShortDateString());
         }
     }
 }

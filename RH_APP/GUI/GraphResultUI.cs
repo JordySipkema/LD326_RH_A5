@@ -29,10 +29,10 @@ namespace RH_APP.GUI
         private Choice _choice2;
 
 
-        public GraphResultUI()
+        public GraphResultUI(List<Measurement> origin)
         {
             InitializeComponent();
-
+            result = origin;
             Array values = typeof(Choice).GetEnumValues();
 
             foreach (Choice choiceValue in values)
@@ -44,15 +44,8 @@ namespace RH_APP.GUI
             _choiceBox1.SetSelected(1, true);
             _choiceBox2.SetSelected(2, true);
 
-
+            updateGraph();
         }
-
-        public List<Measurement> receiveMeasurements(List<Measurement> origin)
-        {
-            result = origin;
-            return result;
-        }
-
 
         public void updateGraph()
         {
@@ -194,7 +187,8 @@ namespace RH_APP.GUI
 
         private void _scrollBar_Scroll(object sender, EventArgs e)
         {
-            _graph.ChartAreas[0].AxisX.ScaleView.Size = _scrollBar.Maximum - _scrollBar.Value;
+            int scale = _scrollBar.Maximum - _scrollBar.Value;
+            _graph.ChartAreas[0].AxisX.ScaleView.Size = scale;
         }
 
         private void _scrollBar_ValueChanged(object sender, EventArgs e)

@@ -81,8 +81,9 @@ namespace Mallaca.Network.Packet
                         return new PullResponsePacket<Measurement>(json);
                         break;
                     case "user_sessions":
-                        return new PullResponsePacket<Tuple<int,int, DateTime>>(json);
+                        return new PullResponsePacket<SessionData>(json);
                         break;
+
 
                 }
                 break;

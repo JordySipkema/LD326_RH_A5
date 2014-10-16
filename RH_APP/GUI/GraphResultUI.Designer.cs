@@ -30,32 +30,31 @@
         {
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            this._scrollBar = new System.Windows.Forms.TrackBar();
             this._choiceBox1 = new System.Windows.Forms.ListBox();
             this._choiceBox2 = new System.Windows.Forms.ListBox();
             this._graph = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this._scrollBar = new System.Windows.Forms.TrackBar();
             this.label3 = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
             this._printButton = new System.Windows.Forms.Button();
             this._closeButton = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this._scrollBar)).BeginInit();
+            this.panel2 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this._graph)).BeginInit();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this._scrollBar)).BeginInit();
+            this.panel3.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // _scrollBar
-            // 
-            this._scrollBar.Location = new System.Drawing.Point(150, 472);
-            this._scrollBar.Name = "_scrollBar";
-            this._scrollBar.Size = new System.Drawing.Size(874, 45);
-            this._scrollBar.TabIndex = 2;
-            this._scrollBar.Scroll += new System.EventHandler(this._scrollBar_Scroll);
-            this._scrollBar.ValueChanged += new System.EventHandler(this._scrollBar_ValueChanged);
             // 
             // _choiceBox1
             // 
             this._choiceBox1.FormattingEnabled = true;
-            this._choiceBox1.Location = new System.Drawing.Point(24, 41);
+            this._choiceBox1.Location = new System.Drawing.Point(3, 37);
             this._choiceBox1.Name = "_choiceBox1";
             this._choiceBox1.Size = new System.Drawing.Size(120, 95);
             this._choiceBox1.TabIndex = 3;
@@ -64,7 +63,7 @@
             // _choiceBox2
             // 
             this._choiceBox2.FormattingEnabled = true;
-            this._choiceBox2.Location = new System.Drawing.Point(24, 210);
+            this._choiceBox2.Location = new System.Drawing.Point(8, 166);
             this._choiceBox2.Name = "_choiceBox2";
             this._choiceBox2.Size = new System.Drawing.Size(120, 95);
             this._choiceBox2.TabIndex = 4;
@@ -74,11 +73,12 @@
             // 
             chartArea2.Name = "ChartArea1";
             this._graph.ChartAreas.Add(chartArea2);
+            this._graph.Dock = System.Windows.Forms.DockStyle.Fill;
             legend2.Name = "Legend1";
             this._graph.Legends.Add(legend2);
-            this._graph.Location = new System.Drawing.Point(160, 12);
+            this._graph.Location = new System.Drawing.Point(153, 3);
             this._graph.Name = "_graph";
-            this._graph.Size = new System.Drawing.Size(851, 433);
+            this._graph.Size = new System.Drawing.Size(975, 552);
             this._graph.TabIndex = 5;
             this._graph.Text = "RESULT";
             // 
@@ -86,7 +86,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(41, 12);
+            this.label2.Location = new System.Drawing.Point(3, 8);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(86, 26);
             this.label2.TabIndex = 8;
@@ -96,27 +96,78 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(41, 181);
+            this.label1.Location = new System.Drawing.Point(3, 135);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(86, 26);
             this.label1.TabIndex = 9;
             this.label1.Text = "Value 2";
             // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.panel2, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this._graph, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.panel3, 1, 1);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 85F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1131, 657);
+            this.tableLayoutPanel1.TabIndex = 13;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this._choiceBox1);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this._choiceBox2);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(3, 3);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(144, 552);
+            this.panel1.TabIndex = 0;
+            // 
+            // _scrollBar
+            // 
+            this._scrollBar.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this._scrollBar.Location = new System.Drawing.Point(0, 48);
+            this._scrollBar.Maximum = 100;
+            this._scrollBar.Name = "_scrollBar";
+            this._scrollBar.Size = new System.Drawing.Size(975, 45);
+            this._scrollBar.TabIndex = 2;
+            this._scrollBar.Scroll += new System.EventHandler(this._scrollBar_Scroll);
+            this._scrollBar.ValueChanged += new System.EventHandler(this._scrollBar_ValueChanged);
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(19, 472);
+            this.label3.Location = new System.Drawing.Point(3, 18);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(127, 26);
             this.label3.TabIndex = 10;
             this.label3.Text = "Zoom in/out";
             // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.label3);
+            this.panel3.Controls.Add(this._scrollBar);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel3.Location = new System.Drawing.Point(153, 561);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(975, 93);
+            this.panel3.TabIndex = 6;
+            // 
             // _printButton
             // 
-            this._printButton.Location = new System.Drawing.Point(24, 342);
+            this._printButton.Location = new System.Drawing.Point(27, 21);
             this._printButton.Name = "_printButton";
-            this._printButton.Size = new System.Drawing.Size(120, 38);
+            this._printButton.Size = new System.Drawing.Size(96, 24);
             this._printButton.TabIndex = 11;
             this._printButton.Text = "Print";
             this._printButton.UseVisualStyleBackColor = true;
@@ -124,47 +175,58 @@
             // 
             // _closeButton
             // 
-            this._closeButton.Location = new System.Drawing.Point(24, 396);
+            this._closeButton.Location = new System.Drawing.Point(27, 51);
             this._closeButton.Name = "_closeButton";
-            this._closeButton.Size = new System.Drawing.Size(120, 38);
+            this._closeButton.Size = new System.Drawing.Size(96, 23);
             this._closeButton.TabIndex = 12;
             this._closeButton.Text = "Close";
             this._closeButton.UseVisualStyleBackColor = true;
             this._closeButton.Click += new System.EventHandler(this._closeButton_Click);
             // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this._closeButton);
+            this.panel2.Controls.Add(this._printButton);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(3, 561);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(144, 93);
+            this.panel2.TabIndex = 1;
+            // 
             // GraphResultUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1036, 529);
-            this.Controls.Add(this._closeButton);
-            this.Controls.Add(this._printButton);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this._graph);
-            this.Controls.Add(this._choiceBox2);
-            this.Controls.Add(this._choiceBox1);
-            this.Controls.Add(this._scrollBar);
+            this.ClientSize = new System.Drawing.Size(1131, 657);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "GraphResultUI";
             this.Text = "Results";
-            ((System.ComponentModel.ISupportInitialize)(this._scrollBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._graph)).EndInit();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this._scrollBar)).EndInit();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
+            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.TrackBar _scrollBar;
         private System.Windows.Forms.ListBox _choiceBox1;
         private System.Windows.Forms.ListBox _choiceBox2;
         private System.Windows.Forms.DataVisualization.Charting.Chart _graph;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button _printButton;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button _closeButton;
+        private System.Windows.Forms.Button _printButton;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TrackBar _scrollBar;
     }
 }
