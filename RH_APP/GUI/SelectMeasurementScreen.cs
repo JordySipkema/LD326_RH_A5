@@ -60,6 +60,7 @@ namespace RH_APP.GUI
 
         private void handleIncomingPackets(Packet p)
         {
+            // Tuple<userId, SessionId, DateOfSession>()
             if (p is PullResponsePacket<Tuple<int, int, DateTime>>)
             {
                 var response = p as PullResponsePacket<Tuple<int, int, DateTime>>;
@@ -74,7 +75,7 @@ namespace RH_APP.GUI
                 BindingSource bs = new BindingSource();
                 bs.DataSource = users;
                 usersCombobox.Invoke((new Action(() => usersCombobox.DataSource = bs)));
-                usersCombobox.Invoke((new Action(() => usersCombobox.DisplayMember = "Name")));
+                usersCombobox.Invoke((new Action(() => usersCombobox.DisplayMember = "Fullname")));
                 usersCombobox.Invoke((new Action(() => usersCombobox.ValueMember = "Id")));
             }
         }

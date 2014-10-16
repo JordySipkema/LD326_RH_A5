@@ -43,7 +43,7 @@ namespace RH_APP.GUI
             _chatController = new Chat_Controller();
 
             ListPacket p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
-            TCPController.PacketReceived += handleIncomingPackets;
+            TCPController.OnPacketReceived += handleIncomingPackets;
             TCPController.Send(p.ToString());
         }
 
@@ -59,7 +59,7 @@ namespace RH_APP.GUI
                 setPowerLabel.Visible = false;
             }
             ListPacket p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
-            TCPController.PacketReceived += handleIncomingPackets;
+            TCPController.OnPacketReceived += handleIncomingPackets;
             TCPController.Send(p.ToString());
         }
 
@@ -167,7 +167,7 @@ namespace RH_APP.GUI
         private void connectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
-            TCPController.PacketReceived += handleIncomingPackets;
+            TCPController.OnPacketReceived += handleIncomingPackets;
             TCPController.Send(p.ToString());
             TCPController.ReceiveTransmission();
 

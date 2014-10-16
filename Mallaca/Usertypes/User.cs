@@ -18,8 +18,8 @@ namespace Mallaca.Usertypes
         public string Gender { get; set; }
         public string AuthToken { get; set; }
         public virtual UserType UserType  { get { return UserType.User;  } }
-
-
+        public string Fullname { get { return Name + " " + Surname; } }
+        
         public bool IsClient { get { return UserType == UserType.Client; } }
         public bool IsSpecialist { get { return UserType == UserType.Specialist; } }
         public bool IsAdministrator { get { return UserType == UserType.Administrator; } }
