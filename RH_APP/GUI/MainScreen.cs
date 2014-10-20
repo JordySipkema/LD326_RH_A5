@@ -41,6 +41,7 @@ namespace RH_APP.GUI
                 menuStrip1.Visible = false;
                 numericUpDown1.Visible = false;
                 setPowerLabel.Visible = false;
+                _quitButton.Visible = false;
             }
             
             _chatController = new Chat_Controller();
