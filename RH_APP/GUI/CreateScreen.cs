@@ -43,7 +43,7 @@ namespace RH_APP.GUI
 
             bool succes;
 
-            //TODO create user with given data, save into db
+            //TODO create User with given data, save into db
             //if (clientRadioButton.Checked)
             //    succes = _connection.SaveClient(_nameBox.Text, _surnameBox.Text, Usernamebox.Text, passwordBox.Text,  gender, dateOfBirthPicker.Value, Decimal.Parse(_lengthBox.Text), Decimal.Parse(_weightBox.Text));
             //else
@@ -52,12 +52,12 @@ namespace RH_APP.GUI
 
             //if (succes)
             //{
-            //    MessageBox.Show("Success: the user has been added.");
+            //    MessageBox.Show("Success: the User has been added.");
             //    this.Close();
             //}
             //else
             //{
-            //    MessageBox.Show("Could not add the user.");
+            //    MessageBox.Show("Could not add the User.");
             //}
 
         }

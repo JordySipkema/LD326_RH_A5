@@ -12,6 +12,7 @@ using Mallaca;
 using Mallaca.Network;
 using Mallaca.Network.Packet.Request;
 using Mallaca.Network.Packet.Response;
+using Mallaca.Usertypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Mallaca.Network.Packet;
@@ -40,25 +41,35 @@ namespace RH_APP.GUI
 
         private void LoginPacketResponse(Packet p)
         {
-            if (this.InvokeRequired)
-                this.Invoke((new Action(() => LoginPacketResponse(p))));
-
             var resp = p as LoginResponsePacket;
+
+            if (resp == null)
+                return;
+
+            if (this.InvokeRequired)
+            {
+                this.Invoke((new Action(() => LoginPacketResponse(p))));
+                return;
+            }
+
+
+
             Console.WriteLine(p.ToString());
 
-            if (resp != null && resp.Status == "200")
+
+
+            if (resp.Status == "200")
             {
                 this.Invoke((Action)(this.Hide));
 
                 RH_APP.Classes.Settings.GetInstance().authToken = resp.AuthToken;
-                TCPController.OnPacketReceived -= LoginPacketResponse;
-                if (resp.Usertype.Equals("Specialist") || resp.Usertype.Equals("Administrator"))
+                RH_APP.Classes.Settings.GetInstance().CurrentUser = resp.User;
+                if (resp.User.IsSpecialist || resp.User.IsAdministrator)
                 {
                     var mainScreen = new MainScreen(true);
                     mainScreen.ShowDialog();
-                    this.Close();
                 }
-                else if (resp.Usertype.Equals("Client"))
+                else if (resp.User.IsClient)
                 {
                     COM_Bike b = new COM_Bike(getCOMPort());
                     var mainScreen = new MainScreen(false, b);
@@ -66,6 +77,7 @@ namespace RH_APP.GUI
                     mainScreen.ShowDialog();
                     //this.Close();
                 }
+                TCPController.OnPacketReceived -= LoginPacketResponse;
             }
             else
             {

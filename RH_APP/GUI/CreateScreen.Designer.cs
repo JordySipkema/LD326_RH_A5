@@ -129,7 +129,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(156, 31);
             this.label3.TabIndex = 9;
-            this.label3.Text = "Create user";
+            this.label3.Text = "Create User";
             // 
             // label4
             // 
@@ -237,7 +237,7 @@
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(54, 13);
             this.label11.TabIndex = 29;
-            this.label11.Text = "Type user";
+            this.label11.Text = "Type User";
             // 
             // clientRadioButton
             // 
@@ -333,7 +333,7 @@
             this.Controls.Add(this._cancelButton);
             this.Controls.Add(this._createButton);
             this.Name = "CreateScreen";
-            this.Text = "Create user";
+            this.Text = "Create User";
             this.Load += new System.EventHandler(this.CreateScreen_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

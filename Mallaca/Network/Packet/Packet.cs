@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Mallaca.Network.Packet.Request;
 using Mallaca.Network.Packet.Response;
 using Newtonsoft.Json.Linq;
 
@@ -56,7 +57,8 @@ namespace Mallaca.Network.Packet
         }
 
         public static Packet RetrievePacket(int packetSize, ref List<byte> buffer)
-        {   Packet p = null;
+        {  
+            Packet p = null;
             JObject json = RetrieveJson(packetSize, ref buffer);
 
             if (json == null)
@@ -67,10 +69,13 @@ namespace Mallaca.Network.Packet
                 case LoginResponsePacket.LoginRcmd:
                     p = new LoginResponsePacket(json);
                     break;
-
+                case ChatPacket.DefCmd:
+                    p = new ChatPacket(json);
+                    break;
+                        
 
                 case PullResponsePacket<string>.Cmd: 
-                switch (json["dataType"].ToString())
+                switch (json["dataType"].ToString().ToLower())
                 {
                     case "users":
                     case "user":
@@ -83,6 +88,7 @@ namespace Mallaca.Network.Packet
                     case "user_sessions":
                         return new PullResponsePacket<SessionData>(json);
                         break;
+                   
 
 
                 }

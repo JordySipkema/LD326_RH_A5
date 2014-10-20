@@ -2,6 +2,7 @@
 using Mallaca;
 using Mallaca.Network;
 using Mallaca.Network.Packet;
+using Mallaca.Network.Packet.Request;
 using Mallaca.Network.Packet.Response;
 using Mallaca.Properties;
 using Mallaca.Usertypes;
@@ -32,7 +33,7 @@ namespace RH_Server.Server
 
         private readonly DBConnect _dbConnect = new DBConnect();
 
-        //private string username;
+        private User currentUser;
         //private Boolean isLoggedIn;
 
         public ClientHandler(TcpClient client)
@@ -177,13 +178,14 @@ namespace RH_Server.Server
             var password = json["password"].ToString();
 
             JObject returnJson;
-            //Code to check user/pass here
-            if (Authentication.Authenticate(username, password, _sslStream))
+            //Code to check User/pass here
+            if (Authentication.Authenticate(username, password, this))
             {
+                currentUser = _database.getUser(username);
                 returnJson = new LoginResponsePacket(
                     Statuscode.Status.Ok,
-                    Authentication.GetUser(username).UserType.ToString(),
-                    Authentication.GetUser(username).AuthToken
+                    Authentication.GetUser(username).AuthToken,
+                    currentUser
                     ).ToJsonObject();
 
             }
@@ -231,11 +233,10 @@ namespace RH_Server.Server
 
         public void HandleChatPacket(JObject json)
         {
-            var authToken = (string) json["AUTHTOKEN"];
-            var username = (string) json["USERNAMEDESTINATION"];
-
-            var s = Authentication.GetStream(username);
-            s.Send(json["MESSAGE"]);
+            ChatPacket p = new ChatPacket(json);
+            var s = Authentication.GetStream(p.UsernameDestination);
+            ChatPacket newPacket = new ChatPacket(p.Message, currentUser.Fullname, "");
+            s.Send(newPacket.ToString());
 
 
         }
@@ -262,7 +263,7 @@ namespace RH_Server.Server
                     break;
 
                 case "users":
-                    resp = new PullUsersResponsePacket(_database.GetAllUsers(), "user");
+                    resp = new PullUsersResponsePacket(_database.GetAllUsers(), "User");
                     break;
 
                 case "connected_clients":

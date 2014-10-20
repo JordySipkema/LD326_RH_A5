@@ -4,6 +4,7 @@ using Mallaca.Network.Packet;
 using Mallaca.Network.Packet.Request;
 using Mallaca.Network.Packet.Response;
 using Mallaca.Usertypes;
+using Newtonsoft.Json.Linq;
 using RH_APP.Classes;
 using RH_APP.Controller;
 using System;
@@ -89,45 +90,33 @@ namespace RH_APP.GUI
 
         private void _sendButton_Click(object sender, EventArgs e)
         {
-            if (_textBox.Text == "")
-            {
-                MessageBox.Show("No message has been sent");
-            }
+            if ( String.IsNullOrWhiteSpace( _textBox.Text ))
+                return;
             else
             {
 
                 String message = _textBox.Text;
 
-                _chatLogBox.AppendText("You say: " + message);
-                _chatLogBox.AppendText(Environment.NewLine);
-
-                Chat_Controller.SendMessage(message);
-
+                addNewMessage(Settings.GetInstance().CurrentUser.Fullname, message);
+                JObject json = new ChatPacket(message, "otto", Settings.GetInstance().authToken).ToJsonObject();
+                TCPController.Send(json.ToString());
                 _textBox.Text = "";
             }
+        }
+
+        private void addNewMessage(string name, string message)
+        {
+            _chatLogBox.AppendText(name + ": " + message);
+            _chatLogBox.AppendText(Environment.NewLine);
         }
 
         private void _textBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)13)
             {
-                if (_textBox.Text == "")
-                {
-                    MessageBox.Show("No message has been sent");
-                }
-                else
-                {
-
-                    String message = _textBox.Text;
-
-                    _chatLogBox.AppendText("You say: " + message);
-                    _chatLogBox.AppendText(Environment.NewLine);
-
-                    Chat_Controller.SendMessage(message);
-
-                    _textBox.Text = "";
-                }
+                _sendButton_Click(this, EventArgs.Empty);
             }
+            
         }
 
         private void createConnectionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -154,13 +143,23 @@ namespace RH_APP.GUI
         private void handleIncomingPackets(Packet p)
         {
             if (this.InvokeRequired)
+            {
                 this.Invoke((new Action(() => handleIncomingPackets(p))));
+                return;
+            }
+
             if (p is PullResponsePacket<User>)
             {
                 PullResponsePacket<User> response = p as PullResponsePacket<User>;
 
                 if (response.DataType == "connected_clients")
                     connectedClients = response.List;
+            }
+            else if (p is ChatPacket)
+            {
+                ChatPacket chat = p as ChatPacket;
+                addNewMessage(chat.UsernameDestination, chat.Message);
+
             }
         }
 
@@ -198,7 +197,7 @@ namespace RH_APP.GUI
             MessageBox.Show("© 23TI2A5 \n Kevin van de Akkerveken \n Farid Amali \n Engin Can \n George de Coo \n Gerjan Holsappel \n Jordy Sipkema");
         }
 
-	        public void updateGUI(object sender, EventArgs args)
+        public void updateGUI(object sender, EventArgs args)
         {
                 dataRPM.Text = _controller.LatestMeasurement.RPM + "";
                 dataSPEED.Text = String.Format("{0:0.0}", _controller.LatestMeasurement.SPEED / 10.0);
