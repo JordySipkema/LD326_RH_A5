@@ -38,5 +38,6 @@ namespace Mallaca.Usertypes
             Gender = gender;
             PasswordToBeSaved = password;
         }
+
     }
 }

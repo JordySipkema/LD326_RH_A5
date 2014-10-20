@@ -17,7 +17,7 @@ using System.Threading;
 
 namespace RH_Server.Server
 {
-    public class ClientHandler
+    internal class ClientHandler
     {
         private readonly byte[] _buffer = new byte[1024];
         private const int BufferSize = 1024;
@@ -293,8 +293,6 @@ namespace RH_Server.Server
             json.TryGetValue("dataId", out UserId);
 
             var measurements = _dbConnect.getMeasurementsOfUser(username == null ? UserId.ToString() : username.ToString(), json["sessionID"].ToString());
-            var i = measurements.Count;
-            var m = JArray.FromObject(measurements);
 
             var response = new PullResponsePacket<Measurement>(measurements,"measurements");
 

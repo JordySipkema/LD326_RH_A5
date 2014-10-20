@@ -8,7 +8,7 @@ using RH_Server.Server;
 
 namespace RH_Server.Classes
 {
-    public static class Authentication
+    internal static class Authentication
     {
         //ConcurrentDictionary to enhance thread safety.
         private static readonly ConcurrentDictionary<User, ClientHandler> AuthUsers = new ConcurrentDictionary<User, ClientHandler>();

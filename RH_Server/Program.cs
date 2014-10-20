@@ -10,7 +10,7 @@ using System.Net.Sockets;
 
 namespace RH_Server
 {
-    class Program
+    internal class Program
     {
         static void Main()
         {

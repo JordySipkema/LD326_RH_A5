@@ -23,7 +23,5 @@ namespace Mallaca.Usertypes
             Clients = new List<Client>();
         }
         public List<Client> Clients { get; set; }
-
-        
     }
 }
