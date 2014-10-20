@@ -124,4 +124,32 @@
   <data name="_23tia5_centificate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\23tia5_centificate.pfx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="ClientHandler_Sending_SyntaxError_packet_to" xml:space="preserve">
+    <value>Sending SyntaxError-packet to {0}</value>
+  </data>
+  <data name="ClientHandler_Got_JSON_that_does_not_define_a_command" xml:space="preserve">
+    <value>Got JSON that does not define a command.</value>
+  </data>
+  <data name="ClientHandler_No_authtoken_found" xml:space="preserve">
+    <value>No authtoken found in packet.</value>
+  </data>
+  <data name="ClientHandler_Recieved_Packet_Invalid_AuthToken" xml:space="preserve">
+    <value>Got a packet with an invalid authentication token.</value>
+  </data>
+  <data name="ClientHandler_Unknown_packet" xml:space="preserve">
+    <value>Unknown packet</value>
+  </data>
+  <data name="ClientHandler_Client_Disconnected" xml:space="preserve">
+    <value>Client with IP-address: {0} has been disconnected</value>
+  </data>
+  <data name="ClientHandler_Debug_HandleLoginPacket" xml:space="preserve">
+    <value>HandleLoginPacket:</value>
+  </data>
+  <data name="ClientHandler_HandlePushPacked_Recieved" xml:space="preserve">
+    <value>Recieved: 
+ {0}</value>
+  </data>
+  <data name="ClientHandler_HandlePullPacket_Non_implemented_data_type" xml:space="preserve">
+    <value>Non-implemented data type: </value>
+  </data>
 </root>

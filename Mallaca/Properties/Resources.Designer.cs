@@ -71,6 +71,88 @@ namespace Mallaca.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Client with IP-address: {0} has been disconnected.
+        /// </summary>
+        public static string ClientHandler_Client_Disconnected {
+            get {
+                return ResourceManager.GetString("ClientHandler_Client_Disconnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HandleLoginPacket:.
+        /// </summary>
+        public static string ClientHandler_Debug_HandleLoginPacket {
+            get {
+                return ResourceManager.GetString("ClientHandler_Debug_HandleLoginPacket", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Got JSON that does not define a command..
+        /// </summary>
+        public static string ClientHandler_Got_JSON_that_does_not_define_a_command {
+            get {
+                return ResourceManager.GetString("ClientHandler_Got_JSON_that_does_not_define_a_command", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Non-implemented data type: .
+        /// </summary>
+        public static string ClientHandler_HandlePullPacket_Non_implemented_data_type {
+            get {
+                return ResourceManager.GetString("ClientHandler_HandlePullPacket_Non_implemented_data_type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recieved: 
+        /// {0}.
+        /// </summary>
+        public static string ClientHandler_HandlePushPacked_Recieved {
+            get {
+                return ResourceManager.GetString("ClientHandler_HandlePushPacked_Recieved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No authtoken found in packet..
+        /// </summary>
+        public static string ClientHandler_No_authtoken_found {
+            get {
+                return ResourceManager.GetString("ClientHandler_No_authtoken_found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Got a packet with an invalid authentication token..
+        /// </summary>
+        public static string ClientHandler_Recieved_Packet_Invalid_AuthToken {
+            get {
+                return ResourceManager.GetString("ClientHandler_Recieved_Packet_Invalid_AuthToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sending SyntaxError-packet to {0}.
+        /// </summary>
+        public static string ClientHandler_Sending_SyntaxError_packet_to {
+            get {
+                return ResourceManager.GetString("ClientHandler_Sending_SyntaxError_packet_to", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown packet.
+        /// </summary>
+        public static string ClientHandler_Unknown_packet {
+            get {
+                return ResourceManager.GetString("ClientHandler_Unknown_packet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         public static byte[] invalid_certificate {
