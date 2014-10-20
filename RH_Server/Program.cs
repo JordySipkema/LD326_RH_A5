@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Mallaca.Network;
+using Mallaca.Network.Packet.Response;
 using Newtonsoft.Json.Linq;
 using RH_Server.Classes;
 using RH_Server.Server;
@@ -19,7 +20,16 @@ namespace RH_Server
 
         static void TestCode()
         {
-            var x = Authentication.Authenticate("Jordy", "Sipkema", null);
+            //Implecit type-cast test!
+            JObject test1 = new LoginResponsePacket(
+                Statuscode.Status.Ok,
+                "Test1",
+                "Test2");
+
+            JObject test2 = new ResponsePacket(Statuscode.Status.InvalidUsernameOrPassword, "RESP-LOGIN");
+
+            Console.WriteLine(test1.ToString());
+            Console.WriteLine(test2.ToString());
             Console.ReadKey();
         }
 

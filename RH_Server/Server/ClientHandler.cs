@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Mallaca;
+﻿using Mallaca;
 using Mallaca.Network;
 using Mallaca.Network.Packet;
 using Mallaca.Network.Packet.Response;
@@ -178,7 +177,7 @@ namespace RH_Server.Server
 
             JObject returnJson;
             //Code to check user/pass here
-            if (Authentication.Authenticate(username, password, _sslStream))
+            if (Authentication.Authenticate(username, password, this))
             {
                 returnJson = new LoginResponsePacket(
                     Statuscode.Status.Ok,
@@ -189,12 +188,7 @@ namespace RH_Server.Server
             }
             else //If the code reaches this point, the authentification has failed.
             {
-                returnJson =
-                    new JObject(
-                        new JProperty("CMD", "RESP-LOGIN"),
-                        new JProperty("STATUS", Statuscode.GetCode(Statuscode.Status.InvalidUsernameOrPassword)),
-                        new JProperty("DESCRIPTION", Statuscode.GetDescription(Statuscode.Status.InvalidUsernameOrPassword))
-                        );
+                returnJson = new ResponsePacket(Statuscode.Status.InvalidUsernameOrPassword, "RESP-LOGIN");
             }
 
             //Send the result back to the client.
