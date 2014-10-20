@@ -45,10 +45,10 @@ namespace RH_APP.GUI
 
             var resp = p as LoginResponsePacket;
             Console.WriteLine(p.ToString());
-
+            
             if (resp != null && resp.Status == "200")
             {
-                this.Invoke((Action)(this.Hide));
+                //this.Invoke((Action)(this.Hide));
 
                 RH_APP.Classes.Settings.GetInstance().authToken = resp.AuthToken;
                 TCPController.OnPacketReceived -= LoginPacketResponse;
@@ -60,11 +60,22 @@ namespace RH_APP.GUI
                 }
                 else if (resp.Usertype.Equals("Client"))
                 {
-                    COM_Bike b = new COM_Bike(getCOMPort());
-                    var mainScreen = new MainScreen(false, b);
-                    mainScreen.Text = " Remote Healthcare - Client Edition";
-                    mainScreen.ShowDialog();
-                    //this.Close();
+
+                    if (checkCOMPort())
+                    {
+                        this.Invoke((Action)(this.Hide));
+                        COM_Bike b = new COM_Bike(getCOMPort());
+                        var mainScreen = new MainScreen(false, b);
+                        mainScreen.Text = " Remote Healthcare - Client Edition";
+                        mainScreen.ShowDialog();
+                        //this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("No connection with a bike, try again!");
+                    }
+
+                    
                 }
             }
             else
@@ -114,6 +125,16 @@ namespace RH_APP.GUI
             }
             return null;
           
+        }
+
+        private bool checkCOMPort()
+        {
+            String result = getCOMPort();
+            if (result != null)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

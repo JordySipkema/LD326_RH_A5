@@ -178,7 +178,7 @@ namespace RH_Server.Server
 
             JObject returnJson;
             //Code to check user/pass here
-            if (Authentication.Authenticate(username, password, _sslStream))
+            if (Authentication.Authenticate(username, password, this))
             {
                 returnJson = new LoginResponsePacket(
                     Statuscode.Status.Ok,

@@ -1,4 +1,5 @@
-﻿namespace Mallaca.Usertypes
+﻿using System;
+namespace Mallaca.Usertypes
 {
     public class Client : User
     {
@@ -22,9 +23,15 @@
             }
         }
 
-        public Client()
+        public Client(int id, string username, string password, string name, DateTime dob, string surname, string gender, int userType)
+            : base(id, username, password, name, dob, surname, gender) 
         { 
-        
+            
+        }
+
+        public Client()
+        {
+            
         }
     }
 }
