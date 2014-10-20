@@ -18,6 +18,10 @@ namespace RH_Server.Classes
             get { return _instance ?? (_instance = new Notifier()); }
         }
 
+        public bool ShouldNotify(Client client)
+        {
+            return GetListeners(client).Any();
+        }
 
         public bool Subscribe(Specialist specialist, Client client)
         {
