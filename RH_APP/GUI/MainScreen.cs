@@ -48,7 +48,7 @@ namespace RH_APP.GUI
             TCPController.OnPacketReceived += handleIncomingPackets;
             TCPController.Send(p.ToString());
 
-            updateGraph();
+            //updateGraph();
         }
 
         public MainScreen(bool showMenu)
@@ -66,7 +66,7 @@ namespace RH_APP.GUI
             TCPController.OnPacketReceived += handleIncomingPackets;
             TCPController.Send(p.ToString());
 
-            updateGraph();
+           // updateGraph();
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -136,11 +136,6 @@ namespace RH_APP.GUI
             }
         }
 
-        private void createConnectionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void label4_Click(object sender, EventArgs e)
         {
 
@@ -191,20 +186,10 @@ namespace RH_APP.GUI
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult dialog = dialog = MessageBox.Show("Are you sure you want to quit?", "Alert", MessageBoxButtons.YesNo);
-            if (dialog == DialogResult.Yes)
-            {
-                this.Close();
-                Application.Exit();
-            }
+            Application.Exit();
         }
 
-        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("© 23TI2A5 \n Kevin van de Akkerveken \n Farid Amali \n Engin Can \n George de Coo \n Gerjan Holsappel \n Jordy Sipkema");
-        }
-
-	        public void updateGUI(object sender, EventArgs args)
+	    public void updateGUI(object sender, EventArgs args)
         {
             if (_inTraining)
             {
