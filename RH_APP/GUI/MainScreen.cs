@@ -227,10 +227,18 @@ namespace RH_APP.GUI
         }
             public void updateGraph()
             {
+                try
+                {
+                    _graph.Series["SPEED"].Points.AddXY(_controller.LatestMeasurement.TIME, _controller.LatestMeasurement.SPEED / 10.0);
 
-                _graph.Series["SPEED"].Points.AddXY(_controller.LatestMeasurement.TIME, _controller.LatestMeasurement.SPEED / 10.0);
+                    _graph.Series["PULSE"].Points.AddXY(_controller.LatestMeasurement.TIME, _controller.LatestMeasurement.PULSE);
+                }
+                catch (NullReferenceException)
+                {
+                    //TODO 
+                    Console.WriteLine("Mainscreen.updateGraph(): Code werkt nog niet met specialist blijkbaar!");
+                }
 
-                _graph.Series["PULSE"].Points.AddXY(_controller.LatestMeasurement.TIME, _controller.LatestMeasurement.PULSE);
             }
 
             private void _quitButton_Click(object sender, EventArgs e)

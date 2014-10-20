@@ -18,21 +18,6 @@ namespace RH_Server
             RunServer();
         }
 
-        static void TestCode()
-        {
-            //Implecit type-cast test!
-            JObject test1 = new LoginResponsePacket(
-                Statuscode.Status.Ok,
-                "Test1",
-                "Test2");
-
-            JObject test2 = new ResponsePacket(Statuscode.Status.InvalidUsernameOrPassword, "RESP-LOGIN");
-
-            Console.WriteLine(test1.ToString());
-            Console.WriteLine(test2.ToString());
-            Console.ReadKey();
-        }
-
         static void RunServer()
         {
             Console.WriteLine("RH_Server initializing");
