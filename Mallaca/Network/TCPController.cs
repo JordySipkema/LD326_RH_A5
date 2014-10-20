@@ -97,22 +97,26 @@ namespace Mallaca.Network
             byte[] bytes = Packet.Packet.CreateByteData(data);
 
             //beginWrite is not thread safe.
-            Monitor.Enter(_sslStream);
+            //Monitor.Enter(_sslStream);
             try
             {
                 _sslStream.BeginWrite(bytes, 0, bytes.Length, SendCallback, _sslStream);
+                _sslStream.Flush();
+
+                Console.WriteLine("Data sent: " + data);
             }
             catch (NotSupportedException e)
             {
                 Console.WriteLine("Unable to write to socket: " + e.Message);
+                Thread.Sleep(1000);
+                Send(data);
             }
             finally
             {
-                Monitor.Exit(_sslStream);
+                //Monitor.Exit(_sslStream);
             }
 
-            _sslStream.Flush();
-            Console.WriteLine("Data sent: " + data);
+
         }
 
         private static void SendCallback(IAsyncResult ar)

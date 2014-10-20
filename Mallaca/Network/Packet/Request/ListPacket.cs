@@ -26,7 +26,7 @@ namespace Mallaca.Network.Packet.Request
         public override JObject ToJsonObject()
         {
             JObject json = base.ToJsonObject();
-            json.Add("dataType", dataType);
+            json.Add("dataType", dataType.ToLower());
             if (dataId > 0)
                 json.Add("dataId", dataId);
             return json;

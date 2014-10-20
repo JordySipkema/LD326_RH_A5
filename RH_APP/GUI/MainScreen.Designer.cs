@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createClientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -135,7 +135,6 @@
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
             this.helpToolStripMenuItem.Text = "Help";
-            this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -322,7 +321,7 @@
             // _sendButton
             // 
             this._sendButton.Location = new System.Drawing.Point(1051, 399);
-            this._sendButton.Margin = new System.Windows.Forms.Padding(4);
+            this._sendButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this._sendButton.Name = "_sendButton";
             this._sendButton.Size = new System.Drawing.Size(103, 26);
             this._sendButton.TabIndex = 34;
@@ -333,7 +332,7 @@
             // _textBox
             // 
             this._textBox.Location = new System.Drawing.Point(603, 400);
-            this._textBox.Margin = new System.Windows.Forms.Padding(4);
+            this._textBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this._textBox.Name = "_textBox";
             this._textBox.Size = new System.Drawing.Size(439, 22);
             this._textBox.TabIndex = 33;
@@ -342,7 +341,7 @@
             // _chatLogBox
             // 
             this._chatLogBox.Location = new System.Drawing.Point(601, 33);
-            this._chatLogBox.Margin = new System.Windows.Forms.Padding(4);
+            this._chatLogBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this._chatLogBox.Multiline = true;
             this._chatLogBox.Name = "_chatLogBox";
             this._chatLogBox.ReadOnly = true;
@@ -358,7 +357,7 @@
             0,
             0});
             this.numericUpDown1.Location = new System.Drawing.Point(45, 319);
-            this.numericUpDown1.Margin = new System.Windows.Forms.Padding(4);
+            this.numericUpDown1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             400,
             0,
@@ -392,33 +391,33 @@
             // 
             // _graph
             // 
-            chartArea4.Name = "ChartArea1";
-            this._graph.ChartAreas.Add(chartArea4);
+            chartArea1.Name = "ChartArea1";
+            this._graph.ChartAreas.Add(chartArea1);
             this._graph.Cursor = System.Windows.Forms.Cursors.Arrow;
             this._graph.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            legend4.Name = "Legend1";
-            this._graph.Legends.Add(legend4);
+            legend1.Name = "Legend1";
+            this._graph.Legends.Add(legend1);
             this._graph.Location = new System.Drawing.Point(45, 457);
-            this._graph.Margin = new System.Windows.Forms.Padding(4);
+            this._graph.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this._graph.Name = "_graph";
-            series7.ChartArea = "ChartArea1";
-            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series7.Legend = "Legend1";
-            series7.Name = "SPEED";
-            series7.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Time;
-            series8.ChartArea = "ChartArea1";
-            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series8.Legend = "Legend1";
-            series8.Name = "PULSE";
-            this._graph.Series.Add(series7);
-            this._graph.Series.Add(series8);
-            this._graph.Size = new System.Drawing.Size(846, 415);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "SPEED";
+            series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Time;
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series2.Legend = "Legend1";
+            series2.Name = "PULSE";
+            this._graph.Series.Add(series1);
+            this._graph.Series.Add(series2);
+            this._graph.Size = new System.Drawing.Size(845, 415);
             this._graph.TabIndex = 36;
             // 
             // _quitButton
             // 
             this._quitButton.Location = new System.Drawing.Point(989, 830);
-            this._quitButton.Margin = new System.Windows.Forms.Padding(4);
+            this._quitButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this._quitButton.Name = "_quitButton";
             this._quitButton.Size = new System.Drawing.Size(163, 42);
             this._quitButton.TabIndex = 37;
@@ -430,7 +429,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1176, 900);
+            this.ClientSize = new System.Drawing.Size(1176, 913);
             this.Controls.Add(this._quitButton);
             this.Controls.Add(this._graph);
             this.Controls.Add(this.setPowerLabel);
@@ -455,7 +454,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this._welcomeLabel);
             this.Controls.Add(this.menuStrip1);
-            this.Margin = new System.Windows.Forms.Padding(4);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "MainScreen";
             this.Text = "Remote Healthcare - Specialist Edition";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainScreen_FormClosing);

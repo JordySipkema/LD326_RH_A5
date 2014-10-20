@@ -180,11 +180,6 @@ namespace RH_APP.GUI
             
         }
 
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            Environment.Exit(0);
-        }
-
         private void _scrollBar_Scroll(object sender, EventArgs e)
         {
             int scale = _scrollBar.Maximum - _scrollBar.Value;
@@ -228,18 +223,18 @@ namespace RH_APP.GUI
             return false;
         }
 
-        private void _closeButton_Click(object sender, EventArgs e)
-        {
-            DialogResult dialog = dialog = MessageBox.Show("Are you sure you want to quit?", "Alert", MessageBoxButtons.YesNo);
-            if (dialog == DialogResult.Yes)
-            {
-                Environment.Exit(0);
-            }
-        }
-
         private void _printButton_Click(object sender, EventArgs e)
         {
             _graph.Printing.Print(true);
+        }
+
+        private void GraphResultUI_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            DialogResult dialog = dialog = MessageBox.Show("Are you sure you want to close the results?", "Alert", MessageBoxButtons.YesNo);
+            if (dialog == DialogResult.Yes)
+            {
+                this.Dispose();
+            }
         }
     }
 }
