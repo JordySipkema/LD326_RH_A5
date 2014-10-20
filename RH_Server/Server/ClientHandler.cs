@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Mallaca;
+﻿using Mallaca;
 using Mallaca.Network;
 using Mallaca.Network.Packet;
 using Mallaca.Network.Packet.Response;
@@ -19,7 +18,7 @@ using System.Threading;
 namespace RH_Server.Server
 {
     // ReSharper disable LocalizableElement
-    class ClientHandler
+    public class ClientHandler
     {
         private readonly byte[] _buffer = new byte[1024];
         private const int BufferSize = 1024;
@@ -155,7 +154,7 @@ namespace RH_Server.Server
             }
         }
 
-        private void Send(String s)
+        public void Send(String s)
         {
             //byte[] data = Encoding.UTF8.GetBytes(s.Length.ToString("0000") + s).ToArray();
 
@@ -163,7 +162,7 @@ namespace RH_Server.Server
             _sslStream.Flush();
         }
 
-        private void Send(Packet s)
+        private void Send(Object s)
         {
             Send(s.ToString());
         }
@@ -178,7 +177,7 @@ namespace RH_Server.Server
 
             JObject returnJson;
             //Code to check user/pass here
-            if (Authentication.Authenticate(username, password, _sslStream))
+            if (Authentication.Authenticate(username, password, this))
             {
                 returnJson = new LoginResponsePacket(
                     Statuscode.Status.Ok,
@@ -189,12 +188,7 @@ namespace RH_Server.Server
             }
             else //If the code reaches this point, the authentification has failed.
             {
-                returnJson =
-                    new JObject(
-                        new JProperty("CMD", "RESP-LOGIN"),
-                        new JProperty("STATUS", Statuscode.GetCode(Statuscode.Status.InvalidUsernameOrPassword)),
-                        new JProperty("DESCRIPTION", Statuscode.GetDescription(Statuscode.Status.InvalidUsernameOrPassword))
-                        );
+                returnJson = new ResponsePacket(Statuscode.Status.InvalidUsernameOrPassword, "RESP-LOGIN");
             }
 
             //Send the result back to the client.
@@ -233,19 +227,11 @@ namespace RH_Server.Server
         {
             var authToken = (string) json["AUTHTOKEN"];
             var username = (string) json["USERNAMEDESTINATION"];
-            //var message = (string) json["MESSAGE"];
 
-            //Check if the authToken is valid:
-            if (Authentication.Authenticate(authToken))
-            {
-                var s = Authentication.GetStream(username);
-                //TODO: Create and send json-object to the destination
-                //HINT: use: Stream s
-            }
-            else
-            {
-                Send(new ResponsePacket(Statuscode.Status.Unauthorized));
-            }
+            var s = Authentication.GetStream(username);
+            s.Send(json["MESSAGE"]);
+
+
         }
 
         public void HandleResponseChatPacket(JObject json)
