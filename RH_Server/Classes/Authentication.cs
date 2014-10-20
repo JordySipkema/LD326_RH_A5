@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Mallaca;
 using Mallaca.Usertypes;
@@ -41,7 +40,24 @@ namespace RH_Server.Classes
 
             user.AuthToken = hash;
 
-            //4. Add the user to the AuthUsers class.
+            //4. Remove the user if existing in the list.
+            var searchQuery =
+                from kvPair in AuthUsers
+                where kvPair.Key.Username == username
+                select kvPair.Key;
+
+            // Above query (searchQuery) is exactly the same as:
+            // var search2 = AuthUsers
+            //     .Where(kvPair => kvPair.Key.Username == username)
+            //     .Select(kvPair => kvPair.Key); 
+
+            foreach (var key in searchQuery)
+            {
+                ClientHandler tempClientHandler;
+                AuthUsers.TryRemove(key, out tempClientHandler);
+            }
+
+            //5. Add the user to the AuthUsers class.
             AuthUsers.GetOrAdd(user, handler);
 
             return true;

@@ -17,7 +17,6 @@ using System.Threading;
 
 namespace RH_Server.Server
 {
-    // ReSharper disable LocalizableElement
     public class ClientHandler
     {
         private readonly byte[] _buffer = new byte[1024];
@@ -76,7 +75,7 @@ namespace RH_Server.Server
                     }
                     catch (JsonReaderException)
                     {
-                        Console.WriteLine("Sending SyntaxError-packet to {0}", _tcpclient.Client.RemoteEndPoint);
+                        Console.WriteLine(Resources.ClientHandler_Sending_SyntaxError_packet_to, _tcpclient.Client.RemoteEndPoint);
                         Send(new ResponsePacket(Statuscode.Status.SyntaxError));
                     }
 
@@ -87,7 +86,7 @@ namespace RH_Server.Server
                     JToken authToken = null;
                     if (!json.TryGetValue("CMD", out cmd))
                     {
-                        Console.WriteLine("Got JSON that does not define a command.");
+                        Console.WriteLine(Resources.ClientHandler_Got_JSON_that_does_not_define_a_command);
                         continue;
                     }
 
@@ -96,12 +95,12 @@ namespace RH_Server.Server
 
                     if (packetType != "login" && !json.TryGetValue("AUTHTOKEN", out authToken))
                     {
-                        Console.WriteLine("No authtoken found in packet.");
+                        Console.WriteLine(Resources.ClientHandler_No_authtoken_found);
                         continue;
                     }
                     if (packetType != "login" && !Authentication.Authenticate(authToken.ToString()))
                     {
-                        Console.WriteLine("Got a packet with an invalid authentication token.");
+                        Console.WriteLine(Resources.ClientHandler_Recieved_Packet_Invalid_AuthToken);
                         continue;
                     }
 
@@ -130,7 +129,7 @@ namespace RH_Server.Server
                             break;
 
                         default:
-                            Console.WriteLine("Unknown packet");
+                            Console.WriteLine(Resources.ClientHandler_Unknown_packet);
                             break;
                     }
 
@@ -142,7 +141,7 @@ namespace RH_Server.Server
                 }
                 catch (SocketException e)
                 {
-                    Console.WriteLine("Client with IP-address: {0} has been disconnected",
+                    Console.WriteLine(Resources.ClientHandler_Client_Disconnected,
                         _tcpclient.Client.LocalEndPoint);
                     Console.WriteLine(e.Message);
                 }
@@ -170,7 +169,7 @@ namespace RH_Server.Server
 
         private void HandleLoginPacket(JObject json)
         {
-            Console.WriteLine("HandleLoginPacket:");
+            Console.WriteLine(Resources.ClientHandler_Debug_HandleLoginPacket);
             //Recieve the username and password from json.
             var username = json["username"].ToString();
             var password = json["password"].ToString();
@@ -206,7 +205,7 @@ namespace RH_Server.Server
                 ))
             {
                 _measurementsList.Add(m);
-                Console.WriteLine("Recieved: \n {0}", json["measurements"]);
+                Console.WriteLine(Resources.ClientHandler_HandlePushPacked_Recieved, json["measurements"]);
             }
 
         }
@@ -249,9 +248,9 @@ namespace RH_Server.Server
                 case "user":
                     JToken userid;
                     json.TryGetValue("dataID", out userid);
-                    int userID;
-                    int.TryParse((string)userid,out userID);
-                    List<User> useristList = new List<User> {_dbConnect.getUser(userID)};
+                    int userId;
+                    int.TryParse((string)userid,out userId);
+                    var useristList = new List<User> {_dbConnect.getUser(userId)};
                     resp = new PullUsersResponsePacket(useristList, "user");
                     break;
 
@@ -271,7 +270,7 @@ namespace RH_Server.Server
                     return;
                     break;
                 default:
-                    Console.WriteLine("Non-implemented data type: " + json["dataType"].ToString());
+                    Console.WriteLine(Resources.ClientHandler_HandlePullPacket_Non_implemented_data_type + json["dataType"].ToString());
                     return;
             }
 
@@ -297,7 +296,7 @@ namespace RH_Server.Server
             var i = measurements.Count;
             var m = JArray.FromObject(measurements);
 
-            PullResponsePacket<Measurement> response = new PullResponsePacket<Measurement>(measurements,"measurements");
+            var response = new PullResponsePacket<Measurement>(measurements,"measurements");
 
             //Send the result back to the specialist.
             Console.WriteLine(response.ToString());
@@ -321,5 +320,4 @@ namespace RH_Server.Server
             Send(returnJson.ToString());
         }
     }
-    // ReSharper restore LocalizableElement
 }

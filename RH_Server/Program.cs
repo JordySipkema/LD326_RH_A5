@@ -2,7 +2,7 @@
 using Mallaca.Network;
 using Mallaca.Network.Packet.Response;
 using Newtonsoft.Json.Linq;
-using RH_Server.Classes;
+using RH_Server.Properties;
 using RH_Server.Server;
 using System;
 using System.Net;
@@ -35,7 +35,7 @@ namespace RH_Server
 
         static void RunServer()
         {
-            Console.WriteLine("RH_Server initializing");
+            Console.WriteLine(RH_Server_Resources.RH_Server_initializing);
             var serverListener = new TcpListener(IPAddress.Any, NetworkSettings.ServerPort); //Its over 9000!!!
 
             //Code for getting server IP
@@ -43,14 +43,14 @@ namespace RH_Server
                 .AddressList.First(o => o.AddressFamily == AddressFamily.InterNetwork)
                 .ToString();
             //Display server IP:
-            Console.WriteLine("RH_Server IP: {0}", serverip);
+            Console.WriteLine(RH_Server_Resources.Message_RH_Server_IP, serverip);
 
-            Console.WriteLine("RH_Server READY! Now listening.");
+            Console.WriteLine(RH_Server_Resources.RH_Server_READY);
             serverListener.Start();
             while (true)
             {
                 var tcpclient = serverListener.AcceptTcpClient();
-                Console.WriteLine("TCP Client accepted");
+                Console.WriteLine(RH_Server_Resources.RH_Server_TCP_Client_accepted);
                 var client = new ClientHandler(tcpclient);
             }
         }
