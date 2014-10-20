@@ -28,10 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createClientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -39,6 +35,8 @@
             this.connectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadClientsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.trainingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createConnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._welcomeLabel = new System.Windows.Forms.Label();
@@ -60,19 +58,14 @@
             this._sendButton = new System.Windows.Forms.Button();
             this._textBox = new System.Windows.Forms.TextBox();
             this._chatLogBox = new System.Windows.Forms.TextBox();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.setPowerLabel = new System.Windows.Forms.Label();
-            this._graph = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this._quitButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this._graph)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.trainingToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -112,21 +105,33 @@
             this.connectionToolStripMenuItem.Name = "connectionToolStripMenuItem";
             this.connectionToolStripMenuItem.Size = new System.Drawing.Size(153, 24);
             this.connectionToolStripMenuItem.Text = "Connection";
-            this.connectionToolStripMenuItem.Click += new System.EventHandler(this.connectionToolStripMenuItem_Click);
             // 
             // loadClientsToolStripMenuItem
             // 
             this.loadClientsToolStripMenuItem.Name = "loadClientsToolStripMenuItem";
             this.loadClientsToolStripMenuItem.Size = new System.Drawing.Size(161, 24);
             this.loadClientsToolStripMenuItem.Text = "Display data";
-            this.loadClientsToolStripMenuItem.Click += new System.EventHandler(this.loadClientsToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(161, 24);
             this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // trainingToolStripMenuItem
+            // 
+            this.trainingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createConnectionToolStripMenuItem});
+            this.trainingToolStripMenuItem.Name = "trainingToolStripMenuItem";
+            this.trainingToolStripMenuItem.Size = new System.Drawing.Size(75, 24);
+            this.trainingToolStripMenuItem.Text = "Training";
+            // 
+            // createConnectionToolStripMenuItem
+            // 
+            this.createConnectionToolStripMenuItem.Name = "createConnectionToolStripMenuItem";
+            this.createConnectionToolStripMenuItem.Size = new System.Drawing.Size(200, 24);
+            this.createConnectionToolStripMenuItem.Text = "Create Connection";
+            this.createConnectionToolStripMenuItem.Click += new System.EventHandler(this.createConnectionToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -135,7 +140,6 @@
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
             this.helpToolStripMenuItem.Text = "Help";
-            this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -322,7 +326,7 @@
             // _sendButton
             // 
             this._sendButton.Location = new System.Drawing.Point(1051, 399);
-            this._sendButton.Margin = new System.Windows.Forms.Padding(4);
+            this._sendButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this._sendButton.Name = "_sendButton";
             this._sendButton.Size = new System.Drawing.Size(103, 26);
             this._sendButton.TabIndex = 34;
@@ -333,7 +337,7 @@
             // _textBox
             // 
             this._textBox.Location = new System.Drawing.Point(603, 400);
-            this._textBox.Margin = new System.Windows.Forms.Padding(4);
+            this._textBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this._textBox.Name = "_textBox";
             this._textBox.Size = new System.Drawing.Size(439, 22);
             this._textBox.TabIndex = 33;
@@ -342,7 +346,7 @@
             // _chatLogBox
             // 
             this._chatLogBox.Location = new System.Drawing.Point(601, 33);
-            this._chatLogBox.Margin = new System.Windows.Forms.Padding(4);
+            this._chatLogBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this._chatLogBox.Multiline = true;
             this._chatLogBox.Name = "_chatLogBox";
             this._chatLogBox.ReadOnly = true;
@@ -350,91 +354,11 @@
             this._chatLogBox.Size = new System.Drawing.Size(551, 357);
             this._chatLogBox.TabIndex = 32;
             // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Location = new System.Drawing.Point(45, 319);
-            this.numericUpDown1.Margin = new System.Windows.Forms.Padding(4);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
-            400,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Minimum = new decimal(new int[] {
-            25,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(84, 22);
-            this.numericUpDown1.TabIndex = 15;
-            this.numericUpDown1.Value = new decimal(new int[] {
-            25,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Click += new System.EventHandler(this.numericUpDown1_Click);
-            // 
-            // setPowerLabel
-            // 
-            this.setPowerLabel.AutoSize = true;
-            this.setPowerLabel.Location = new System.Drawing.Point(139, 326);
-            this.setPowerLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.setPowerLabel.Name = "setPowerLabel";
-            this.setPowerLabel.Size = new System.Drawing.Size(91, 17);
-            this.setPowerLabel.TabIndex = 35;
-            this.setPowerLabel.Text = "SET POWER";
-            this.setPowerLabel.Click += new System.EventHandler(this.label4_Click);
-            // 
-            // _graph
-            // 
-            chartArea4.Name = "ChartArea1";
-            this._graph.ChartAreas.Add(chartArea4);
-            this._graph.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this._graph.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            legend4.Name = "Legend1";
-            this._graph.Legends.Add(legend4);
-            this._graph.Location = new System.Drawing.Point(45, 457);
-            this._graph.Margin = new System.Windows.Forms.Padding(4);
-            this._graph.Name = "_graph";
-            series7.ChartArea = "ChartArea1";
-            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series7.Legend = "Legend1";
-            series7.Name = "SPEED";
-            series7.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Time;
-            series8.ChartArea = "ChartArea1";
-            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series8.Legend = "Legend1";
-            series8.Name = "PULSE";
-            this._graph.Series.Add(series7);
-            this._graph.Series.Add(series8);
-            this._graph.Size = new System.Drawing.Size(846, 415);
-            this._graph.TabIndex = 36;
-            // 
-            // _quitButton
-            // 
-            this._quitButton.Location = new System.Drawing.Point(989, 830);
-            this._quitButton.Margin = new System.Windows.Forms.Padding(4);
-            this._quitButton.Name = "_quitButton";
-            this._quitButton.Size = new System.Drawing.Size(163, 42);
-            this._quitButton.TabIndex = 37;
-            this._quitButton.Text = "Stop Training";
-            this._quitButton.UseVisualStyleBackColor = true;
-            this._quitButton.Click += new System.EventHandler(this._quitButton_Click);
-            // 
             // MainScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1176, 900);
-            this.Controls.Add(this._quitButton);
-            this.Controls.Add(this._graph);
-            this.Controls.Add(this.setPowerLabel);
-            this.Controls.Add(this.numericUpDown1);
+            this.ClientSize = new System.Drawing.Size(1176, 449);
             this.Controls.Add(this._sendButton);
             this.Controls.Add(this._textBox);
             this.Controls.Add(this._chatLogBox);
@@ -455,15 +379,13 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this._welcomeLabel);
             this.Controls.Add(this.menuStrip1);
-            this.Margin = new System.Windows.Forms.Padding(4);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "MainScreen";
             this.Text = "Remote Healthcare - Specialist Edition";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainScreen_FormClosing);
             this.Load += new System.EventHandler(this.MainScreen_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this._graph)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -478,6 +400,7 @@
         private System.Windows.Forms.ToolStripMenuItem loadClientsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.Label _welcomeLabel;
+        private System.Windows.Forms.ToolStripMenuItem trainingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem userToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem connectionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
@@ -499,10 +422,7 @@
         private System.Windows.Forms.Button _sendButton;
         private System.Windows.Forms.TextBox _textBox;
         private System.Windows.Forms.TextBox _chatLogBox;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.Label setPowerLabel;
-        private System.Windows.Forms.DataVisualization.Charting.Chart _graph;
-        private System.Windows.Forms.Button _quitButton;
+        private System.Windows.Forms.ToolStripMenuItem createConnectionToolStripMenuItem;
 
     }
 }

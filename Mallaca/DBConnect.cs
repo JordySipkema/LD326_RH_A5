@@ -323,7 +323,7 @@ namespace Mallaca
                 if (user.Id == null)
                 {
                     userQuery = string.Format("INSERT INTO {6}.users(Username, dateOfBirth, surname, gender, name, user_type) VALUES('{0}','{1}','{2}','{3}','{4}','{5}')",
-                         user.Username, user.DateOfBirth.ToString("yyyy-mm-dd"), user.Surname, user.Gender, user.Name,((int) user.UserType), _database);
+                         user.Username, user.DateOfBirth.ToString("yyyy-MM-dd"), user.Surname, user.Gender, user.Name,((int) user.UserType), _database);
                     _selectCommand = new MySqlCommand(userQuery, Connection);
                     _selectCommand.ExecuteNonQuery();
                     user.Id = getLastInsertId(); 

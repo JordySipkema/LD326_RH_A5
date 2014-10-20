@@ -60,24 +60,36 @@ namespace RH_APP.GUI
 
             if (resp.Status == "200")
             {
-                this.Invoke((Action)(this.Hide));
+                //this.Invoke((Action)(this.Hide));
 
                 RH_APP.Classes.Settings.GetInstance().authToken = resp.AuthToken;
                 RH_APP.Classes.Settings.GetInstance().CurrentUser = resp.User;
                 if (resp.User.IsSpecialist || resp.User.IsAdministrator)
                 {
                     var mainScreen = new MainScreen(true);
+                    TCPController.OnPacketReceived -= LoginPacketResponse;
                     mainScreen.ShowDialog();
                 }
                 else if (resp.User.IsClient)
                 {
-                    COM_Bike b = new COM_Bike(getCOMPort());
-                    var mainScreen = new MainScreen(false, b);
-                    mainScreen.Text = " Remote Healthcare - Client Edition";
-                    mainScreen.ShowDialog();
-                    //this.Close();
+
+                    if (checkCOMPort())
+                    {
+                        this.Hide();
+                        COM_Bike b = new COM_Bike(getCOMPort());
+                        var mainScreen = new MainScreen(false, b);
+                        TCPController.OnPacketReceived -= LoginPacketResponse;
+                        mainScreen.Text = " Remote Healthcare - Client Edition";
+                        mainScreen.ShowDialog();
+                        //this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("No connection with a bike, try again!");
+                    }
+
+                    
                 }
-                TCPController.OnPacketReceived -= LoginPacketResponse;
             }
             else
             {
@@ -120,12 +132,24 @@ namespace RH_APP.GUI
                 var output = serial.ReadLine();
                 if (!String.IsNullOrEmpty(output))
                 {
+                    serial.WriteLine("RS");
+                    Thread.Sleep(10);
                     serial.Close();
                     return i;
                 }
             }
             return null;
           
+        }
+
+        private bool checkCOMPort()
+        {
+            String result = getCOMPort();
+            if (result != null)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

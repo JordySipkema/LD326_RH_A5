@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mallaca;
+using Mallaca.Usertypes;
+
 namespace RH_APP.GUI
     //Test
 {
@@ -43,22 +45,54 @@ namespace RH_APP.GUI
 
             bool succes;
 
-            //TODO create User with given data, save into db
-            //if (clientRadioButton.Checked)
-            //    succes = _connection.SaveClient(_nameBox.Text, _surnameBox.Text, Usernamebox.Text, passwordBox.Text,  gender, dateOfBirthPicker.Value, Decimal.Parse(_lengthBox.Text), Decimal.Parse(_weightBox.Text));
-            //else
-            //    succes = _connection.saveSpecialist(_nameBox.Text, _surnameBox.Text, gender, Usernamebox.Text, passwordBox.Text, dateOfBirthPicker.Value);
+            //TODO create user with given data, save into db
+            if (clientRadioButton.Checked)
+            {
+
+                Client client = new Client()
+                {
+
+                    AuthToken = "",
+                    DateOfBirth = dateOfBirthPicker.Value,
+                    Gender = gender,
+                    Weight = Decimal.Parse(_weightBox.Text),
+                    Lenght = Decimal.Parse(_lengthBox.Text),
+                    Name = _nameBox.Text,
+                    Surname = _surnameBox.Text,
+                    Username = Usernamebox.Text,
+                    PasswordToBeSaved = passwordBox.Text
 
 
-            //if (succes)
-            //{
-            //    MessageBox.Show("Success: the User has been added.");
-            //    this.Close();
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Could not add the User.");
-            //}
+                };
+
+                succes = _connection.saveUser(client);
+            }
+            else
+            {
+
+                Specialist specialist = new Specialist()
+                {
+                    AuthToken = "",
+                    DateOfBirth = dateOfBirthPicker.Value,
+                    Name = _nameBox.Text,
+                    Gender = gender,
+                    PasswordToBeSaved = passwordBox.Text,
+                    Username = Usernamebox.Text,
+                    Surname = _surnameBox.Text
+                };
+
+                succes = _connection.saveUser(specialist);
+            }
+            
+            if (succes)
+            {
+                MessageBox.Show("Success: the user has been added.");
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Could not add the user.");
+            }
 
         }
 

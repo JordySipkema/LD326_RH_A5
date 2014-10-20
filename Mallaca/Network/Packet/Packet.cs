@@ -100,5 +100,10 @@ namespace Mallaca.Network.Packet
         }
 
         public abstract JObject ToJsonObject();
+
+        public static implicit operator JObject(Packet value)
+        {
+            return value.ToJsonObject();
+        }
     }
 }
