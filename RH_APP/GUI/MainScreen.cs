@@ -28,7 +28,7 @@ namespace RH_APP.GUI
         private readonly RH_Controller _controller; 
         private bool _inTraining = true;
 
-        public MainScreen(Boolean showMenu, IBike b)
+        public MainScreen(Boolean showSpecialistItems, IBike b)
         {
 
             _controller = new RH_Controller(b);
@@ -36,7 +36,7 @@ namespace RH_APP.GUI
             
             InitializeComponent();
 
-            if (!showMenu)
+            if (!showSpecialistItems)
             {
                 menuStrip1.Visible = false;
                 numericUpDown1.Visible = false;
