@@ -4,6 +4,7 @@ using Mallaca.Network.Packet;
 using Mallaca.Network.Packet.Request;
 using Mallaca.Network.Packet.Response;
 using Mallaca.Usertypes;
+using Newtonsoft.Json.Linq;
 using RH_APP.Classes;
 using RH_APP.Controller;
 using System;
@@ -95,45 +96,33 @@ namespace RH_APP.GUI
 
         private void _sendButton_Click(object sender, EventArgs e)
         {
-            if (_textBox.Text == "")
-            {
-                MessageBox.Show("No message has been sent");
-            }
+            if ( String.IsNullOrWhiteSpace( _textBox.Text ))
+                return;
             else
             {
 
                 String message = _textBox.Text;
 
-                _chatLogBox.AppendText("You say: " + message);
-                _chatLogBox.AppendText(Environment.NewLine);
-
-                Chat_Controller.SendMessage(message);
-
+                addNewMessage(Settings.GetInstance().CurrentUser.Fullname, message);
+                JObject json = new ChatPacket(message, "otto", Settings.GetInstance().authToken).ToJsonObject();
+                TCPController.Send(json.ToString());
                 _textBox.Text = "";
             }
+        }
+
+        private void addNewMessage(string name, string message)
+        {
+            _chatLogBox.AppendText(name + ": " + message);
+            _chatLogBox.AppendText(Environment.NewLine);
         }
 
         private void _textBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)13)
             {
-                if (_textBox.Text == "")
-                {
-                    MessageBox.Show("No message has been sent");
-                }
-                else
-                {
-
-                    String message = _textBox.Text;
-
-                    _chatLogBox.AppendText("You say: " + message);
-                    _chatLogBox.AppendText(Environment.NewLine);
-
-                    Chat_Controller.SendMessage(message);
-
-                    _textBox.Text = "";
-                }
+                _sendButton_Click(this, EventArgs.Empty);
             }
+            
         }
 
         private void label4_Click(object sender, EventArgs e)
@@ -155,13 +144,23 @@ namespace RH_APP.GUI
         private void handleIncomingPackets(Packet p)
         {
             if (this.InvokeRequired)
+            {
                 this.Invoke((new Action(() => handleIncomingPackets(p))));
+                return;
+            }
+
             if (p is PullResponsePacket<User>)
             {
                 PullResponsePacket<User> response = p as PullResponsePacket<User>;
 
                 if (response.DataType == "connected_clients")
                     connectedClients = response.List;
+            }
+            else if (p is ChatPacket)
+            {
+                ChatPacket chat = p as ChatPacket;
+                addNewMessage(chat.UsernameDestination, chat.Message);
+
             }
         }
 
@@ -213,10 +212,18 @@ namespace RH_APP.GUI
         }
             public void updateGraph()
             {
+                try
+                {
+                    _graph.Series["SPEED"].Points.AddXY(_controller.LatestMeasurement.TIME, _controller.LatestMeasurement.SPEED / 10.0);
 
-                _graph.Series["SPEED"].Points.AddXY(_controller.LatestMeasurement.TIME, _controller.LatestMeasurement.SPEED / 10.0);
+                    _graph.Series["PULSE"].Points.AddXY(_controller.LatestMeasurement.TIME, _controller.LatestMeasurement.PULSE);
+                }
+                catch (NullReferenceException)
+                {
+                    //TODO 
+                    Console.WriteLine("Mainscreen.updateGraph(): Code werkt nog niet met specialist blijkbaar!");
+                }
 
-                _graph.Series["PULSE"].Points.AddXY(_controller.LatestMeasurement.TIME, _controller.LatestMeasurement.PULSE);
             }
 
             private void _quitButton_Click(object sender, EventArgs e)

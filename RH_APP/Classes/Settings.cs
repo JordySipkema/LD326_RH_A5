@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mallaca.Usertypes;
 
 namespace RH_APP.Classes
 {
@@ -10,6 +11,7 @@ namespace RH_APP.Classes
     {
         private static Settings settings;
 
+        public User CurrentUser { get; set; }
         public string authToken { get; set; }
 
         private Settings()

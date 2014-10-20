@@ -22,7 +22,7 @@ namespace Mallaca.Network.Packet.Response
 
         public PullResponsePacket(JObject json, bool dealWithContents = true) : base (json)
         {
-            DataType = json["dataType"].ToString();
+            DataType = json["dataType"].ToString().ToLower();
             if (!dealWithContents)
                 return;
             List = new List<T>();

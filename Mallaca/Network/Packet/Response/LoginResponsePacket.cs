@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net.Configuration;
+using Mallaca.Usertypes;
 using Newtonsoft.Json.Linq;
 
 namespace Mallaca.Network.Packet.Response
@@ -7,20 +9,20 @@ namespace Mallaca.Network.Packet.Response
     {
         public const string LoginRcmd = "RESP-LOGIN";
 
-        public string Usertype { get; set; }
         public string AuthToken { get; set; }
+        public User User;
 
         #region Constructors
-        public LoginResponsePacket(Statuscode.Status status, String usertype, String authtoken)
+        public LoginResponsePacket(Statuscode.Status status, String authtoken, User u)
             : base(status, LoginRcmd)
         {
-            Initialize(usertype, authtoken);
+            Initialize(authtoken, u);
         }
 
-        public LoginResponsePacket(String status, String description, String usertype, String authtoken) 
+        public LoginResponsePacket(String status, String description, User u, String authtoken) 
             : base(status, description, LoginRcmd)
         {
-            Initialize(usertype, authtoken);
+            Initialize(authtoken, u);
         }
 
         public LoginResponsePacket(JObject json) : base(json)
@@ -29,27 +31,42 @@ namespace Mallaca.Network.Packet.Response
                 throw new InvalidOperationException("Wrong command type.");
 
             JToken token;
-            JToken userType;
+            JToken user;
+            json.TryGetValue("User", out user);
+            if(user == null)
+                throw new InvalidOperationException("No user defined");
+            int type = (int) user.Value<int>("UserType");
+            if (type == 0)
+                User = user.ToObject<Client>();
+            else if (type == 1)
+                User = user.ToObject<Specialist>();
+            else if (type == 2)
+                User = user.ToObject<Administrator>();
+            else if (type == 0)
+                User = user.ToObject<User>();
+                
 
-            Usertype = json.TryGetValue("USERTYPE", out userType) ? userType.ToString() : null;
+            
+
             AuthToken = json.TryGetValue("AUTHTOKEN", out token) ? token.ToString() : null;
+            string test = "";
         }
         #endregion
 
         #region Initializers
-        private void Initialize(String usertype, String authtoken)
+        private void Initialize(String authtoken, User user)
         {
-            Usertype = usertype;
+            User = user;
             AuthToken = authtoken;
+            User = user;
         }
         #endregion
 
         public override JObject ToJsonObject()
         {
             var returnJson = base.ToJsonObject();
-            returnJson.Add("USERTYPE", Usertype);
             returnJson.Add("AUTHTOKEN", AuthToken);
-
+            returnJson.Add("User", JObject.FromObject(User));
             return returnJson;
 
         }
