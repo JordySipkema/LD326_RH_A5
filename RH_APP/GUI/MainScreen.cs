@@ -24,7 +24,9 @@ namespace RH_APP.GUI
     {
         private Chat_Controller _chatController;
         private List<User> connectedClients = new List<User>();
-        private readonly RH_Controller _controller;
+        private readonly RH_Controller _controller; 
+        private bool _inTraining = true;
+
         public MainScreen(Boolean showMenu, IBike b)
         {
 
@@ -45,6 +47,8 @@ namespace RH_APP.GUI
             ListPacket p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
             TCPController.OnPacketReceived += handleIncomingPackets;
             TCPController.Send(p.ToString());
+
+            updateGraph();
         }
 
         public MainScreen(bool showMenu)
@@ -61,6 +65,8 @@ namespace RH_APP.GUI
             ListPacket p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
             TCPController.OnPacketReceived += handleIncomingPackets;
             TCPController.Send(p.ToString());
+
+            updateGraph();
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -200,6 +206,8 @@ namespace RH_APP.GUI
 
 	        public void updateGUI(object sender, EventArgs args)
         {
+            if (_inTraining)
+            {
                 dataRPM.Text = _controller.LatestMeasurement.RPM + "";
                 dataSPEED.Text = String.Format("{0:0.0}", _controller.LatestMeasurement.SPEED / 10.0);
                 dataDISTANCE.Text = String.Format("{0:0.00}", _controller.LatestMeasurement.DISTANCE / 10.0);
@@ -209,12 +217,38 @@ namespace RH_APP.GUI
                 dataTIME.Text = _controller.LatestMeasurement.TIME;
                 dataPULSE.Text = _controller.LatestMeasurement.PULSE + "";
 
+                updateGraph();
+            }
+
                 //if (!_writeToFile) return;
                 //var protoLine = _controller.LatestMeasurement.toProtocolString();
                 //_writer.WriteLine(protoLine);
      
 
         }
+            public void updateGraph()
+            {
+
+                _graph.Series["SPEED"].Points.AddXY(_controller.LatestMeasurement.TIME, _controller.LatestMeasurement.SPEED / 10.0);
+
+                _graph.Series["PULSE"].Points.AddXY(_controller.LatestMeasurement.TIME, _controller.LatestMeasurement.PULSE);
+            }
+
+            private void _quitButton_Click(object sender, EventArgs e)
+            {
+                DialogResult dialog /*= dialog*/ = MessageBox.Show("Are you sure you want to stop the training?", "Alert", MessageBoxButtons.YesNo);
+                if (dialog == DialogResult.Yes)
+                {
+                    //this.Hide();            
+
+                    _inTraining = false;
+                    
+                    GraphResultUI resultUI = new GraphResultUI(_controller.GetList());
+
+                    resultUI.updateGraph();
+                    resultUI.Show();
+                }
+            }
 
     }
 }
