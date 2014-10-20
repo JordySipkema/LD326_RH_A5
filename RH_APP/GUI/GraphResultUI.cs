@@ -49,10 +49,10 @@ namespace RH_APP.GUI
 
         public void updateGraph()
         {
-     
 
-         //   _graph.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
-           // _graph.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
+
+            //_graph.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
+            //_graph.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
 
             _graph.ChartAreas[0].CursorX.AutoScroll = true;
         //    _graph.ChartAreas[0].CursorY.AutoScroll = true;

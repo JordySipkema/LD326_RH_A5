@@ -108,6 +108,8 @@ namespace RH_APP.GUI
                 var output = serial.ReadLine();
                 if (!String.IsNullOrEmpty(output))
                 {
+                    serial.WriteLine("RS");
+                    Thread.Sleep(10);
                     serial.Close();
                     return i;
                 }
@@ -115,5 +117,6 @@ namespace RH_APP.GUI
             return null;
           
         }
+
     }
 }
