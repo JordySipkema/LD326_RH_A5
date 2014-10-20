@@ -5,15 +5,16 @@ using System.IO;
 using System.Linq;
 using Mallaca;
 using Mallaca.Usertypes;
+using RH_Server.Server;
 
 namespace RH_Server.Classes
 {
     public static class Authentication
     {
         //ConcurrentDictionary to enhance thread safety.
-        private static readonly ConcurrentDictionary<User, Stream> AuthUsers = new ConcurrentDictionary<User, Stream>();
+        private static readonly ConcurrentDictionary<User, ClientHandler> AuthUsers = new ConcurrentDictionary<User, ClientHandler>();
 
-        public static Boolean Authenticate(String username, String passhash, Stream socketStream)
+        public static Boolean Authenticate(String username, String passhash, ClientHandler handler)
         {
             //check that user and passhash are valid.
             var database = new DBConnect();
@@ -41,7 +42,7 @@ namespace RH_Server.Classes
             user.AuthToken = hash;
 
             //4. Add the user to the AuthUsers class.
-            AuthUsers.GetOrAdd(user, socketStream);
+            AuthUsers.GetOrAdd(user, handler);
 
             return true;
         }
@@ -56,12 +57,12 @@ namespace RH_Server.Classes
             var users = AuthUsers.Keys.Where(user => user.AuthToken == authToken);
             foreach (var user in users)
             {
-                Stream s;
+                ClientHandler s;
                 AuthUsers.TryRemove(user, out s);
             }
         }
 
-        public static Stream GetStream(String username)
+        public static ClientHandler GetStream(String username)
         {
             return AuthUsers.First(x => x.Key.Username == username).Value;
         }
