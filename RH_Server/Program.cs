@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Mallaca;
 using Mallaca.Network;
+using Mallaca.Network.Packet.Request;
 using Mallaca.Network.Packet.Response;
 using Newtonsoft.Json.Linq;
 using RH_Server.Properties;
@@ -14,7 +17,6 @@ namespace RH_Server
     {
         static void Main()
         {
-            //TestCode();
             RunServer();
         }
 

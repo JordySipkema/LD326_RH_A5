@@ -226,9 +226,9 @@ namespace RH_Server.Server
 
         public void HandleChatPacket(JObject json)
         {
-            ChatPacket p = new ChatPacket(json);
+            var p = new ChatPacket(json);
             var s = Authentication.GetStream(p.UsernameDestination);
-            ChatPacket newPacket = new ChatPacket(p.Message, currentUser.Fullname, "");
+            var newPacket = new ChatPacket(p.Message, currentUser.Username, "");
             s.Send(newPacket.ToString());
 
 

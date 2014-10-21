@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Mallaca.Network.Packet;
 using Mallaca.Usertypes;
 
 namespace RH_Server.Classes
@@ -55,11 +56,10 @@ namespace RH_Server.Classes
                 where s.Key.Username == specialist.Username
                 select s.Key).ToList();
 
-            if (resultList.Any())
-            {
-                List<Client> x;
-                _subscribers.TryRemove(resultList.First(), out x);
-            }
+            if (!resultList.Any()) return false;
+
+            List<Client> x;
+            return _subscribers.TryRemove(resultList.First(), out x);
         }
 
         private Tuple<Specialist, List<Client>> GetListBySpecialist(Specialist specialist)
