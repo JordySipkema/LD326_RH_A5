@@ -129,6 +129,10 @@ namespace RH_Server.Server
                         case "lsu":
                             HandleLsuPacket(json);
                             break;
+                        case "Subscr":
+                            HandleSubscribePacket(json);
+                            break;
+                            
 
                         default:
                             Console.WriteLine(Resources.ClientHandler_Unknown_packet);
@@ -163,9 +167,14 @@ namespace RH_Server.Server
             _sslStream.Flush();
         }
 
-        private void Send(Object s)
+        //private void Send(Object s)
+        //{
+        //    Send(s.ToString());
+        //}
+
+        private void Send(Packet p)
         {
-            Send(s.ToString());
+            Send(p.ToString());
         }
 
 
@@ -320,6 +329,28 @@ namespace RH_Server.Server
             //Send the result back to the specialist.
             Console.WriteLine(returnJson.ToString());
             Send(returnJson.ToString());
+        }
+
+        public void HandleSubscribePacket(JObject json)
+        {
+            var notifier = Notifier.Instance;
+            var packet = SubscribePacket.GetSubscribePacket(json);
+
+            if (packet == null)
+            {
+                Send(new ResponsePacket(Statuscode.Status.SyntaxError, "resp-subscr"));
+                return;
+            }
+
+            var specialist = Authentication.GetUserByAuthToken(packet.AuthToken) as Specialist;
+            var client = Authentication.GetUser(packet.Client) as Client;
+
+            var success = packet.Subscribe ? notifier.Subscribe(specialist, client) : notifier.Unsubscribe(specialist, client);
+
+            Console.WriteLine("Subscribepacket success = " + success);
+
+            Send(new ResponsePacket(Statuscode.Status.Ok, "resp-subscr"));
+
         }
     }
 }

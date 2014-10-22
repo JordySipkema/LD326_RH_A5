@@ -80,21 +80,27 @@ namespace RH_Server.Classes
 
         public static ClientHandler GetStream(String username)
         {
-            return AuthUsers.First(x => x.Key.Username == username).Value;
+            //return AuthUsers.First(x => x.Key.Username == username).Value;
+            return AuthUsers.Where(user => user.Key.Username == username).Select(user => user.Value).FirstOrDefault();
         }
 
         public static User GetUser(String username)
         {
-            return AuthUsers.First(x => x.Key.Username == username).Key;
+            return AuthUsers.Where(user => user.Key.Username == username).Select(user => user.Key).FirstOrDefault();
+        }
+
+        public static User GetUserByAuthToken(string authtoken)
+        {
+            return AuthUsers.Where(user => user.Key.AuthToken == authtoken).Select(user => user.Key).FirstOrDefault();
         }
 
         public static List<User> GetClients()
         {
-            var z = AuthUsers.Keys.ToList().Where(x => x.IsClient).ToList();
-            var u = new Client {Name = "Henk", Username = "Henk2"};
-            z.Add(u);
-            return z;
-            //return AuthUsers.Keys.ToList().Where(x => x.IsClient).ToList();
+            //var z = AuthUsers.Keys.ToList().Where(x => x.IsClient).ToList();
+            //var u = new Client {Name = "Henk", Username = "Henk2"};
+            //z.Add(u);
+            //return z;
+            return AuthUsers.Keys.ToList().Where(x => x.IsClient).ToList();
         }
     }
 }

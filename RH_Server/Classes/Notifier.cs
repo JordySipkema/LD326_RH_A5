@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Mallaca.Network.Packet;
 using Mallaca.Usertypes;
 
 namespace RH_Server.Classes

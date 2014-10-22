@@ -14,6 +14,17 @@ namespace Mallaca.Network.Packet.Request
         public string Client { get; private set; }
         public bool Subscribe { get; private set; }
 
+        public static SubscribePacket GetSubscribePacket(JObject json)
+        {
+            if ((string) json["CMD"] != DefCmd) return null;
+
+            var client = (string) json["Client"];
+            var subscribe = (bool) json["Subscribe"];
+            var authtoken = (string) json["AUTHTOKEN"];
+
+            return new SubscribePacket(client, subscribe, authtoken);
+        }
+
         public SubscribePacket(string usernameClient, bool subscribe, string authtoken) : base(DefCmd, authtoken)
         {
             Initialize(usernameClient, subscribe);
