@@ -15,6 +15,8 @@ namespace Mallaca
         private int _speed = -1;
 
         private int _distance = -1;
+        public string currentAndCycleTime { get { return TIME + " / " + DATE.ToShortTimeString(); } }
+        
         private string _time = "--:--";
         private int _powerpct = -1;
         private int _power = -1;

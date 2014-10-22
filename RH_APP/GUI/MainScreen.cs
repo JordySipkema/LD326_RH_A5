@@ -215,9 +215,9 @@ namespace RH_APP.GUI
             {
                 try
                 {
-                    _graph.Series["SPEED"].Points.AddXY(_controller.LatestMeasurement.TIME, _controller.LatestMeasurement.SPEED / 10.0);
+                    _graph.Series["SPEED"].Points.AddXY(_controller.LatestMeasurement.currentAndCycleTime, _controller.LatestMeasurement.SPEED / 10.0);
 
-                    _graph.Series["PULSE"].Points.AddXY(_controller.LatestMeasurement.TIME, _controller.LatestMeasurement.PULSE);
+                    _graph.Series["PULSE"].Points.AddXY(_controller.LatestMeasurement.currentAndCycleTime, _controller.LatestMeasurement.PULSE);
                 }
                 catch (NullReferenceException)
                 {

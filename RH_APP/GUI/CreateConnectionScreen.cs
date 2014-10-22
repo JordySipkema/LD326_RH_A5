@@ -32,6 +32,8 @@ namespace RH_APP.GUI
                 {
                     _clientList.Items.Add(user);
                 }
+                _clientList.DisplayMember = "Fullname";
+                
             }     
         }
 
