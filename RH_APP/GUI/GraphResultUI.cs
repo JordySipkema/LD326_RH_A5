@@ -69,7 +69,7 @@ namespace RH_APP.GUI
 
                     foreach (Measurement m in result)
                     {
-                        _graph.Series[0].Points.AddXY(m.TIME, m.RPM);
+                        _graph.Series[0].Points.AddXY(m.currentAndCycleTime, m.RPM);
                     }
                     break;
                 case Choice.SPEED:
@@ -78,7 +78,7 @@ namespace RH_APP.GUI
 
                     foreach (Measurement m in result)
                     {
-                        _graph.Series[0].Points.AddXY(m.TIME, m.SPEED / 10.0);
+                        _graph.Series[0].Points.AddXY(m.currentAndCycleTime, m.SPEED / 10.0);
                     }
                     break;
                 case Choice.DISTANCE:
@@ -87,7 +87,7 @@ namespace RH_APP.GUI
 
                     foreach (Measurement m in result)
                     {
-                        _graph.Series[0].Points.AddXY(m.TIME, m.DISTANCE);
+                        _graph.Series[0].Points.AddXY(m.currentAndCycleTime, m.DISTANCE);
                     }
                     break;
                 case Choice.ACT_POWER:
@@ -96,7 +96,7 @@ namespace RH_APP.GUI
 
                     foreach (Measurement m in result)
                     {
-                        _graph.Series[0].Points.AddXY(m.TIME, m.ACT_POWER);
+                        _graph.Series[0].Points.AddXY(m.currentAndCycleTime, m.ACT_POWER);
                     }
                     break;
                 case Choice.ENERGY:
@@ -105,7 +105,7 @@ namespace RH_APP.GUI
 
                     foreach (Measurement m in result)
                     {
-                        _graph.Series[0].Points.AddXY(m.TIME, m.ENERGY);
+                        _graph.Series[0].Points.AddXY(m.currentAndCycleTime, m.ENERGY);
                     }
                     break;
                 case Choice.PULSE:
@@ -114,7 +114,7 @@ namespace RH_APP.GUI
 
                     foreach (Measurement m in result)
                     {
-                        _graph.Series[0].Points.AddXY(m.TIME, m.PULSE);
+                        _graph.Series[0].Points.AddXY(m.currentAndCycleTime, m.PULSE);
                     }
                     break;
             }
@@ -127,7 +127,7 @@ namespace RH_APP.GUI
 
                     foreach (Measurement m in result)
                     {
-                        _graph.Series[1].Points.AddXY(m.TIME, m.RPM);
+                        _graph.Series[1].Points.AddXY(m.currentAndCycleTime, m.RPM);
                     }
                     break;
                 case Choice.SPEED:
@@ -136,7 +136,7 @@ namespace RH_APP.GUI
 
                     foreach (Measurement m in result)
                     {
-                        _graph.Series[1].Points.AddXY(m.TIME, m.SPEED / 10.0);
+                        _graph.Series[1].Points.AddXY(m.currentAndCycleTime, m.SPEED / 10.0);
                     }
                     break;
                 case Choice.DISTANCE:
@@ -145,7 +145,7 @@ namespace RH_APP.GUI
 
                     foreach (Measurement m in result)
                     {
-                        _graph.Series[1].Points.AddXY(m.TIME, m.DISTANCE);
+                        _graph.Series[1].Points.AddXY(m.currentAndCycleTime, m.DISTANCE);
                     }
                     break;
                 case Choice.ACT_POWER:
@@ -154,7 +154,7 @@ namespace RH_APP.GUI
 
                     foreach (Measurement m in result)
                     {
-                        _graph.Series[1].Points.AddXY(m.TIME, m.ACT_POWER);
+                        _graph.Series[1].Points.AddXY(m.currentAndCycleTime, m.ACT_POWER);
                     }
                     break;
                 case Choice.ENERGY:
@@ -163,7 +163,7 @@ namespace RH_APP.GUI
 
                     foreach (Measurement m in result)
                     {
-                        _graph.Series[1].Points.AddXY(m.TIME, m.ENERGY);
+                        _graph.Series[1].Points.AddXY(m.currentAndCycleTime, m.ENERGY);
                     }
                     break;
                 case Choice.PULSE:
@@ -172,7 +172,7 @@ namespace RH_APP.GUI
 
                     foreach (Measurement m in result)
                     {
-                        _graph.Series[1].Points.AddXY(m.TIME, m.PULSE);
+                        _graph.Series[1].Points.AddXY(m.currentAndCycleTime, m.PULSE);
                     }
                     break;
             }
@@ -235,6 +235,11 @@ namespace RH_APP.GUI
             {
                 this.Dispose();
             }
+        }
+
+        private void GraphResultUI_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
