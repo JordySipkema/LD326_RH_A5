@@ -26,34 +26,26 @@ namespace RH_APP.GUI
     public partial class MainScreen : Form
     {
         private Chat_Controller _chatController;
-        private List<User> connectedClients = new List<User>();
-        private readonly RH_Controller _controller;
-        private readonly Specialist_Controller _spController;
+        private Specialist_Controller _spController;
+        private RH_Controller _controller; 
         private bool _inTraining = true;
-        private readonly IP_Bike _ipbike = new IP_Bike();
+        private bool isSpecialist;
 
-        public MainScreen(Boolean showSpecialistItems, IBike b)
-        private readonly RH_Controller _controller; 
-        private bool _inTraining = true;
-
-        public MainScreen(Boolean showSpecialistItems, IBike b)
+        public MainScreen(Boolean showSpecialistItems)
         {
 
-            _controller = new RH_Controller(b);
-            _controller.UpdatedList += updateGUI;
+           
 
             InitializeComponent();
             _quitButton.Enabled = false;
-            isSpecialist = showMenu;
-            if (!showMenu)
+            isSpecialist = showSpecialistItems;
+            if (!isSpecialist)
             {
                 menuStrip1.Visible = false;
                 numericUpDown1.Visible = false;
                 setPowerLabel.Visible = false;
             }
-            ListPacket p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
             TCPController.OnPacketReceived += handleIncomingPackets;
-            TCPController.Send(p.ToString());
 
            // updateGraph();
         }
@@ -65,11 +57,22 @@ namespace RH_APP.GUI
 
             if (isSpecialist)
             {
-                //send start packet to client
+                _spController = new Specialist_Controller();
             }
-            ListPacket p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
-            TCPController.OnPacketReceived += handleIncomingPackets;
-            TCPController.Send(p.ToString());
+            else
+            {
+                var port = getCOMPort();
+                if (port == null)
+                {
+                    MessageBox.Show("No COM port found. Please connect your pc to a Kettler x700");
+                    return;
+                }
+                _controller = new RH_Controller(new COM_Bike(port));
+                _controller.UpdatedList += updateGUI;
+            }
+            startTrainingButton.Enabled = false;
+            _quitButton.Enabled = true;
+
         }
 
         private void _quitButton_Click(object sender, EventArgs e)
@@ -186,16 +189,7 @@ namespace RH_APP.GUI
                 return;
             }
 
-            Console.WriteLine("Packet: " + p.ToString());
-
-            if (p is PullResponsePacket<User>)
-            {
-                PullResponsePacket<User> response = p as PullResponsePacket<User>;
-
-                if (response.DataType == "connected_clients")
-                    connectedClients = response.List;
-            }
-            else if (p is PullResponsePacket<Measurement>)
+            if (p is PullResponsePacket<Measurement>)
             {
                 var response = p as PullResponsePacket<Measurement>;
                 if (_spController == null)
@@ -222,7 +216,6 @@ namespace RH_APP.GUI
             TCPController.ReceiveTransmission();
 
             var createScreen = new CreateConnectionScreen();
-            createScreen.readClients(connectedClients);
             
             createScreen.ShowDialog();
         }

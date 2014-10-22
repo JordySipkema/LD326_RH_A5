@@ -88,18 +88,22 @@ namespace Mallaca.Network.Packet
 
         private static Packet HandlePullResponsePacket(JObject json)
         {
+            Packet p;
             switch (json["dataType"].ToString().ToLower())
             {
                 case "users":
                 case "user":
                 case "connected_clients":
-                    p = PullUsersResponsePacket(json);
+                    p = new PullUsersResponsePacket(json);
                     break;
                 case "measurements":
-                    p = PullResponsePacket<Measurement>(json);
+                    p = new PullResponsePacket<Measurement>(json);
                     break;
                 case "user_sessions":
-                    p = PullResponsePacket<SessionData>(json);
+                    p = new PullResponsePacket<SessionData>(json);
+                    break;
+                default:
+                    return null;
                     break;
             }
             return p;

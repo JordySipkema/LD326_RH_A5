@@ -1,4 +1,8 @@
-﻿using Mallaca.Usertypes;
+﻿using Mallaca.Network;
+using Mallaca.Network.Packet;
+using Mallaca.Network.Packet.Request;
+using Mallaca.Network.Packet.Response;
+using Mallaca.Usertypes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using RH_APP.Classes;
 
 namespace RH_APP.GUI
 {
@@ -16,9 +21,13 @@ namespace RH_APP.GUI
         public CreateConnectionScreen()
         {
             InitializeComponent();
+            var p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
+            TCPController.OnPacketReceived += ReceiveHonoredGuests;
+            TCPController.Send(p);
+
         }
 
-        public void readClients(List<User> clients)
+        private void readClients(List<User> clients)
         {
             bool isEmpty = !clients.Any();
 
@@ -36,6 +45,7 @@ namespace RH_APP.GUI
                 
             }     
         }
+
 
         private void _cancelButton_Click(object sender, EventArgs e)
         {
@@ -66,6 +76,25 @@ namespace RH_APP.GUI
         private void CreateConnectionScreen_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void ReceiveHonoredGuests(Packet p)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke((new Action(() => ReceiveHonoredGuests(p))));
+                return;
+            }
+
+            if (p is PullResponsePacket<User>)
+            {
+                var response = p as PullResponsePacket<User>;
+
+                if (response.DataType == "connected_clients")
+                    readClients(response.List);
+                TCPController.OnPacketReceived -= ReceiveHonoredGuests;
+
+            }
         }
     }
 }
