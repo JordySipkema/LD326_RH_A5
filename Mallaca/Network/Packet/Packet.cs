@@ -73,26 +73,12 @@ namespace Mallaca.Network.Packet
                 case ChatPacket.DefCmd:
                     p = new ChatPacket(json);
                     break;
-                        
+                case SubscribePacket.DefCmd:
+                    p = SubscribePacket.GetSubscribePacket(json);
+                    break;
 
-                case PullResponsePacket<string>.Cmd: 
-                switch (json["dataType"].ToString().ToLower())
-                {
-                    case "users":
-                    case "user":
-                    case "connected_clients":
-                        p = new PullUsersResponsePacket(json);
-                        break;
-                    case "measurements":
-                        return new PullResponsePacket<Measurement>(json);
-                        break;
-                    case "user_sessions":
-                        return new PullResponsePacket<SessionData>(json);
-                        break;
-                   
-
-
-                }
+                case PullResponsePacket<string>.Cmd:
+                    p = HandlePullResponsePacket(json);
                 break;
             }
                                 
@@ -100,8 +86,28 @@ namespace Mallaca.Network.Packet
             return p;
         }
 
+        private static Packet HandlePullResponsePacket(JObject json)
+        {
+            switch (json["dataType"].ToString().ToLower())
+            {
+                case "users":
+                case "user":
+                case "connected_clients":
+                    return new PullUsersResponsePacket(json);
+                    break;
+                case "measurements":
+                    return new PullResponsePacket<Measurement>(json);
+                    break;
+                case "user_sessions":
+                    return new PullResponsePacket<SessionData>(json);
+                    break;
+            }
+            return null;
+        }
+
         public abstract JObject ToJsonObject();
 
+        
         public static implicit operator JObject(Packet value)
         {
             return value.ToJsonObject();
