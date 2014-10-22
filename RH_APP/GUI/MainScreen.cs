@@ -1,4 +1,6 @@
-﻿using Mallaca;
+﻿using System.IO.Ports;
+using System.Threading;
+using Mallaca;
 using Mallaca.Network;
 using Mallaca.Network.Packet;
 using Mallaca.Network.Packet.Request;
@@ -25,39 +27,15 @@ namespace RH_APP.GUI
     {
         private Chat_Controller _chatController;
         private List<User> connectedClients = new List<User>();
-        private readonly RH_Controller _controller; 
-        private bool _inTraining = true;
-
-        public MainScreen(Boolean showSpecialistItems, IBike b)
-        {
-
-            _controller = new RH_Controller(b);
-            _controller.UpdatedList += updateGUI;
-            
-            InitializeComponent();
-
-            if (!showSpecialistItems)
-            {
-                menuStrip1.Visible = false;
-                //numericUpDown1.Visible = false;
-                //setPowerLabel.Visible = false;
-                //_quitButton.Visible = false;
-            }
-            
-            _chatController = new Chat_Controller();
-
-            ListPacket p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
-            TCPController.OnPacketReceived += handleIncomingPackets;
-            TCPController.Send(p.ToString());
-
-            //updateGraph();
-        }
-
+        private RH_Controller _controller; 
+        private bool _inTraining = false;
+        private bool isSpecialist;
         public MainScreen(bool showMenu)
         {
 
             InitializeComponent();
-
+            _quitButton.Enabled = false;
+            isSpecialist = showMenu;
             if (!showMenu)
             {
                 menuStrip1.Visible = false;
@@ -69,6 +47,46 @@ namespace RH_APP.GUI
             TCPController.Send(p.ToString());
 
            // updateGraph();
+        }
+
+        private void startTraining(object sender, EventArgs e)
+        {
+            if(_inTraining)
+                return;
+
+            if (isSpecialist)
+            {
+                //send start packet to client
+            }
+            else
+            {
+                var port = getCOMPort();
+                if (port == null)
+                {
+                    MessageBox.Show("No COM port found. Please connect your pc to a Kettler x700");
+                    return;
+                }
+                _controller = new RH_Controller(new COM_Bike(port));
+                _controller.UpdatedList += updateGUI;
+            }
+            startTrainingButton.Enabled = false;
+            _quitButton.Enabled = true;
+        }
+
+        private void _quitButton_Click(object sender, EventArgs e)
+        {
+            DialogResult dialog /*= dialog*/ = MessageBox.Show("Are you sure you want to stop the training?", "Alert", MessageBoxButtons.YesNo);
+            if (dialog == DialogResult.Yes)
+            {
+                //this.Hide();            
+
+                _inTraining = false;
+
+                GraphResultUI resultUI = new GraphResultUI(_controller.GetList());
+
+                resultUI.updateGraph();
+                resultUI.Show();
+            }
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -227,20 +245,34 @@ namespace RH_APP.GUI
 
             }
 
-            private void _quitButton_Click(object sender, EventArgs e)
+            private string getCOMPort()
             {
-                DialogResult dialog /*= dialog*/ = MessageBox.Show("Are you sure you want to stop the training?", "Alert", MessageBoxButtons.YesNo);
-                if (dialog == DialogResult.Yes)
+
+                var portNames = SerialPort.GetPortNames();
+                foreach (string i in portNames)
                 {
-                    //this.Hide();            
+                    var serial = new SerialPort();
+                    serial.PortName = i;
 
-                    _inTraining = false;
-                    
-                    GraphResultUI resultUI = new GraphResultUI(_controller.GetList());
+                    serial.DataBits = 8;
+                    serial.StopBits = StopBits.One;
+                    serial.ReadTimeout = 2000;
+                    serial.WriteTimeout = 50;
 
-                    resultUI.updateGraph();
-                    resultUI.Show();
+                    serial.Open();
+
+                    serial.WriteLine("ID");
+                    var output = serial.ReadLine();
+                    if (!String.IsNullOrEmpty(output))
+                    {
+                        serial.WriteLine("RS");
+                        Thread.Sleep(10);
+                        serial.Close();
+                        return i;
+                    }
                 }
+                return null;
+
             }
 
     }

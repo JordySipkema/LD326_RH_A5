@@ -72,19 +72,12 @@ namespace RH_APP.GUI
                 else if (resp.User.IsClient)
                 {
 
-                    if (checkCOMPort())
-                    {
                         this.Hide();
-                        COM_Bike b = new COM_Bike(getCOMPort());
-                        var mainScreen = new MainScreen(false, b);
+                        var mainScreen = new MainScreen(false);
                         TCPController.OnPacketReceived -= LoginPacketResponse;
                         mainScreen.Text = " Remote Healthcare - Client Edition";
                         mainScreen.ShowDialog();
-                    }
-                    else
-                    {
-                        MessageBox.Show("No connection with a bike, try again!");
-                    }
+
 
                     
                 }
@@ -111,43 +104,6 @@ namespace RH_APP.GUI
 
         }
 
-        private string getCOMPort()
-        {
 
-            var portNames = SerialPort.GetPortNames();
-            foreach(string i in portNames){
-               var serial = new SerialPort();
-                serial.PortName = i;
-
-                serial.DataBits = 8;
-                serial.StopBits = StopBits.One;
-                serial.ReadTimeout = 2000;
-                serial.WriteTimeout = 50;
-
-                serial.Open();
-
-                serial.WriteLine("ID");
-                var output = serial.ReadLine();
-                if (!String.IsNullOrEmpty(output))
-                {
-                    serial.WriteLine("RS");
-                    Thread.Sleep(10);
-                    serial.Close();
-                    return i;
-                }
-            }
-            return null;
-          
-        }
-
-        private bool checkCOMPort()
-        {
-            String result = getCOMPort();
-            if (result != null)
-            {
-                return true;
-            }
-            return false;
-        }
     }
 }
