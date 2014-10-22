@@ -74,8 +74,9 @@ namespace RH_Server.Server
                     {
                         json = Packet.RetrieveJson(packetSize, ref _totalBuffer);
                     }
-                    catch (JsonReaderException)
+                    catch (JsonReaderException e)
                     {
+                        Console.WriteLine(e.Message);
                         Console.WriteLine(Resources.ClientHandler_Sending_SyntaxError_packet_to, _tcpclient.Client.RemoteEndPoint);
                         Send(new ResponsePacket(Statuscode.Status.SyntaxError));
                     }
@@ -200,14 +201,17 @@ namespace RH_Server.Server
         private void HandlePushPacket(JObject json)
         {
             //var size = json["count"];
-            var measurements = json["measurements"].Children();
+            var measurements = json["DataSource"].Children();
+            var datatype = (string)json["Datatype"];
+
+            if (datatype != "Measurements") return;
 
             foreach (var m in measurements.Select(
                 jtoken => JsonConvert.DeserializeObject<Measurement>(jtoken.ToString())
                 ))
             {
                 _measurementsList.Add(m);
-                Console.WriteLine(Resources.ClientHandler_HandlePushPacked_Recieved, json["measurements"]);
+                Console.WriteLine(Resources.ClientHandler_HandlePushPacked_Recieved, measurements.FirstOrDefault());
             }
 
         }
@@ -269,7 +273,6 @@ namespace RH_Server.Server
                 case "measurements":
                     HandleLsmPacket(json);
                     return;
-                    break;
                 default:
                     Console.WriteLine(Resources.ClientHandler_HandlePullPacket_Non_implemented_data_type + json["dataType"].ToString());
                     return;
