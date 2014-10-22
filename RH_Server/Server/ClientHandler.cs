@@ -133,7 +133,7 @@ namespace RH_Server.Server
                         case "lsu":
                             HandleLsuPacket(json);
                             break;
-                        case "Subscr":
+                        case "subscr":
                             HandleSubscribePacket(json);
                             break;
                             
@@ -229,10 +229,9 @@ namespace RH_Server.Server
             }
 
             var senderU = Authentication.GetUserByAuthToken(authtoken);
-
             // Check that sender is a client. if its not, return.
             if (!(senderU is Client)) return;
-
+            
             var senderC = senderU as Client;
             //Should we notify anyone for this sender? If not, return.
             if (!Notifier.Instance.ShouldNotify(senderC)) return;
@@ -241,10 +240,16 @@ namespace RH_Server.Server
             var handlers =
                 Notifier.Instance.GetListeners(senderC).Select(listener => Authentication.GetStream(listener.Username));
 
+            var mList = measurements.Select(m => JsonConvert.DeserializeObject<Measurement>(m.ToString())).ToList();
+
+            // Building new json
+            var returnJson = new PullResponsePacket<Measurement>(mList, "measurements");
+
             foreach (var handler in handlers)
             {
                 handler.Send(json.ToString());
             }
+            Console.WriteLine("Notified the listeners");
 
 
         }
@@ -314,7 +319,7 @@ namespace RH_Server.Server
 
 
             
-            Console.WriteLine(json);
+            //Console.WriteLine(json);
             string data = resp.ToString();
             Send(data);
             
@@ -370,8 +375,6 @@ namespace RH_Server.Server
             var client = Authentication.GetUser(packet.Client) as Client;
 
             var success = packet.Subscribe ? notifier.Subscribe(specialist, client) : notifier.Unsubscribe(specialist, client);
-
-            Console.WriteLine("Subscribepacket success = " + success);
 
             Send(new ResponsePacket(Statuscode.Status.Ok, "resp-subscr"));
 

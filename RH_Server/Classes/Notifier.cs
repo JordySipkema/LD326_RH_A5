@@ -26,6 +26,11 @@ namespace RH_Server.Classes
         public bool Subscribe(Specialist specialist, Client client)
         {
             var tuple = GetListBySpecialist(specialist);
+            if (tuple == null)
+            {
+                return _subscribers.TryAdd(specialist, new List<Client>() { client });
+            }
+
             var listOfClients = tuple.Item2;
             if (listOfClients != null){
                 // Voeg de extra client toe aan de lijst

@@ -61,6 +61,7 @@
     <Compile Include="Network\Packet\Request\SubscribePacket.cs" />
     <Compile Include="Network\Packet\Response\LoginResponsePacket.cs" />
     <Compile Include="Network\Packet\Response\NotifyPacket.cs" />
+    <Compile Include="Network\Packet\Response\PullMeasurementsResponsePacket.cs" />
     <Compile Include="Network\Packet\Response\PullResponsePacket.cs" />
     <Compile Include="Network\Packet\Response\PullUsersResponsePacket.cs" />
     <Compile Include="Network\Packet\Response\PushResponsePacket.cs" />

@@ -93,16 +93,16 @@ namespace Mallaca.Network.Packet
                 case "users":
                 case "user":
                 case "connected_clients":
-                    return new PullUsersResponsePacket(json);
+                    p = PullUsersResponsePacket(json);
                     break;
                 case "measurements":
-                    return new PullResponsePacket<Measurement>(json);
+                    p = PullResponsePacket<Measurement>(json);
                     break;
                 case "user_sessions":
-                    return new PullResponsePacket<SessionData>(json);
+                    p = PullResponsePacket<SessionData>(json);
                     break;
             }
-            return null;
+            return p;
         }
 
         public abstract JObject ToJsonObject();

@@ -27,11 +27,20 @@ namespace RH_APP.GUI
     {
         private Chat_Controller _chatController;
         private List<User> connectedClients = new List<User>();
-        private RH_Controller _controller; 
-        private bool _inTraining = false;
-        private bool isSpecialist;
-        public MainScreen(bool showMenu)
+        private readonly RH_Controller _controller;
+        private readonly Specialist_Controller _spController;
+        private bool _inTraining = true;
+        private readonly IP_Bike _ipbike = new IP_Bike();
+
+        public MainScreen(Boolean showSpecialistItems, IBike b)
+        private readonly RH_Controller _controller; 
+        private bool _inTraining = true;
+
+        public MainScreen(Boolean showSpecialistItems, IBike b)
         {
+
+            _controller = new RH_Controller(b);
+            _controller.UpdatedList += updateGUI;
 
             InitializeComponent();
             _quitButton.Enabled = false;
@@ -81,6 +90,8 @@ namespace RH_APP.GUI
 
         public MainScreen(User client)
         {
+            _spController = new Specialist_Controller();
+            _spController.UpdatedList += updateGUI;
 
             InitializeComponent();
             isSpecialist = true;
@@ -91,6 +102,9 @@ namespace RH_APP.GUI
             TCPController.Send(p.ToString());
 
             TCPController.Send(subbie.ToString());
+
+
+            // updateGraph();
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -172,12 +186,25 @@ namespace RH_APP.GUI
                 return;
             }
 
+            Console.WriteLine("Packet: " + p.ToString());
+
             if (p is PullResponsePacket<User>)
             {
                 PullResponsePacket<User> response = p as PullResponsePacket<User>;
 
                 if (response.DataType == "connected_clients")
                     connectedClients = response.List;
+            }
+            else if (p is PullResponsePacket<Measurement>)
+            {
+                var response = p as PullResponsePacket<Measurement>;
+                if (_spController == null)
+                    return;
+
+                foreach (var m in response.List)
+	            {
+		             _spController.SetMeasurement(m);
+	            }
             }
             else if (p is ChatPacket)
             {

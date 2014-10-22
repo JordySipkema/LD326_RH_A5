@@ -8,14 +8,21 @@ namespace RH_APP.Classes
 {
     class IP_Bike : IBike
     {
+        private Measurement m = new Measurement();
+
+        public void setMeasurement(Measurement m)
+        {
+            this.m = m;
+        }
+
         public override Measurement RecieveData()
         {
-            throw new NotImplementedException();
+            return m;
         }
 
         public override void SendData(string command)
         {
-            throw new NotImplementedException();
+            //TODO: throw new NotImplementedException();
         }
     }
 }

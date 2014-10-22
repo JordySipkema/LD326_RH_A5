@@ -19,6 +19,7 @@ namespace RH_APP.Controller
         private readonly IBike _bike;
         private readonly BackgroundWorker _bw = new BackgroundWorker();
         private readonly List<Measurement> _data = new List<Measurement>();
+        private int _counter = 0;
 
         public Measurement LatestMeasurement
         {
@@ -122,7 +123,6 @@ namespace RH_APP.Controller
 
         private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            //Thread.Sleep(100);
             var m = _bike.RecieveData();
             e.Result = m;
         }
@@ -131,12 +131,16 @@ namespace RH_APP.Controller
         {
             // Access the result through the Result property. 
             // But first be sure that e.Result is a Measurement instance.
-            var result = e.Result as Measurement;
-            if (result != null)
+            if (e.Result != null)
             {
-                _data.Add(result);
-                OnUpdatedList(EventArgs.Empty);
+                var result = e.Result as Measurement;
+                if (result != null)
+                {
+                    _data.Add(result);
+                    OnUpdatedList(EventArgs.Empty);
+                }
             }
+
             if (!((BackgroundWorker)sender).CancellationPending)
             {
                 _bw.RunWorkerAsync();

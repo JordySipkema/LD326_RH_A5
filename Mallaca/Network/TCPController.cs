@@ -103,7 +103,7 @@ namespace Mallaca.Network
                 _sslStream.BeginWrite(bytes, 0, bytes.Length, SendCallback, _sslStream);
                 _sslStream.Flush();
 
-                Console.WriteLine("Data sent: " + data);
+                //Console.WriteLine("Data sent: " + data);
             }
             catch (NotSupportedException e)
             {
@@ -131,7 +131,7 @@ namespace Mallaca.Network
                 sendDone.Set();
                 
                 Busy = false;
-                Console.WriteLine("Sent to server...");
+                //Console.WriteLine("Sent to server...");
 
             }
 
@@ -189,12 +189,11 @@ namespace Mallaca.Network
                             var p = Packet.Packet.RetrievePacket(packetSize, ref _totalBuffer);
                             if (p != null)
                             {
-                                foreach(ReceivedPacket deleg in OnPacketReceived.GetInvocationList())
+                                foreach (ReceivedPacket deleg in OnPacketReceived.GetInvocationList())
                                 {
                                     deleg.BeginInvoke(p, null, null);
                                 }
                             }
-
                         }
 
                     }
