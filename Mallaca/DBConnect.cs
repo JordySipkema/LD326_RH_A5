@@ -546,6 +546,7 @@ namespace Mallaca
 
         public List<Measurement> getMeasurementsOfUser(String username, string sessionID)
         {
+            OpenConnection();
             List<Measurement> measurements = new List<Measurement>();
 
             string query;

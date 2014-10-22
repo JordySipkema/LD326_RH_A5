@@ -74,7 +74,6 @@ namespace RH_APP.GUI
 
                 GraphResultUI resultUI = new GraphResultUI(_controller.GetList());
 
-                resultUI.updateGraph();
                 resultUI.Show();
             }
         }

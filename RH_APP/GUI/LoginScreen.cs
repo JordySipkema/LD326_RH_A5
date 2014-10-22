@@ -53,11 +53,6 @@ namespace RH_APP.GUI
             }
 
 
-
-            Console.WriteLine(p.ToString());
-
-
-
             if (resp.Status == "200")
             {
 

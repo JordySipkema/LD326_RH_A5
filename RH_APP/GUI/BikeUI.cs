@@ -178,7 +178,6 @@ namespace RH_APP.GUI
                 this.Dispose();
                 GraphResultUI resultUI = new GraphResultUI(_controller.GetList());
                 
-                resultUI.updateGraph();
                 resultUI.Show();
             }
         }
