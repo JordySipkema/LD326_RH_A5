@@ -106,5 +106,10 @@ namespace Mallaca.Network.Packet
         {
             return value.ToJsonObject();
         }
+
+        public static implicit operator String(Packet value)
+        {
+            return value.ToString();
+        }
     }
 }
