@@ -193,7 +193,6 @@ namespace Mallaca.Network
                                 {
                                     deleg.BeginInvoke(p, null, null);
                                 }
-                                string f5 = "";
                             }
 
                         }

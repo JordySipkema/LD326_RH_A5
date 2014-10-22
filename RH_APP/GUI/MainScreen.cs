@@ -64,11 +64,54 @@ namespace RH_APP.GUI
                 numericUpDown1.Visible = false;
                 setPowerLabel.Visible = false;
             }
+            else
+            {
+                dataPULSE.Visible = false;
+                dataPOWER.Visible = false;
+                dataPOWERPCT.Visible = false;
+                dataENERGY.Visible = false;
+                dataTIME.Visible = false;
+                dataDISTANCE.Visible = false;
+                dataSPEED.Visible = false;
+                dataRPM.Visible = false;
+                label11.Visible = false;
+                label10.Visible = false;
+                label9.Visible = false;
+                label7.Visible = false;
+                label3.Visible = false;
+                label2.Visible = false;
+                label1.Visible = false;
+                _sendButton.Visible = false;
+                _textBox.Visible = false;
+                _chatLogBox.Visible = false;
+                numericUpDown1.Visible = false;
+                setPowerLabel.Visible = false;
+                _graph.Visible = false;
+                _quitButton.Visible = false;
+
+            }
             ListPacket p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
             TCPController.OnPacketReceived += handleIncomingPackets;
             TCPController.Send(p.ToString());
 
            // updateGraph();
+        }
+
+        public MainScreen(User client)
+        {
+
+            InitializeComponent();
+
+            SubscribePacket subbie = new SubscribePacket(client.Username, true, Settings.GetInstance().authToken);
+
+            ListPacket p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
+            TCPController.OnPacketReceived += handleIncomingPackets;
+            TCPController.Send(p.ToString());
+
+            TCPController.Send(subbie.ToString());
+
+
+            // updateGraph();
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -201,6 +244,16 @@ namespace RH_APP.GUI
                 dataENERGY.Text = _controller.LatestMeasurement.ENERGY + "";
                 dataTIME.Text = _controller.LatestMeasurement.TIME;
                 dataPULSE.Text = _controller.LatestMeasurement.PULSE + "";
+
+                dataRPM.Refresh();
+                dataSPEED.Refresh();
+                dataDISTANCE.Refresh();
+                dataPOWER.Refresh();
+                dataPOWERPCT.Refresh();
+                dataENERGY.Refresh();
+                dataTIME.Refresh();
+                dataPULSE.Refresh();
+                numericUpDown1.Refresh();
 
                 updateGraph();
             }
