@@ -1,4 +1,4 @@
-﻿namespace RH_APP.GUI
+namespace RH_APP.GUI
 {
     partial class MainScreen
     {

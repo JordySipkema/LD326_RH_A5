@@ -50,7 +50,6 @@ namespace RH_APP.GUI
         public void updateGraph()
         {
 
-
             //_graph.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
             //_graph.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
 
@@ -63,9 +62,12 @@ namespace RH_APP.GUI
 
             switch (_choice1)
             {
+
                 case Choice.RPM:
                     var choice1 = _graph.Series.Add("RPM");
                     choice1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+                    _graph.Series[0].Color = Color.DarkBlue;
+                    _graph.Series[0].BorderWidth = 2;
 
                     foreach (Measurement m in result)
                     {
@@ -84,6 +86,8 @@ namespace RH_APP.GUI
                 case Choice.DISTANCE:
                     var choice3 = _graph.Series.Add("DISTANCE");
                     choice3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+                    _graph.Series[0].Color = Color.DarkBlue;
+                    _graph.Series[0].BorderWidth = 2;
 
                     foreach (Measurement m in result)
                     {
@@ -93,6 +97,8 @@ namespace RH_APP.GUI
                 case Choice.ACT_POWER:
                     var choice4 = _graph.Series.Add("ACT_POWER");
                     choice4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+                    _graph.Series[0].Color = Color.DarkBlue;
+                    _graph.Series[0].BorderWidth = 2;
 
                     foreach (Measurement m in result)
                     {
@@ -102,6 +108,8 @@ namespace RH_APP.GUI
                 case Choice.ENERGY:
                     var choice5 = _graph.Series.Add("ENERGY");
                     choice5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+                    _graph.Series[0].Color = Color.DarkBlue;
+                    _graph.Series[0].BorderWidth = 2;
 
                     foreach (Measurement m in result)
                     {
@@ -111,6 +119,8 @@ namespace RH_APP.GUI
                 case Choice.PULSE:
                     var choice6 = _graph.Series.Add("PULSE");
                     choice6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+                    _graph.Series[0].Color = Color.DarkBlue;
+                    _graph.Series[0].BorderWidth = 2;
 
                     foreach (Measurement m in result)
                     {
@@ -124,6 +134,8 @@ namespace RH_APP.GUI
                 case Choice.RPM:
                     var choice1 = _graph.Series.Add("RPM");
                     choice1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+                    _graph.Series[1].Color = Color.DarkRed;
+                    _graph.Series[1].BorderWidth = 2;
 
                     foreach (Measurement m in result)
                     {
@@ -133,6 +145,8 @@ namespace RH_APP.GUI
                 case Choice.SPEED:
                     var choice2 = _graph.Series.Add("SPEED");
                     choice2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+                    _graph.Series[1].Color = Color.DarkRed;
+                    _graph.Series[1].BorderWidth = 2;
 
                     foreach (Measurement m in result)
                     {
@@ -142,6 +156,8 @@ namespace RH_APP.GUI
                 case Choice.DISTANCE:
                     var choice3 = _graph.Series.Add("DISTANCE");
                     choice3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+                    _graph.Series[1].Color = Color.DarkRed;
+                    _graph.Series[1].BorderWidth = 2;
 
                     foreach (Measurement m in result)
                     {
@@ -151,6 +167,8 @@ namespace RH_APP.GUI
                 case Choice.ACT_POWER:
                     var choice4 = _graph.Series.Add("ACT_POWER");
                     choice4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+                    _graph.Series[1].Color = Color.DarkRed;
+                    _graph.Series[1].BorderWidth = 2;
 
                     foreach (Measurement m in result)
                     {
@@ -160,6 +178,8 @@ namespace RH_APP.GUI
                 case Choice.ENERGY:
                     var choice5 = _graph.Series.Add("ENERGY");
                     choice5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+                    _graph.Series[1].Color = Color.DarkRed;
+                    _graph.Series[1].BorderWidth = 2;
 
                     foreach (Measurement m in result)
                     {
@@ -169,6 +189,8 @@ namespace RH_APP.GUI
                 case Choice.PULSE:
                     var choice6 = _graph.Series.Add("PULSE");
                     choice6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+                    _graph.Series[1].Color = Color.DarkRed;
+                    _graph.Series[1].BorderWidth = 2;
 
                     foreach (Measurement m in result)
                     {
