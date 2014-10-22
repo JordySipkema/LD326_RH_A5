@@ -51,26 +51,16 @@ namespace RH_APP.GUI
 
         private void startTraining(object sender, EventArgs e)
         {
-            if(_inTraining)
+            if (_inTraining)
                 return;
 
             if (isSpecialist)
             {
                 //send start packet to client
             }
-            else
-            {
-                var port = getCOMPort();
-                if (port == null)
-                {
-                    MessageBox.Show("No COM port found. Please connect your pc to a Kettler x700");
-                    return;
-                }
-                _controller = new RH_Controller(new COM_Bike(port));
-                _controller.UpdatedList += updateGUI;
-            }
-            startTrainingButton.Enabled = false;
-            _quitButton.Enabled = true;
+            ListPacket p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
+            TCPController.OnPacketReceived += handleIncomingPackets;
+            TCPController.Send(p.ToString());
         }
 
         private void _quitButton_Click(object sender, EventArgs e)
@@ -87,6 +77,21 @@ namespace RH_APP.GUI
                 resultUI.updateGraph();
                 resultUI.Show();
             }
+        }
+
+
+        public MainScreen(User client)
+        {
+
+            InitializeComponent();
+            isSpecialist = true;
+            SubscribePacket subbie = new SubscribePacket(client.Username, true, Settings.GetInstance().authToken);
+
+            ListPacket p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
+            TCPController.OnPacketReceived += handleIncomingPackets;
+            TCPController.Send(p.ToString());
+
+            TCPController.Send(subbie.ToString());
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -219,6 +224,16 @@ namespace RH_APP.GUI
                 dataENERGY.Text = _controller.LatestMeasurement.ENERGY + "";
                 dataTIME.Text = _controller.LatestMeasurement.TIME;
                 dataPULSE.Text = _controller.LatestMeasurement.PULSE + "";
+
+                dataRPM.Refresh();
+                dataSPEED.Refresh();
+                dataDISTANCE.Refresh();
+                dataPOWER.Refresh();
+                dataPOWERPCT.Refresh();
+                dataENERGY.Refresh();
+                dataTIME.Refresh();
+                dataPULSE.Refresh();
+                numericUpDown1.Refresh();
 
                 updateGraph();
             }

@@ -50,5 +50,22 @@ namespace RH_APP.GUI
         {
 
         }
+
+        private void _connectButton_Click(object sender, EventArgs e)
+        {
+            // Loop through all items the ListBox. 
+            foreach (User u in _clientList.SelectedItems)
+            {                
+               var mainScreen = new MainScreen(u);
+               
+               mainScreen.Show();
+            }
+            this.Dispose();
+        }
+
+        private void CreateConnectionScreen_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Mallaca;
+﻿using System.CodeDom;
+using Mallaca;
 using Mallaca.Network;
 using Mallaca.Network.Packet;
 using Mallaca.Network.Packet.Request;
@@ -98,11 +99,14 @@ namespace RH_Server.Server
                     if (packetType != "login" && !json.TryGetValue("AUTHTOKEN", out authToken))
                     {
                         Console.WriteLine(Resources.ClientHandler_No_authtoken_found);
+                        Send(new ResponsePacket(Statuscode.Status.Unauthorized));
                         continue;
                     }
+                    // ReSharper disable once PossibleNullReferenceException
                     if (packetType != "login" && !Authentication.Authenticate(authToken.ToString()))
                     {
                         Console.WriteLine(Resources.ClientHandler_Recieved_Packet_Invalid_AuthToken);
+                        Send(new ResponsePacket(Statuscode.Status.AccessDenied));
                         continue;
                     }
 
@@ -212,6 +216,7 @@ namespace RH_Server.Server
             //var size = json["count"];
             var measurements = json["DataSource"].Children();
             var datatype = (string)json["Datatype"];
+            var authtoken = (string) json["AUTHTOKEN"];
 
             if (datatype != "Measurements") return;
 
@@ -222,6 +227,25 @@ namespace RH_Server.Server
                 _measurementsList.Add(m);
                 Console.WriteLine(Resources.ClientHandler_HandlePushPacked_Recieved, measurements.FirstOrDefault());
             }
+
+            var senderU = Authentication.GetUserByAuthToken(authtoken);
+
+            // Check that sender is a client. if its not, return.
+            if (!(senderU is Client)) return;
+
+            var senderC = senderU as Client;
+            //Should we notify anyone for this sender? If not, return.
+            if (!Notifier.Instance.ShouldNotify(senderC)) return;
+
+            // Get all handlers based on all listeners their username.
+            var handlers =
+                Notifier.Instance.GetListeners(senderC).Select(listener => Authentication.GetStream(listener.Username));
+
+            foreach (var handler in handlers)
+            {
+                handler.Send(json.ToString());
+            }
+
 
         }
 
