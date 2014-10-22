@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this._choiceBox1 = new System.Windows.Forms.ListBox();
             this._choiceBox2 = new System.Windows.Forms.ListBox();
             this._graph = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -70,11 +70,11 @@
             // 
             // _graph
             // 
-            chartArea3.Name = "ChartArea1";
-            this._graph.ChartAreas.Add(chartArea3);
+            chartArea1.Name = "ChartArea1";
+            this._graph.ChartAreas.Add(chartArea1);
             this._graph.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend3.Name = "Legend1";
-            this._graph.Legends.Add(legend3);
+            legend1.Name = "Legend1";
+            this._graph.Legends.Add(legend1);
             this._graph.Location = new System.Drawing.Point(153, 3);
             this._graph.Name = "_graph";
             this._graph.Size = new System.Drawing.Size(975, 505);
@@ -116,7 +116,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 85F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1022, 602);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1120, 602);
             this.tableLayoutPanel1.TabIndex = 13;
             // 
             // panel1
@@ -185,7 +185,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1022, 602);
+            this.ClientSize = new System.Drawing.Size(1120, 602);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "GraphResultUI";
             this.Text = "Results";
