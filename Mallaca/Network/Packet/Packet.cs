@@ -31,7 +31,8 @@ namespace Mallaca.Network.Packet
         public static JObject RetrieveJson(int packetSize, ref List<byte> buffer)
         {
             if (buffer.Count < packetSize + 4) return null;
-            return JObject.Parse(Encoding.UTF8.GetString(GetPacketBytes(packetSize, ref buffer).ToArray()));
+            var q = Encoding.UTF8.GetString(GetPacketBytes(packetSize, ref buffer).ToArray());
+            return JObject.Parse(q);
         }
 
         //TODO: BACK TO PRIVATE

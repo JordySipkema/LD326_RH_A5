@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using Mallaca.Network;
 using System.Threading;
+using Mallaca.Network.Packet.Request;
 
 namespace RH_APP.Controller
 {
@@ -82,21 +83,25 @@ namespace RH_APP.Controller
 
         private void SendToServer(object sender, EventArgs args)
         {
-            var jsonObject = new JObject(
-                    new JProperty("CMD", "push"),
-                    new JProperty("count", 1),
-                    new JProperty("measurements", 
-                            new JArray(
-                                JObject.FromObject(LatestMeasurement)
-                            )
-                        )
+            //var jsonObject = new JObject(
+            //        new JProperty("CMD", "push"),
+            //        new JProperty("count", 1),
+            //        new JProperty("measurements", 
+            //                new JArray(
+            //                    JObject.FromObject(LatestMeasurement)
+            //                )
+            //            )
+                //);
+
+            var jsonObject = new PushPacket<Measurement>(PushPacket<Measurement>.DataType.Measurements,
+                new List<Measurement>() { LatestMeasurement },
+                Settings.GetInstance().authToken
                 );
 
-            var json = jsonObject.ToString();
             //Johan's code line
             // ReSharper disable once SpecifyACultureInStringConversionExplicitly
-            json = json.Length.ToString().PadRight(4, ' ') + json;
-            TCPController.Send(json);
+            //json = json.Length.ToString().PadRight(4, ' ') + json;
+            TCPController.Send(jsonObject.ToString());
         }
 
         public void FormClosing()
