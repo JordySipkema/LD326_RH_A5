@@ -11,6 +11,8 @@ namespace Mallaca.Network.Packet.Request
         //Inherited field: CMD, AuthToken
         //Introduced fields: PacketDataType (enum), Measurements (Array/List)
 
+        public const string CMD = "PUSH";
+
         public DataType PacketDataType { get; private set; }
         public IEnumerable<T> DataSource { get; private set; }
 
@@ -22,8 +24,8 @@ namespace Mallaca.Network.Packet.Request
             Configuration
         }
 
-        public PushPacket(DataType datatype, IEnumerable<T> datasource, string cmd, string authtoken)
-            : base(cmd, authtoken)
+        public PushPacket(DataType datatype, IEnumerable<T> datasource, string authtoken)
+            : base(CMD, authtoken)
         {
             Initialize(datatype, datasource);
         }
