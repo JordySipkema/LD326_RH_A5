@@ -1,4 +1,6 @@
-﻿using Mallaca;
+﻿using System.IO.Ports;
+using System.Threading;
+using Mallaca;
 using Mallaca.Network;
 using Mallaca.Network.Packet;
 using Mallaca.Network.Packet.Request;
@@ -31,66 +33,23 @@ namespace RH_APP.GUI
         private readonly IP_Bike _ipbike = new IP_Bike();
 
         public MainScreen(Boolean showSpecialistItems, IBike b)
+        private readonly RH_Controller _controller; 
+        private bool _inTraining = true;
+
+        public MainScreen(Boolean showSpecialistItems, IBike b)
         {
 
             _controller = new RH_Controller(b);
             _controller.UpdatedList += updateGUI;
 
             InitializeComponent();
-
-            if (!showSpecialistItems)
-            {
-                menuStrip1.Visible = false;
-                //numericUpDown1.Visible = false;
-                //setPowerLabel.Visible = false;
-                //_quitButton.Visible = false;
-            }
-            
-            _chatController = new Chat_Controller();
-
-            ListPacket p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
-            TCPController.OnPacketReceived += handleIncomingPackets;
-            TCPController.Send(p.ToString());
-
-            //updateGraph();
-        }
-
-        public MainScreen(bool showMenu)
-        {
-
-            InitializeComponent();
-
+            _quitButton.Enabled = false;
+            isSpecialist = showMenu;
             if (!showMenu)
             {
                 menuStrip1.Visible = false;
                 numericUpDown1.Visible = false;
                 setPowerLabel.Visible = false;
-            }
-            else
-            {
-                dataPULSE.Visible = false;
-                dataPOWER.Visible = false;
-                dataPOWERPCT.Visible = false;
-                dataENERGY.Visible = false;
-                dataTIME.Visible = false;
-                dataDISTANCE.Visible = false;
-                dataSPEED.Visible = false;
-                dataRPM.Visible = false;
-                label11.Visible = false;
-                label10.Visible = false;
-                label9.Visible = false;
-                label7.Visible = false;
-                label3.Visible = false;
-                label2.Visible = false;
-                label1.Visible = false;
-                _sendButton.Visible = false;
-                _textBox.Visible = false;
-                _chatLogBox.Visible = false;
-                numericUpDown1.Visible = false;
-                setPowerLabel.Visible = false;
-                _graph.Visible = false;
-                _quitButton.Visible = false;
-
             }
             ListPacket p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
             TCPController.OnPacketReceived += handleIncomingPackets;
@@ -99,13 +58,44 @@ namespace RH_APP.GUI
            // updateGraph();
         }
 
+        private void startTraining(object sender, EventArgs e)
+        {
+            if (_inTraining)
+                return;
+
+            if (isSpecialist)
+            {
+                //send start packet to client
+            }
+            ListPacket p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
+            TCPController.OnPacketReceived += handleIncomingPackets;
+            TCPController.Send(p.ToString());
+        }
+
+        private void _quitButton_Click(object sender, EventArgs e)
+        {
+            DialogResult dialog /*= dialog*/ = MessageBox.Show("Are you sure you want to stop the training?", "Alert", MessageBoxButtons.YesNo);
+            if (dialog == DialogResult.Yes)
+            {
+                //this.Hide();            
+
+                _inTraining = false;
+
+                GraphResultUI resultUI = new GraphResultUI(_controller.GetList());
+
+                resultUI.updateGraph();
+                resultUI.Show();
+            }
+        }
+
+
         public MainScreen(User client)
         {
             _spController = new Specialist_Controller();
             _spController.UpdatedList += updateGUI;
 
             InitializeComponent();
-
+            isSpecialist = true;
             SubscribePacket subbie = new SubscribePacket(client.Username, true, Settings.GetInstance().authToken);
 
             ListPacket p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
@@ -113,6 +103,7 @@ namespace RH_APP.GUI
             TCPController.Send(p.ToString());
 
             TCPController.Send(subbie.ToString());
+
 
             // updateGraph();
         }
@@ -296,20 +287,34 @@ namespace RH_APP.GUI
 
             }
 
-            private void _quitButton_Click(object sender, EventArgs e)
+            private string getCOMPort()
             {
-                DialogResult dialog /*= dialog*/ = MessageBox.Show("Are you sure you want to stop the training?", "Alert", MessageBoxButtons.YesNo);
-                if (dialog == DialogResult.Yes)
+
+                var portNames = SerialPort.GetPortNames();
+                foreach (string i in portNames)
                 {
-                    //this.Hide();            
+                    var serial = new SerialPort();
+                    serial.PortName = i;
 
-                    _inTraining = false;
-                    
-                    GraphResultUI resultUI = new GraphResultUI(_controller.GetList());
+                    serial.DataBits = 8;
+                    serial.StopBits = StopBits.One;
+                    serial.ReadTimeout = 2000;
+                    serial.WriteTimeout = 50;
 
-                    resultUI.updateGraph();
-                    resultUI.Show();
+                    serial.Open();
+
+                    serial.WriteLine("ID");
+                    var output = serial.ReadLine();
+                    if (!String.IsNullOrEmpty(output))
+                    {
+                        serial.WriteLine("RS");
+                        Thread.Sleep(10);
+                        serial.Close();
+                        return i;
+                    }
                 }
+                return null;
+
             }
 
     }

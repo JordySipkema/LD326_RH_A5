@@ -33,20 +33,20 @@ namespace Mallaca.Network.Packet.Response
             JToken token;
             JToken user;
             json.TryGetValue("User", out user);
-            if(user == null)
-                throw new InvalidOperationException("No user defined");
-            int type = (int) user.Value<int>("UserType");
-            if (type == 0)
-                User = user.ToObject<Client>();
-            else if (type == 1)
-                User = user.ToObject<Specialist>();
-            else if (type == 2)
-                User = user.ToObject<Administrator>();
-            else if (type == 0)
-                User = user.ToObject<User>();
-                
+            if (user != null)
+            {
+                int type = (int) user.Value<int>("UserType");
+                if (type == 0)
+                    User = user.ToObject<Client>();
+                else if (type == 1)
+                    User = user.ToObject<Specialist>();
+                else if (type == 2)
+                    User = user.ToObject<Administrator>();
+                else if (type == 0)
+                    User = user.ToObject<User>();
+            }
 
-            
+
 
             AuthToken = json.TryGetValue("AUTHTOKEN", out token) ? token.ToString() : null;
             string test = "";
