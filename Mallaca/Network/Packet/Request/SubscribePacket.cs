@@ -9,10 +9,12 @@ namespace Mallaca.Network.Packet.Request
 
         //Note: Subscribe is true for subscribing, false for unsubscribing.
 
+        public const string CMD = "Subscr";
+
         public string Client { get; private set; }
         public bool Subscribe { get; private set; }
 
-        public SubscribePacket(string usernameClient, bool subscribe, string cmd, string authtoken) : base(cmd, authtoken)
+        public SubscribePacket(string usernameClient, bool subscribe, string authtoken) : base(CMD, authtoken)
         {
             Initialize(usernameClient, subscribe);
         }
