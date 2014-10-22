@@ -58,6 +58,7 @@
     <Compile Include="Network\Packet\Request\LSMPacket.cs" />
     <Compile Include="Network\Packet\Request\PushPacket.cs" />
     <Compile Include="Network\Packet\Request\RequestPacket.cs" />
+    <Compile Include="Network\Packet\Request\SubscribePacket.cs" />
     <Compile Include="Network\Packet\Response\LoginResponsePacket.cs" />
     <Compile Include="Network\Packet\Response\NotifyPacket.cs" />
     <Compile Include="Network\Packet\Response\PullResponsePacket.cs" />
