@@ -60,7 +60,6 @@ namespace RH_APP.GUI
 
             if (resp.Status == "200")
             {
-                //this.Invoke((Action)(this.Hide));
 
                 RH_APP.Classes.Settings.GetInstance().authToken = resp.AuthToken;
                 RH_APP.Classes.Settings.GetInstance().CurrentUser = resp.User;
@@ -81,7 +80,6 @@ namespace RH_APP.GUI
                         TCPController.OnPacketReceived -= LoginPacketResponse;
                         mainScreen.Text = " Remote Healthcare - Client Edition";
                         mainScreen.ShowDialog();
-                        //this.Close();
                     }
                     else
                     {
