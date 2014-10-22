@@ -73,7 +73,6 @@ namespace Mallaca.Network.Packet
                 case ChatPacket.DefCmd:
                     p = new ChatPacket(json);
                     break;
-                        
 
                 case PullResponsePacket<string>.Cmd: 
                 switch (json["dataType"].ToString().ToLower())
@@ -84,19 +83,14 @@ namespace Mallaca.Network.Packet
                         p = new PullUsersResponsePacket(json);
                         break;
                     case "measurements":
-                        return new PullResponsePacket<Measurement>(json);
+                        p = new PullMeasurementsResponsePacket(json);
                         break;
                     case "user_sessions":
-                        return new PullResponsePacket<SessionData>(json);
+                        p = new PullResponsePacket<SessionData>(json);
                         break;
-                   
-
-
                 }
                 break;
             }
-                                
-
             return p;
         }
 

@@ -25,15 +25,17 @@ namespace RH_APP.GUI
     {
         private Chat_Controller _chatController;
         private List<User> connectedClients = new List<User>();
-        private readonly RH_Controller _controller; 
+        private readonly RH_Controller _controller;
+        private readonly Specialist_Controller _spController;
         private bool _inTraining = true;
+        private readonly IP_Bike _ipbike = new IP_Bike();
 
         public MainScreen(Boolean showSpecialistItems, IBike b)
         {
 
             _controller = new RH_Controller(b);
             _controller.UpdatedList += updateGUI;
-            
+
             InitializeComponent();
 
             if (!showSpecialistItems)
@@ -99,6 +101,8 @@ namespace RH_APP.GUI
 
         public MainScreen(User client)
         {
+            _spController = new Specialist_Controller();
+            _spController.UpdatedList += updateGUI;
 
             InitializeComponent();
 
@@ -109,7 +113,6 @@ namespace RH_APP.GUI
             TCPController.Send(p.ToString());
 
             TCPController.Send(subbie.ToString());
-
 
             // updateGraph();
         }
@@ -193,12 +196,25 @@ namespace RH_APP.GUI
                 return;
             }
 
+            Console.WriteLine("Packet: " + p.ToString());
+
             if (p is PullResponsePacket<User>)
             {
                 PullResponsePacket<User> response = p as PullResponsePacket<User>;
 
                 if (response.DataType == "connected_clients")
                     connectedClients = response.List;
+            }
+            else if (p is PullResponsePacket<Measurement>)
+            {
+                var response = p as PullResponsePacket<Measurement>;
+                if (_spController == null)
+                    return;
+
+                foreach (var m in response.List)
+	            {
+		             _spController.SetMeasurement(m);
+	            }
             }
             else if (p is ChatPacket)
             {
