@@ -6,13 +6,8 @@ using System.Threading.Tasks;
 
 namespace Mallaca.Usertypes
 {
-    class Administrator : User
+    public class Administrator : Specialist
     {
-        public Administrator(int id, string username, string password, string name, DateTime dob, string surname, string gender, int userType)
-            : base( id, username, password, name, dob, surname, gender)
-        {
-            
-        }
 
         public Administrator() 
         {

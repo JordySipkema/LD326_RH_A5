@@ -78,6 +78,11 @@ namespace RH_Server.Classes
             }
         }
 
+        public static ClientHandler GetStream(User u)
+        {
+            return GetStream(u.Username);
+        }
+
         public static ClientHandler GetStream(String username)
         {
             //return AuthUsers.First(x => x.Key.Username == username).Value;

@@ -30,7 +30,7 @@ namespace RH_APP.GUI
         private void readClients(List<User> clients)
         {
             bool isEmpty = !clients.Any();
-
+            _clientList.Items.Clear();
             if (isEmpty)
             {
                 _clientList.Items.Add("No clients are connected!");
@@ -64,6 +64,7 @@ namespace RH_APP.GUI
         private void _connectButton_Click(object sender, EventArgs e)
         {
             // Loop through all items the ListBox. 
+
             foreach (User u in _clientList.SelectedItems)
             {                
                var mainScreen = new MainScreen(u);

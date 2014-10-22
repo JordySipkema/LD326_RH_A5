@@ -269,10 +269,24 @@ namespace RH_Server.Server
         public void HandleChatPacket(JObject json)
         {
             var p = new ChatPacket(json);
-            var s = Authentication.GetStream(p.UsernameDestination);
-            var newPacket = new ChatPacket(p.Message, currentUser.Username, "");
-            s.Send(newPacket.ToString());
+            var destinationClientHandler = Authentication.GetStream(p.UsernameDestination);
 
+
+            var newPacket = new ChatPacket(p.Message, currentUser.Fullname, "");
+            if (currentUser.IsSpecialist || currentUser.IsAdministrator)
+            {
+                Specialist spec = currentUser as Specialist;
+                var clients = Notifier.Instance.GetListeners(spec);
+
+                clients.ToList().ForEach(x => Authentication.GetStream(x).Send(newPacket));
+
+            }
+            else
+            {
+                Client clie = currentUser as Client;
+                var specialists = Notifier.Instance.GetListeners(clie);
+                specialists.ToList().ForEach(x => Authentication.GetStream(clie).Send(newPacket));
+            }
 
         }
 
@@ -375,6 +389,22 @@ namespace RH_Server.Server
             var client = Authentication.GetUser(packet.Client) as Client;
 
             var success = packet.Subscribe ? notifier.Subscribe(specialist, client) : notifier.Unsubscribe(specialist, client);
+
+            
+            if (packet.Subscribe)
+            {
+                ChatPacket serverToClientMessage = new ChatPacket(String.Format("{0} has connected to your training and is monitoring your progress.", specialist.Fullname),"","");
+                ChatPacket serverToSpecMessage = new ChatPacket(String.Format("You have sucessfully connected to {0}", client.Fullname), "", "");    
+                Authentication.GetStream(client).Send(serverToClientMessage);
+                Authentication.GetStream(specialist).Send(serverToSpecMessage);
+            }
+            else
+            {
+                ChatPacket serverToClientMessage = new ChatPacket(String.Format("{0} has deemed you unworthy of his time and has disconnected.", specialist.Fullname), "", "");
+                ChatPacket serverToSpecMessage = new ChatPacket(String.Format("You have sucessfully abandoned {0}'s training.", client.Fullname), "", "");
+                Authentication.GetStream(client).Send(serverToClientMessage);
+                Authentication.GetStream(specialist).Send(serverToSpecMessage);
+            }
 
             Send(new ResponsePacket(Statuscode.Status.Ok, "resp-subscr"));
 

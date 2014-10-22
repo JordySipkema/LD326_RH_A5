@@ -210,11 +210,6 @@ namespace RH_APP.GUI
 
         private void connectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
-            TCPController.OnPacketReceived += handleIncomingPackets;
-            TCPController.Send(p.ToString());
-            TCPController.ReceiveTransmission();
-
             var createScreen = new CreateConnectionScreen();
             
             createScreen.ShowDialog();

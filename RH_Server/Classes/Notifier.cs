@@ -93,6 +93,11 @@ namespace RH_Server.Classes
             return listeningSpecialists;
         }
 
+        public IEnumerable<Client> GetListeners(Specialist spec)
+        {
+            return _subscribers.First(x => x.Key == spec).Value;
+        }
+
         private Notifier()
         {
         } 
