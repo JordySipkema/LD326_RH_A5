@@ -96,8 +96,8 @@ namespace Mallaca.Network
             if (_client == null)
                 return;
             Busy = true;
-            
-            byte[] bytes = Packet.Packet.CreateByteData(data)
+
+            byte[] bytes = Packet.Packet.CreateByteData(data);
             await _sslStream.WriteAsync(bytes,0, bytes.Length);
 
         }
@@ -137,6 +137,11 @@ namespace Mallaca.Network
                         Console.WriteLine("An exception occured in the TCPController.ReceiveTransmissionAsync function: " +
                                           e.Message);
                     }
+                }
+                else
+                {
+                    Console.WriteLine("No bytes received. Connection has probably been closed.");
+                    return;
                 }
             }
         }
