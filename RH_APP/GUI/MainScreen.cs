@@ -28,12 +28,13 @@ namespace RH_APP.GUI
         private Chat_Controller _chatController;
         private Specialist_Controller _spController;
         private RH_Controller _controller; 
-        private bool _inTraining = true;
+        private bool _inTraining = false;
         private bool isSpecialist;
 
         public MainScreen(Boolean showSpecialistItems)
         {
 
+            TCPController.OnPacketReceived += handleIncomingPackets;
            
 
             InitializeComponent();
@@ -44,16 +45,17 @@ namespace RH_APP.GUI
                 menuStrip1.Visible = false;
                 numericUpDown1.Visible = false;
                 setPowerLabel.Visible = false;
+                
             }
-            TCPController.OnPacketReceived += handleIncomingPackets;
 
-           // updateGraph();
+            // updateGraph();
         }
 
         private void startTraining(object sender, EventArgs e)
         {
             if (_inTraining)
                 return;
+            _inTraining = true;
 
             if (isSpecialist)
             {
@@ -61,13 +63,14 @@ namespace RH_APP.GUI
             }
             else
             {
-                var port = getCOMPort();
-                if (port == null)
-                {
-                    MessageBox.Show("No COM port found. Please connect your pc to a Kettler x700");
-                    return;
-                }
-                _controller = new RH_Controller(new COM_Bike(port));
+                //var port = getCOMPort();
+                //if (port == null)
+                //{
+                //    MessageBox.Show("No COM port found. Please connect your pc to a Kettler x700");
+                //    return;
+                //}
+                //_controller = new RH_Controller(new COM_Bike(port), true);
+                _controller = new RH_Controller(new STUB_Bike(), true);
                 _controller.UpdatedList += updateGUI;
             }
             startTrainingButton.Enabled = false;
@@ -77,17 +80,14 @@ namespace RH_APP.GUI
 
         private void _quitButton_Click(object sender, EventArgs e)
         {
-            DialogResult dialog /*= dialog*/ = MessageBox.Show("Are you sure you want to stop the training?", "Alert", MessageBoxButtons.YesNo);
-            if (dialog == DialogResult.Yes)
-            {
-                //this.Hide();            
 
-                _inTraining = false;
-
-                GraphResultUI resultUI = new GraphResultUI(_controller.GetList());
-
-                resultUI.Show();
-            }
+            //this.Hide();            
+            //_controller.UpdatedList -= updateGUI;
+            _controller.Stop();
+            TCPController.Send(new EndTrainingPacket(Settings.GetInstance().authToken));
+            _inTraining = false;
+                
+            
         }
 
 

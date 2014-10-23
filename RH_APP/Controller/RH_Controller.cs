@@ -35,12 +35,19 @@ namespace RH_APP.Controller
             }
         }
 
-        public RH_Controller(IBike b)
+        public void Stop()
+        {
+            _bw.CancelAsync();
+            UpdatedList -= SendToServer;
+        }
+
+        public RH_Controller(IBike b, bool sendToServer = false)
         {
             //bike = new Classes.COM_Bike("COM3");
             //bike = new Classes.STUB_Bike();
             _bike = b;
-            UpdatedList += SendToServer;
+            if(sendToServer)
+                UpdatedList += SendToServer;
             InitializeBackgroundWorker();
             _bw.RunWorkerAsync();
 

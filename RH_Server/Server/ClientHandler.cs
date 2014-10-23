@@ -1,4 +1,5 @@
 ﻿using System.CodeDom;
+using System.Configuration;
 using Mallaca;
 using Mallaca.Network;
 using Mallaca.Network.Packet;
@@ -33,6 +34,7 @@ namespace RH_Server.Server
         private readonly DBConnect _dbConnect = new DBConnect();
 
         private User currentUser;
+        private int currentSession = -1;
         //private Boolean isLoggedIn;
 
         public ClientHandler(TcpClient client)
@@ -136,7 +138,9 @@ namespace RH_Server.Server
                         case "subscr":
                             HandleSubscribePacket(json);
                             break;
-                            
+                        case "endtraining":
+                            HandleEndTrainingPacket(json);
+                            break;
 
                         default:
                             Console.WriteLine(Resources.ClientHandler_Unknown_packet);
@@ -160,6 +164,31 @@ namespace RH_Server.Server
                     Console.WriteLine(e.Message);
                     break;
                 }
+            }
+        }
+
+        private void HandleEndTrainingPacket(JObject json)
+        {
+            if (currentUser.Id == null)
+            {
+                Send(new ResponsePacket("IS NOT POSSIBLE","Current user's id is null.", "RESP-ENDTRAINING"));
+                return;
+            }
+
+            int id = currentUser.Id ?? -1;
+            int session = _database.getNewTrainingSessionId(id);
+
+            bool sucess = _database.SaveMeasurements(_measurementsList, session, id);
+
+            if (sucess)
+            {
+                _measurementsList.Clear();
+
+                Send(new ResponsePacket(Statuscode.Status.Ok, "RESP-ENDTRAINING"));
+            }
+            else
+            {
+                Send(new ResponsePacket(Statuscode.Status.CommandNotFound, "RESP-ENDTRAINING"));
             }
         }
 
