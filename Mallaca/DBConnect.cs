@@ -160,6 +160,44 @@ namespace Mallaca
             }
         }
 
+        public bool SaveMeasurements(List<Measurement> measurements, int sessionId, int userId)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(
+                String.Format(
+                    "INSERT INTO {0}.measurement(session_id, RPM, speed, distance, power, energy, pulse, user_id, datetime, time) VALUES",
+                _database));
+            for (int i = 0; i< measurements.Count;i++)
+            {
+                Measurement m = measurements.ElementAt(i);
+                sb.Append(String.Format(" ('{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}', '{9}', '{10}')",
+                _database, sessionId, m.RPM, m.SPEED, m.DISTANCE, m.POWER, m.ENERGY, m.PULSE, userId, m.DATE.ToString("yyyy-MM-dd HH:mm:ss.fff"), ":00" + m.TIME));
+
+                sb.Append(i == measurements.Count - 1 ? ';' : ',');
+
+            }
+
+            
+
+            try
+            {
+                string query = sb.ToString();
+                MySqlCommand cmd = new MySqlCommand(query, this.Connection);
+                OpenConnection();
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Exception: DBConnect.saveClient(): " + ex.Message);
+                throw;
+            }
+            finally
+            {
+                Connection.Close();
+            }
+        }
+
         private List<User> readToUser(MySqlDataReader _reader)
         {
             List<User> users = new List<User>();
