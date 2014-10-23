@@ -99,6 +99,7 @@ namespace RH_APP.GUI
             }
             else if (p is PullResponsePacket<Measurement>)
             {
+                TCPController.OnPacketReceived -= handleIncomingPackets;
                 this.Close();
                 GraphResultUI ui = new GraphResultUI(((PullResponsePacket<Measurement>)p).List);
                 ui.Show();

@@ -15,7 +15,7 @@ namespace RH_APP.GUI
     public partial class GraphResultUI : Form
     {
         private List<Measurement> result = new List<Measurement>();
-
+        private bool finishedinit = false;
         enum Choice 
         { 
             RPM = 1, 
@@ -35,6 +35,8 @@ namespace RH_APP.GUI
             InitializeComponent();
             result = origin;
             Array values = typeof(Choice).GetEnumValues();
+            CheckboxChanges(this, EventArgs.Empty);
+
             CheckboxChanges(this, EventArgs.Empty);
         }
 
@@ -70,6 +72,14 @@ namespace RH_APP.GUI
                 configureGraphData(Choice.RPM, Color.RoyalBlue, 2);
             if (speedCheckBox.Checked)
                 configureGraphData(Choice.SPEED, Color.DarkViolet, 2);
+
+            foreach (Series ser in _graph.Series)
+            {
+                ser.IsValueShownAsLabel = showDatapointRadionbutton.Checked;
+                ser.MarkerStyle = showDatapointRadionbutton.Checked ? MarkerStyle.Square : MarkerStyle.None;
+                ser.BorderWidth = 1;
+            }
+            
         }
 
         private void configureGraphDataNEW(Choice choice, Color c)
@@ -110,9 +120,15 @@ namespace RH_APP.GUI
             }
             
             seriesLines.XValueMember = "DATE";
+            
+            seriesLines.IsValueShownAsLabel = true;
             int i = _graph.ChartAreas.Count - 1;
             _graph.ChartAreas[i].AxisX.LabelStyle.Format = "HH:mm:ss";
+            _graph.ChartAreas[i].AxisX.IsMarginVisible = true;
+            _graph.ChartAreas[i].AxisX.LabelStyle.Interval = 1;
+
             seriesLines.XValueType = ChartValueType.Time;
+            
             seriesLines.Color = c;
             seriesLines.ChartType = SeriesChartType.Line;
         }
@@ -216,11 +232,11 @@ namespace RH_APP.GUI
 
         private void GraphResultUI_FormClosed(object sender, FormClosedEventArgs e)
         {
-            DialogResult dialog = dialog = MessageBox.Show("Are you sure you want to close the results?", "Alert", MessageBoxButtons.YesNo);
-            if (dialog == DialogResult.Yes)
-            {
-                this.Dispose();
-            }
+            //DialogResult dialog = dialog = MessageBox.Show("Are you sure you want to close the results?", "Alert", MessageBoxButtons.YesNo);
+            //if (dialog == DialogResult.Yes)
+            //{
+            //    this.Dispose();
+            //}
         }
 
         private void GraphResultUI_Load(object sender, EventArgs e)
@@ -233,39 +249,39 @@ namespace RH_APP.GUI
 
         void graph_MouseMove(object sender, MouseEventArgs e)
         {
-            var pos = e.Location;
-            if (prevPosition.HasValue && pos == prevPosition.Value)
-                return;
-            tooltip.RemoveAll();
-            prevPosition = pos;
-            var results = _graph.HitTest(pos.X, pos.Y, false,
-                                            ChartElementType.DataPoint);
-            foreach (var result in results)
-            {
-                if (result.ChartElementType == ChartElementType.DataPoint)
-                {
-                    var prop = result.Object as DataPoint;
-                    if (prop != null)
-                    {
-                        var pointXPixel = result.ChartArea.AxisX.ValueToPixelPosition(prop.XValue);
-                        var pointYPixel = result.ChartArea.AxisY.ValueToPixelPosition(prop.YValues[0]);
-                        Console.WriteLine("Now at " + pointXPixel + ":" + pointYPixel + ".");
-                        // check if the cursor is really close to the point (2 pixels around the point)
-                        //if (Math.Abs(pos.X - pointXPixel) < 2 &&
-                        //    Math.Abs(pos.Y - pointYPixel) < 2)
-                        //{
-                        //    Console.WriteLine("Found a position. Creating tooltip.");
-                        //    tooltip.Show("X=" + prop.XValue + ", Y=" + prop.YValues[0], this._graph,
-                        //                    pos.X, pos.Y - 15);
-                        //}
-                        //else
-                        //{
-                            tooltip.Show(" Y=" + prop.YValues[0], this._graph,
-                            pos.X, pos.Y - 15);
-                        //}
-                    }
-                }
-            }
+            //var pos = e.Location;
+            //if (prevPosition.HasValue && pos == prevPosition.Value)
+            //    return;
+            //tooltip.RemoveAll();
+            //prevPosition = pos;
+            //var results = _graph.HitTest(pos.X, pos.Y, false,
+            //                                ChartElementType.DataPoint);
+            //foreach (var result in results)
+            //{
+            //    if (result.ChartElementType == ChartElementType.DataPoint)
+            //    {
+            //        var prop = result.Object as DataPoint;
+            //        if (prop != null)
+            //        {
+            //            var pointXPixel = result.ChartArea.AxisX.ValueToPixelPosition(prop.XValue);
+            //            var pointYPixel = result.ChartArea.AxisY.ValueToPixelPosition(prop.YValues[0]);
+            //            Console.WriteLine("Now at " + pointXPixel + ":" + pointYPixel + ".");
+            //            // check if the cursor is really close to the point (2 pixels around the point)
+            //            //if (Math.Abs(pos.X - pointXPixel) < 2 &&
+            //            //    Math.Abs(pos.Y - pointYPixel) < 2)
+            //            //{
+            //            //    Console.WriteLine("Found a position. Creating tooltip.");
+            //            //    tooltip.Show("X=" + prop.XValue + ", Y=" + prop.YValues[0], this._graph,
+            //            //                    pos.X, pos.Y - 15);
+            //            //}
+            //            //else
+            //            //{
+            //                tooltip.Show(" Y=" + prop.YValues[0], this._graph,
+            //                pos.X, pos.Y - 15);
+            //            //}
+            //        }
+            //    }
+            //}
         }
     }
 }

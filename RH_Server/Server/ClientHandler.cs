@@ -169,27 +169,11 @@ namespace RH_Server.Server
 
         private void HandleEndTrainingPacket(JObject json)
         {
-            if (currentUser.Id == null)
-            {
-                Send(new ResponsePacket("IS NOT POSSIBLE","Current user's id is null.", "RESP-ENDTRAINING"));
-                return;
-            }
-
-            int id = currentUser.Id ?? -1;
-            int session = _database.getNewTrainingSessionId(id);
-
-            bool sucess = _database.SaveMeasurements(_measurementsList, session, id);
-
-            if (sucess)
-            {
-                _measurementsList.Clear();
+            currentSession = -1;
+            _measurementsList.Clear();
 
                 Send(new ResponsePacket(Statuscode.Status.Ok, "RESP-ENDTRAINING"));
-            }
-            else
-            {
-                Send(new ResponsePacket(Statuscode.Status.CommandNotFound, "RESP-ENDTRAINING"));
-            }
+
         }
 
         public void Send(String s)
@@ -247,16 +231,26 @@ namespace RH_Server.Server
             var datatype = (string)json["Datatype"];
             var authtoken = (string) json["AUTHTOKEN"];
 
+            int id = currentUser.Id ?? -1;
+            if (currentSession == -1)
+                currentSession = _database.getNewTrainingSessionId(id);
+            
+
+            
+
             if (datatype != "Measurements") return;
 
+            List<Measurement> measurementsL = new List<Measurement>();
             foreach (var m in measurements.Select(
-                jtoken => JsonConvert.DeserializeObject<Measurement>(jtoken.ToString())
-                ))
+                jtoken => jtoken.ToObject<Measurement>())
+                )
             {
-                _measurementsList.Add(m);
+                measurementsL.Add(m);
                 Console.WriteLine(Resources.ClientHandler_HandlePushPacked_Recieved, measurements.FirstOrDefault());
             }
 
+            _database.SaveMeasurements(measurementsL, currentSession, id);
+            
             var senderU = Authentication.GetUserByAuthToken(authtoken);
             // Check that sender is a client. if its not, return.
             if (!(senderU is Client)) return;

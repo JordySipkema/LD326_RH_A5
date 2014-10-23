@@ -98,7 +98,15 @@ namespace Mallaca.Network
             Busy = true;
 
             byte[] bytes = Packet.Packet.CreateByteData(data);
-            await _sslStream.WriteAsync(bytes,0, bytes.Length);
+            try
+            {
+                await _sslStream.WriteAsync(bytes, 0, bytes.Length);
+            }
+            catch (NotSupportedException)
+            {
+                Send(data);
+            }
+            
 
         }
 
