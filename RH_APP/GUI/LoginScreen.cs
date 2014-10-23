@@ -29,7 +29,7 @@ namespace RH_APP.GUI
             _passwordBox.UseSystemPasswordChar = true;
             TCPController.RunClient();
             TCPController.OnPacketReceived += LoginPacketResponse;
-            TCPController.ReceiveTransmission();
+            TCPController.ReceiveTransmissionAsync();
         }
 
         private void _loginButton_Click(object sender, EventArgs e)

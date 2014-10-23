@@ -37,10 +37,12 @@ namespace Mallaca.Network
         private static string _response = String.Empty;
 
         public delegate void ReceivedPacket(Packet.Packet p);
+
         public static event ReceivedPacket OnPacketReceived;
 
         public static bool IsReading { get; private set; }
-        private static  List<byte> _totalBuffer = new List<byte>();
+        private static List<byte> _totalBuffer = new List<byte>();
+
         private static ManualResetEvent sendDone =
             new ManualResetEvent(false);
 
@@ -87,99 +89,32 @@ namespace Mallaca.Network
             Console.WriteLine("Client closed...");
         }
 
-        public static void Send(String data)
+
+
+        public async static void Send(String data)
         {
             if (_client == null)
                 return;
-
             Busy = true;
             
-            byte[] bytes = Packet.Packet.CreateByteData(data);
-
-            //beginWrite is not thread safe.
-            //Monitor.Enter(_sslStream);
-            try
-            {
-                _sslStream.BeginWrite(bytes, 0, bytes.Length, SendCallback, _sslStream);
-                _sslStream.Flush();
-
-                //Console.WriteLine("Data sent: " + data);
-            }
-            catch (NotSupportedException e)
-            {
-                Console.WriteLine("Unable to write to socket: " + e.Message);
-                Thread.Sleep(1000);
-                Send(data);
-            }
-            finally
-            {
-                //Monitor.Exit(_sslStream);
-            }
-
+            byte[] bytes = Packet.Packet.CreateByteData(data)
+            await _sslStream.WriteAsync(bytes,0, bytes.Length);
 
         }
 
-        private static void SendCallback(IAsyncResult ar)
+        public async static void ReceiveTransmissionAsync()
         {
-            try
+            
+            while (true)
             {
-                //Retrieve the SslStream
-                var sslstream = (SslStream)ar.AsyncState;
-
-                //Complete sending the data to the remote device
-                sslstream.EndWrite(ar);
-                sendDone.Set();
-                
-                Busy = false;
-                //Console.WriteLine("Sent to server...");
-
-            }
-
-            catch (Exception exception)
-            {
-                Console.WriteLine("ERROR!!: " + exception);
-            }
-        }
-
-
-        public static void ReceiveTransmission()
-        {
-            if(IsReading)
-                return;
-            try
-            {
-                IsReading = true;
-                // Create the state object.
-                var state = new StateObject();
-
-                // Begin receiving the data from the remote device.
-                _sslStream.BeginRead(state.buffer, 0, StateObject.BufferSize, ReceiveCallback,
-                    state);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-        }
-
-        private static void ReceiveCallback(IAsyncResult ar)
-        {
-            try
-            {
-                // Retrieve the state object and the client socket 
-                // from the asynchronous state object.
-                var state = (StateObject)ar.AsyncState;
-                
-
-                // Read data from the remote device.
-                var bytesRead = _sslStream.EndRead(ar);
-
+                byte[] buffer = new byte[1024];
+                int bytesRead = await _sslStream.ReadAsync(buffer, 0, buffer.Length);
                 if (bytesRead > 0)
                 {
                     try
                     {
                         var rawData = new byte[bytesRead];
-                        Array.Copy(state.buffer, 0, rawData, 0, bytesRead);
+                        Array.Copy(buffer, 0, rawData, 0, bytesRead);
                         _totalBuffer = _totalBuffer.Concat(rawData).ToList();
 
                         int packetSize = Packet.Packet.GetLengthOfPacket(_totalBuffer);
@@ -199,21 +134,10 @@ namespace Mallaca.Network
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine("An exception occured in the TCPController.ReceiveCallback function: " + e.Message);    
+                        Console.WriteLine("An exception occured in the TCPController.ReceiveTransmissionAsync function: " +
+                                          e.Message);
                     }
-
-                    _sslStream.BeginRead(state.buffer, 0, StateObject.BufferSize, ReceiveCallback,
-                        state);
                 }
-                else
-                {
-                    IsReading = false;
-                }
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
             }
         }
 
