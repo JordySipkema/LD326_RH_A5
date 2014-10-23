@@ -56,6 +56,7 @@
     <Compile Include="Network\Packet\Request\ListPacket.cs" />
     <Compile Include="Network\Packet\Request\LoginPacket.cs" />
     <Compile Include="Network\Packet\Request\LSMPacket.cs" />
+    <Compile Include="Network\Packet\Request\EndTrainingPacket.cs" />
     <Compile Include="Network\Packet\Request\PushPacket.cs" />
     <Compile Include="Network\Packet\Request\RequestPacket.cs" />
     <Compile Include="Network\Packet\Request\SubscribePacket.cs" />
