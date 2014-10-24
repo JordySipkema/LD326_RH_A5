@@ -13,21 +13,6 @@ using Newtonsoft.Json.Linq;
 
 namespace Mallaca.Network
 {
-    // State object for receiving data from remote device.
-    public class StateObject
-    {
-        // Size of receive buffer.
-        public const int BufferSize = 256;
-        // Receive buffer.
-        public byte[] buffer = new byte[BufferSize];
-         
-        // Received data string.
-        public StringBuilder sb = new StringBuilder();
-
-
-
-    }
-
     // ReSharper disable once InconsistentNaming
     public class TCPController
     {
