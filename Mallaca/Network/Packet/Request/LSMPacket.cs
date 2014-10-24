@@ -13,7 +13,7 @@ namespace Mallaca.Network.Packet.Request
 
         public LSMPacket(int userId, int sessionID, string authtoken) : base("measurements", authtoken, userId)
         {
-            sessionID = sessionID;
+            this.sessionID = sessionID;
         }
 
         public LSMPacket(JObject json) : base(json)
