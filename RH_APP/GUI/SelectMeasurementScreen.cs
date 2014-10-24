@@ -54,11 +54,7 @@ namespace RH_APP.GUI
 
         private void _cancelButton_Click(object sender, EventArgs e)
         {
-            DialogResult dialog = dialog = MessageBox.Show("Are you sure you want to cancel?", "Alert", MessageBoxButtons.YesNo);
-            if (dialog == DialogResult.Yes)
-            {
-                this.Close();
-            }
+
         }
 
         private void SelectMeasurementScreen_Load(object sender, EventArgs e)
