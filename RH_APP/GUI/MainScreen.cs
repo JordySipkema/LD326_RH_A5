@@ -30,6 +30,7 @@ namespace RH_APP.GUI
         private RH_Controller _controller; 
         private bool _inTraining = false;
         private bool isSpecialist;
+        private User client;
 
         public MainScreen(Boolean showSpecialistItems)
         {
@@ -93,6 +94,7 @@ namespace RH_APP.GUI
 
         public MainScreen(User client)
         {
+            this.client = client;
             _spController = new Specialist_Controller();
             _spController.UpdatedList += updateGUI;
 
@@ -144,7 +146,15 @@ namespace RH_APP.GUI
                 String message = _textBox.Text;
 
                 addNewMessage(Settings.GetInstance().CurrentUser.Fullname, message);
-                JObject json = new ChatPacket(message, "otto", Settings.GetInstance().authToken).ToJsonObject();
+
+                string destination;
+                if (isSpecialist)
+                    destination = client.Username;
+                else
+                    destination = "";
+
+
+                JObject json = new ChatPacket(message, destination, Settings.GetInstance().authToken).ToJsonObject();
                 TCPController.Send(json.ToString());
                 _textBox.Text = "";
             }
@@ -189,11 +199,12 @@ namespace RH_APP.GUI
                 return;
             }
 
-            if (p is PullResponsePacket<Measurement>)
+            if (p is DataFromClientPacket<Measurement>)
             {
-                var response = p as PullResponsePacket<Measurement>;
+                var response = p as DataFromClientPacket<Measurement>;
+                
                 if (_spController == null)
-                    return;
+                    startTraining(this, EventArgs.Empty);
 
                 foreach (var m in response.List)
 	            {
@@ -203,6 +214,8 @@ namespace RH_APP.GUI
             else if (p is ChatPacket)
             {
                 ChatPacket chat = p as ChatPacket;
+                if (client != null && chat.UsernameDestination != client.Username)
+                    return;
                 addNewMessage(chat.UsernameDestination, chat.Message);
 
             }

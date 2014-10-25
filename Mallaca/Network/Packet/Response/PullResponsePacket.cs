@@ -9,13 +9,14 @@ namespace Mallaca.Network.Packet.Response
         public string DataType { get; private set; }
         public List<T> List { get; set; }
 
-        public PullResponsePacket(List<T> lsit, string datatype) : base(Statuscode.Status.Ok, Cmd)
+        public PullResponsePacket(List<T> lsit, string datatype, string cmd = Cmd)
+            : base(Statuscode.Status.Ok, cmd)
         {
             DataType = datatype;
             List = lsit;
         }
 
-        public PullResponsePacket() : base(Statuscode.Status.Ok, Cmd)
+        public PullResponsePacket(string cmd = Cmd) : base(Statuscode.Status.Ok, cmd)
         {
             
         }

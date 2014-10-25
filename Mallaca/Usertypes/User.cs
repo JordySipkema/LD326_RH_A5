@@ -10,6 +10,10 @@ namespace Mallaca.Usertypes
     {
 
         public int? Id { get; set; }
+        public int NonNullId { get
+            {
+                return Id ?? -1;
+            }}
         public string Username { get; set; }
         public String PasswordToBeSaved { get; set; }
         public string Name { get; set; }

@@ -162,7 +162,7 @@ namespace RH_Server.Server
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
-                    break;
+                    //break;
                 }
             }
         }
@@ -266,10 +266,11 @@ namespace RH_Server.Server
             var mList = measurements.Select(m => JsonConvert.DeserializeObject<Measurement>(m.ToString())).ToList();
 
             // Building new json
-            var returnJson = new PullResponsePacket<Measurement>(mList, "measurements");
+            
 
             foreach (var handler in handlers)
             {
+                var returnJson = new DataFromClientPacket<Measurement>(mList, "measurements", handler.currentUser.NonNullId);//new PullResponsePacket<Measurement>(mList, "measurements");
                 handler.Send(json.ToString());
             }
             Console.WriteLine("Notified the listeners");
@@ -300,15 +301,20 @@ namespace RH_Server.Server
             {
                 Specialist spec = currentUser as Specialist;
                 var clients = Notifier.Instance.GetListeners(spec);
+                //get all other specialist subscribed to this client, excluding the sending specialist
+                var specialists = Notifier.Instance.GetListeners((Client) _database.getUser(p.UsernameDestination)).Where(x => x.Username != currentUser.Username);
 
-                clients.ToList().ForEach(x => Authentication.GetStream(x).Send(newPacket));
+                var allReceivers = clients.Concat<User>(specialists);
+                allReceivers.ToList().ForEach(x => Authentication.GetStream(x).Send(newPacket));
+                
+
 
             }
             else
             {
                 Client clie = currentUser as Client;
                 var specialists = Notifier.Instance.GetListeners(clie);
-                specialists.ToList().ForEach(x => Authentication.GetStream(clie).Send(newPacket));
+                specialists.ToList().ForEach(x => Authentication.GetStream(x.Username).Send(newPacket));
             }
 
         }
