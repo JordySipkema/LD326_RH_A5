@@ -203,12 +203,16 @@ namespace RH_APP.GUI
             {
                 var response = p as DataFromClientPacket<Measurement>;
                 
+                if(response.ClientId != client.Id)
+                    return;
                 if (_spController == null)
                     startTraining(this, EventArgs.Empty);
+
 
                 foreach (var m in response.List)
 	            {
 		             _spController.SetMeasurement(m);
+                    Console.WriteLine("Received a measurement.");
 	            }
             }
             else if (p is ChatPacket)

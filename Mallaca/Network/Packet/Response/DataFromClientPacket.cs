@@ -10,8 +10,9 @@ namespace Mallaca.Network.Packet.Response
     public class DataFromClientPacket<T> : PullResponsePacket<T>
     {
         public int ClientId { get; private set; }
-        public new const string Cmd = "HERESAHOTPAPAYA"; //magic cookies... yum!
-        public DataFromClientPacket(List<T> lsit, string dataType, int clientId ) : base(lsit, dataType, Cmd)
+        public const string dCmd = "HERESAHOTPAPAYA"; 
+        public DataFromClientPacket(List<T> lsit, string dataType, int clientId)
+            : base(lsit, dataType, dCmd)
         {
             ClientId = clientId;
         }

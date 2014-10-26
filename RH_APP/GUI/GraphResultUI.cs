@@ -125,7 +125,7 @@ namespace RH_APP.GUI
             int i = _graph.ChartAreas.Count - 1;
             _graph.ChartAreas[i].AxisX.LabelStyle.Format = "HH:mm:ss";
             _graph.ChartAreas[i].AxisX.IsMarginVisible = true;
-            _graph.ChartAreas[i].AxisX.LabelStyle.Interval = 1;
+            //_graph.ChartAreas[i].AxisX.LabelStyle.Interval = 1;
 
             seriesLines.XValueType = ChartValueType.Time;
             

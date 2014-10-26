@@ -270,10 +270,11 @@ namespace RH_Server.Server
 
             foreach (var handler in handlers)
             {
+                Console.WriteLine("Notified " + handler.currentUser.Fullname);
                 var returnJson = new DataFromClientPacket<Measurement>(mList, "measurements", handler.currentUser.NonNullId);//new PullResponsePacket<Measurement>(mList, "measurements");
-                handler.Send(json.ToString());
+                handler.Send(returnJson.ToString());
             }
-            Console.WriteLine("Notified the listeners");
+            //Console.WriteLine("Notified the listeners");
 
 
         }

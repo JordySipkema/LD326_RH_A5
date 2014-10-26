@@ -654,7 +654,7 @@ namespace Mallaca
 
         public override string ToString()
         {
-            return String.Format("Session {0}, {1}", sessionId, date.ToShortDateString());
+            return String.Format("Session {0}, {1}", sessionId, date.ToShortDateString() + " " + date.ToShortTimeString());
         }
     }
 }

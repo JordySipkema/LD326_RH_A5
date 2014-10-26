@@ -60,21 +60,22 @@ namespace RH_APP.GUI
                 RH_APP.Classes.Settings.GetInstance().CurrentUser = resp.User;
                 if (resp.User.IsSpecialist || resp.User.IsAdministrator)
                 {
-                    var mainScreen = new MainScreen(true);
+                    //var mainScreen = new MainScreen(true);
                     TCPController.OnPacketReceived -= LoginPacketResponse;
-                    mainScreen.ShowDialog();
+                    //mainScreen.ShowDialog();
+
+                    this.Hide();
+                    MainMenu m = new MainMenu();
+                    m.Show();
                 }
                 else if (resp.User.IsClient)
                 {
-
                         this.Hide();
                         var mainScreen = new MainScreen(false);
                         TCPController.OnPacketReceived -= LoginPacketResponse;
                         mainScreen.Text = " Remote Healthcare - Client Edition";
                         mainScreen.ShowDialog();
 
-
-                    
                 }
             }
             else

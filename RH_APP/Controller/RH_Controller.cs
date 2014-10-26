@@ -130,6 +130,7 @@ namespace RH_APP.Controller
 
         private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
+            System.Threading.Thread.Sleep(500);
             var m = _bike.RecieveData();
             e.Result = m;
         }

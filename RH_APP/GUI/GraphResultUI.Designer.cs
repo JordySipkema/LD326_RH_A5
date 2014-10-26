@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this._graph = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -62,11 +62,12 @@
             // 
             // _graph
             // 
-            chartArea4.Name = "ChartArea1";
-            this._graph.ChartAreas.Add(chartArea4);
+            this._graph.BackColor = System.Drawing.Color.Transparent;
+            chartArea1.Name = "ChartArea1";
+            this._graph.ChartAreas.Add(chartArea1);
             this._graph.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend4.Name = "Legend1";
-            this._graph.Legends.Add(legend4);
+            legend1.Name = "Legend1";
+            this._graph.Legends.Add(legend1);
             this._graph.Location = new System.Drawing.Point(153, 3);
             this._graph.Name = "_graph";
             this._graph.Size = new System.Drawing.Size(1052, 505);
@@ -293,7 +294,6 @@
             this.showDatapointRadionbutton.Name = "showDatapointRadionbutton";
             this.showDatapointRadionbutton.Size = new System.Drawing.Size(52, 17);
             this.showDatapointRadionbutton.TabIndex = 0;
-            this.showDatapointRadionbutton.TabStop = true;
             this.showDatapointRadionbutton.Text = "Show";
             this.showDatapointRadionbutton.UseVisualStyleBackColor = true;
             this.showDatapointRadionbutton.CheckedChanged += new System.EventHandler(this.CheckboxChanges);

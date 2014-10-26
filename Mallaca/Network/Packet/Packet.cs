@@ -65,7 +65,9 @@ namespace Mallaca.Network.Packet
 
             if (json == null)
                 return null;
-            
+
+            Console.WriteLine("Got " + json["CMD"].ToString().ToUpper() + " packet.");
+
             switch (json["CMD"].ToString().ToUpper())
             {
                 case LoginResponsePacket.LoginRcmd:
@@ -77,7 +79,7 @@ namespace Mallaca.Network.Packet
                 case SubscribePacket.DefCmd:
                     p = SubscribePacket.GetSubscribePacket(json);
                     break;
-                case DataFromClientPacket<Thread>.Cmd:
+                case DataFromClientPacket<Thread>.dCmd:
                     //only measurements are supported.
                     p = new DataFromClientPacket<Measurement>(json);
                     break;
