@@ -35,7 +35,7 @@ namespace RH_APP.GUI
         public MainScreen(Boolean showSpecialistItems)
         {
 
-            TCPController.OnPacketReceived += handleIncomingPackets;
+            TCPController.OnPacketReceived += HandleIncomingPackets;
            
 
             InitializeComponent();
@@ -72,7 +72,7 @@ namespace RH_APP.GUI
                 //}
                 //_controller = new RH_Controller(new COM_Bike(port), true);
                 _controller = new RH_Controller(new STUB_Bike(), true);
-                _controller.UpdatedList += updateGUI;
+                _controller.UpdatedList += UpdateGUI;
             }
             startTrainingButton.Enabled = false;
             _quitButton.Enabled = true;
@@ -96,14 +96,14 @@ namespace RH_APP.GUI
         {
             this.client = client;
             _spController = new Specialist_Controller();
-            _spController.UpdatedList += updateGUI;
+            _spController.UpdatedList += UpdateGUI;
 
             InitializeComponent();
             isSpecialist = true;
             SubscribePacket subbie = new SubscribePacket(client.Username, true, Settings.GetInstance().authToken);
 
             ListPacket p = new ListPacket("connected_clients", Settings.GetInstance().authToken);
-            TCPController.OnPacketReceived += handleIncomingPackets;
+            TCPController.OnPacketReceived += HandleIncomingPackets;
             TCPController.Send(p.ToString());
 
             TCPController.Send(subbie.ToString());
@@ -145,7 +145,7 @@ namespace RH_APP.GUI
 
                 String message = _textBox.Text;
 
-                addNewMessage(Settings.GetInstance().CurrentUser.Fullname, message);
+                AddNewMessage(Settings.GetInstance().CurrentUser.Fullname, message);
 
                 string destination;
                 if (isSpecialist)
@@ -160,7 +160,7 @@ namespace RH_APP.GUI
             }
         }
 
-        private void addNewMessage(string name, string message)
+        private void AddNewMessage(string name, string message)
         {
             _chatLogBox.AppendText(name + ": " + message);
             _chatLogBox.AppendText(Environment.NewLine);
@@ -191,11 +191,11 @@ namespace RH_APP.GUI
             _controller.SetPower((int)(numericUpDown1.Value));
         }
 
-        private void handleIncomingPackets(Packet p)
+        private void HandleIncomingPackets(Packet p)
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                this.Invoke((new Action(() => handleIncomingPackets(p))));
+                Invoke((new Action(() => HandleIncomingPackets(p))));
                 return;
             }
 
@@ -217,10 +217,10 @@ namespace RH_APP.GUI
             }
             else if (p is ChatPacket)
             {
-                ChatPacket chat = p as ChatPacket;
+                var chat = p as ChatPacket;
                 if (client != null && chat.UsernameDestination != client.Username)
                     return;
-                addNewMessage(chat.UsernameDestination, chat.Message);
+                AddNewMessage(chat.UsernameDestination, chat.Message);
 
             }
         }
@@ -243,33 +243,34 @@ namespace RH_APP.GUI
             Application.Exit();
         }
 
-	    public void updateGUI(object sender, EventArgs args)
+// ReSharper disable once InconsistentNaming
+	    public void UpdateGUI(object sender, EventArgs args)
         {
-            if (_inTraining)
-            {
-                dataRPM.Text = _controller.LatestMeasurement.RPM + "";
-                dataSPEED.Text = String.Format("{0:0.0}", _controller.LatestMeasurement.SPEED / 10.0);
-                dataDISTANCE.Text = String.Format("{0:0.00}", _controller.LatestMeasurement.DISTANCE / 10.0);
-                dataPOWER.Text = _controller.LatestMeasurement.POWER + "";
-                dataPOWERPCT.Text = _controller.LatestMeasurement.POWERPCT + "%";
-                dataENERGY.Text = _controller.LatestMeasurement.ENERGY + "";
-                dataTIME.Text = _controller.LatestMeasurement.TIME;
-                dataPULSE.Text = _controller.LatestMeasurement.PULSE + "";
+	        if (!_inTraining) return;
 
-                dataRPM.Refresh();
-                dataSPEED.Refresh();
-                dataDISTANCE.Refresh();
-                dataPOWER.Refresh();
-                dataPOWERPCT.Refresh();
-                dataENERGY.Refresh();
-                dataTIME.Refresh();
-                dataPULSE.Refresh();
-                numericUpDown1.Refresh();
 
-                updateGraph();
-            }
+	        dataRPM.Text = _controller.LatestMeasurement.RPM + "";
+	        dataSPEED.Text = String.Format("{0:0.0}", _controller.LatestMeasurement.SPEED / 10.0);
+	        dataDISTANCE.Text = String.Format("{0:0.00}", _controller.LatestMeasurement.DISTANCE / 10.0);
+	        dataPOWER.Text = _controller.LatestMeasurement.POWER + "";
+	        dataPOWERPCT.Text = _controller.LatestMeasurement.POWERPCT + "%";
+	        dataENERGY.Text = _controller.LatestMeasurement.ENERGY + "";
+	        dataTIME.Text = _controller.LatestMeasurement.TIME;
+	        dataPULSE.Text = _controller.LatestMeasurement.PULSE + "";
 
-                //if (!_writeToFile) return;
+	        dataRPM.Refresh();
+	        dataSPEED.Refresh();
+	        dataDISTANCE.Refresh();
+	        dataPOWER.Refresh();
+	        dataPOWERPCT.Refresh();
+	        dataENERGY.Refresh();
+	        dataTIME.Refresh();
+	        dataPULSE.Refresh();
+	        numericUpDown1.Refresh();
+
+	        updateGraph();
+
+	        //if (!_writeToFile) return;
                 //var protoLine = _controller.LatestMeasurement.toProtocolString();
                 //_writer.WriteLine(protoLine);
      

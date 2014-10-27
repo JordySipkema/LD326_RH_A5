@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Mallaca.Usertypes
 {
@@ -41,6 +42,27 @@ namespace Mallaca.Usertypes
             Surname = surname;
             Gender = gender;
             PasswordToBeSaved = password;
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = 13;
+            hash = (hash * 7) + UserType.GetHashCode();
+            hash = (hash * 7) + Username.GetHashCode();
+            return hash;
+        }
+
+        public class UserComparer : IEqualityComparer<User>
+        {
+            public bool Equals(User x, User y)
+            {
+                return x.Username == y.Username;
+            }
+
+            public int GetHashCode(User obj)
+            {
+                return obj.GetHashCode();
+            }
         }
 
     }

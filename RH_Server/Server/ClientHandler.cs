@@ -1,4 +1,5 @@
 ﻿using System.CodeDom;
+using System.Collections;
 using System.Configuration;
 using Mallaca;
 using Mallaca.Network;
@@ -271,7 +272,8 @@ namespace RH_Server.Server
             foreach (var handler in handlers)
             {
                 Console.WriteLine("Notified " + handler.currentUser.Fullname);
-                var returnJson = new DataFromClientPacket<Measurement>(mList, "measurements", handler.currentUser.NonNullId);//new PullResponsePacket<Measurement>(mList, "measurements");
+                var returnJson = new DataFromClientPacket<Measurement>(mList, "measurements", handler.currentUser.NonNullId);
+                //new PullResponsePacket<Measurement>(mList, "measurements");
                 handler.Send(returnJson.ToString());
             }
             //Console.WriteLine("Notified the listeners");
@@ -294,18 +296,18 @@ namespace RH_Server.Server
         public void HandleChatPacket(JObject json)
         {
             var p = new ChatPacket(json);
-            var destinationClientHandler = Authentication.GetStream(p.UsernameDestination);
+            //var destinationClientHandler = Authentication.GetStream(p.UsernameDestination);
 
 
-            var newPacket = new ChatPacket(p.Message, currentUser.Fullname, "");
+            var newPacket = new ChatPacket(p.Message, currentUser.Username, "SERVER");
             if (currentUser.IsSpecialist || currentUser.IsAdministrator)
             {
-                Specialist spec = currentUser as Specialist;
+                var spec = currentUser as Specialist;
                 var clients = Notifier.Instance.GetListeners(spec);
                 //get all other specialist subscribed to this client, excluding the sending specialist
                 var specialists = Notifier.Instance.GetListeners((Client) _database.getUser(p.UsernameDestination)).Where(x => x.Username != currentUser.Username);
 
-                var allReceivers = clients.Concat<User>(specialists);
+                var allReceivers = clients.Concat<User>(specialists).Distinct(new User.UserComparer());
                 allReceivers.ToList().ForEach(x => Authentication.GetStream(x).Send(newPacket));
                 
 
@@ -313,9 +315,10 @@ namespace RH_Server.Server
             }
             else
             {
-                Client clie = currentUser as Client;
-                var specialists = Notifier.Instance.GetListeners(clie);
-                specialists.ToList().ForEach(x => Authentication.GetStream(x.Username).Send(newPacket));
+                var clie = currentUser as Client;
+                var specialists = Notifier.Instance.GetListeners(clie).ToList();
+
+                specialists.ForEach(x => Authentication.GetStream(x.Username).Send(newPacket));
             }
 
         }
