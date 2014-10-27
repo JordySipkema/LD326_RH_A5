@@ -10,17 +10,18 @@ namespace RH_APP.Classes
 {
     class COM_Bike : IBike
     {
-        private SerialPort serial = null;
+        private readonly SerialPort serial = null;
 
         public COM_Bike(String com_port) 
         {
-            serial = new SerialPort();
-            serial.PortName = com_port;
-
-            serial.DataBits = 8;
-            serial.StopBits = StopBits.One;
-            serial.ReadTimeout = 2000;
-            serial.WriteTimeout = 50;
+            serial = new SerialPort
+            {
+                PortName = com_port,
+                DataBits = 8,
+                StopBits = StopBits.One,
+                ReadTimeout = 2000,
+                WriteTimeout = 100
+            };
 
             serial.Open();
             serial.WriteLine("CM");
@@ -31,7 +32,7 @@ namespace RH_APP.Classes
             try
             {
                 serial.WriteLine("ST");
-                Measurement m = base.ProtocolToMeasurement(serial.ReadLine());
+                Measurement m = ProtocolToMeasurement(serial.ReadLine());
                 m.DATE = DateTime.Now;
                 return m;
             }

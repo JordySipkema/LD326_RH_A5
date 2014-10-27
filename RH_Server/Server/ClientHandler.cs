@@ -232,52 +232,69 @@ namespace RH_Server.Server
             var datatype = (string)json["Datatype"];
             var authtoken = (string) json["AUTHTOKEN"];
 
+            if (!Authentication.Authenticate(authtoken))
+            {
+                Send(new ResponsePacket(Statuscode.Status.Unauthorized));
+                return;
+            }
+
             int id = currentUser.Id ?? -1;
             if (currentSession == -1)
                 currentSession = _database.getNewTrainingSessionId(id);
-            
 
-            
 
-            if (datatype != "Measurements") return;
-
-            List<Measurement> measurementsL = new List<Measurement>();
-            foreach (var m in measurements.Select(
-                jtoken => jtoken.ToObject<Measurement>())
-                )
+            if (datatype == "Measurements")
             {
-                measurementsL.Add(m);
-                Console.WriteLine(Resources.ClientHandler_HandlePushPacked_Recieved, measurements.FirstOrDefault());
+
+                List<Measurement> measurementsL = new List<Measurement>();
+                foreach (var m in measurements.Select(
+                    jtoken => jtoken.ToObject<Measurement>())
+                    )
+                {
+                    measurementsL.Add(m);
+                    Console.WriteLine(Resources.ClientHandler_HandlePushPacked_Recieved, measurements.FirstOrDefault());
+                }
+
+                _database.SaveMeasurements(measurementsL, currentSession, id);
+
+                var senderU = Authentication.GetUserByAuthToken(authtoken);
+                // Check that sender is a client. if its not, return.
+                if (!(senderU is Client)) return;
+
+                var senderC = senderU as Client;
+                //Should we notify anyone for this sender? If not, return.
+                if (!Notifier.Instance.ShouldNotify(senderC)) return;
+
+                // Get all handlers based on all listeners their username.
+                var handlers =
+                    Notifier.Instance.GetListeners(senderC)
+                        .Select(listener => Authentication.GetStream(listener.Username));
+
+                var mList = measurements.Select(m => JsonConvert.DeserializeObject<Measurement>(m.ToString())).ToList();
+
+                // Building new json
+
+
+                foreach (var handler in handlers)
+                {
+                    Console.WriteLine("Notified " + handler.currentUser.Fullname);
+                    var returnJson = new DataFromClientPacket<Measurement>(mList, "measurements", currentUser.NonNullId);
+                    //new PullResponsePacket<Measurement>(mList, "measurements");
+                    handler.Send(returnJson);
+                }
+                //Console.WriteLine("Notified the listeners");
             }
-
-            _database.SaveMeasurements(measurementsL, currentSession, id);
-            
-            var senderU = Authentication.GetUserByAuthToken(authtoken);
-            // Check that sender is a client. if its not, return.
-            if (!(senderU is Client)) return;
-            
-            var senderC = senderU as Client;
-            //Should we notify anyone for this sender? If not, return.
-            if (!Notifier.Instance.ShouldNotify(senderC)) return;
-
-            // Get all handlers based on all listeners their username.
-            var handlers =
-                Notifier.Instance.GetListeners(senderC).Select(listener => Authentication.GetStream(listener.Username));
-
-            var mList = measurements.Select(m => JsonConvert.DeserializeObject<Measurement>(m.ToString())).ToList();
-
-            // Building new json
-            
-
-            foreach (var handler in handlers)
+            else if (datatype.Equals("Configuration", StringComparison.CurrentCultureIgnoreCase))
             {
-                Console.WriteLine("Notified " + handler.currentUser.Fullname);
-                var returnJson = new DataFromClientPacket<Measurement>(mList, "measurements", currentUser.NonNullId);
-                //new PullResponsePacket<Measurement>(mList, "measurements");
-                handler.Send(returnJson);
-            }
-            //Console.WriteLine("Notified the listeners");
+                var p = new PushPacket<Configuaration>(json);
+                var config = p.DataSource.FirstOrDefault();
+                if (config == null)
+                    return;
 
+                Console.WriteLine("Sending config-push-packet");
+                var stream = Authentication.GetStream(config.Username);
+                stream.Send(p);
+            }
 
         }
 

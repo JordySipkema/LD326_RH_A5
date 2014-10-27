@@ -1,5 +1,6 @@
 ﻿using Mallaca;
 using Mallaca.Network;
+using Mallaca.Network.Packet;
 using Mallaca.Network.Packet.Request;
 using Newtonsoft.Json.Linq;
 using RH_APP.Classes;
@@ -36,9 +37,16 @@ namespace RH_APP.Controller
             OnUpdatedList(new MeasurementEventArgs(m));
         }
 
-        public void SetPower(int power)
+        public void SetPower(int power, String username)
         {
-            //TODO: Implement
+            Console.WriteLine("Setpower in SP CTRL");
+            Packet p = new PushPacket<Configuaration>(PushPacket<Configuaration>.DataType.Configuration,
+                new List<Configuaration> {
+                    new Configuaration { Power = power, Username = username }
+                },
+                Settings.GetInstance().authToken);
+            Console.WriteLine("Sending \n {0}", p);
+            TCPController.Send(p);
         }
 
         public event EventHandler UpdatedList;

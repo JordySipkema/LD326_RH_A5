@@ -1,4 +1,5 @@
 ﻿using System.IO.Ports;
+using System.Linq;
 using System.Threading;
 using Mallaca;
 using Mallaca.Network;
@@ -181,8 +182,13 @@ namespace RH_APP.GUI
 
         private void numericUpDown1_Click(object sender, EventArgs e)
         {
-            
-            _controller.SetPower((int)(numericUpDown1.Value));
+            var power = (int) numericUpDown1.Value;
+
+            if (_controller != null) 
+                _controller.SetPower(power);
+
+            if (_spController != null)
+                _spController.SetPower(power, client.Username);
         }
 
         private void HandleIncomingPackets(Packet p)
@@ -216,6 +222,18 @@ namespace RH_APP.GUI
                     return;
                 AddNewMessage(chat.UsernameDestination, chat.Message);
 
+            }
+            else if (p is PushPacket<Configuaration>)
+            {
+                var ppacket = p as PushPacket<Configuaration>;
+                var config = ppacket.DataSource.FirstOrDefault();
+                if (config == null)
+                    return;
+
+                if (config.Power.HasValue && _controller != null)
+                {
+                    _controller.SetPower(config.Power.Value);
+                }
             }
         }
 

@@ -16,11 +16,13 @@ namespace RH_APP.Controller
 // ReSharper disable once InconsistentNaming
     class RH_Controller
     {
+        private const int _readOffsetMillis = 500;
         private readonly IBike _bike;
         private readonly BackgroundWorker _bw = new BackgroundWorker();
         private readonly List<Measurement> _data = new List<Measurement>();
-        private int _counter = 0;
+        private readonly Queue<String> _queue = new Queue<string>();
 
+        private DateTime lastSuccesfullRead;
         public Measurement LatestMeasurement
         {
             get
@@ -43,6 +45,7 @@ namespace RH_APP.Controller
 
         public RH_Controller(IBike b, bool sendToServer = false)
         {
+            lastSuccesfullRead = DateTime.Now;
             //bike = new Classes.COM_Bike("COM3");
             //bike = new Classes.STUB_Bike();
             _bike = b;
@@ -55,7 +58,7 @@ namespace RH_APP.Controller
 
         public void SetPower(int power)
         {
-            _bike.SendData(String.Format("PW {0}", power));
+            _queue.Enqueue(String.Format("PW {0}", power));
         }
 
         public event EventHandler UpdatedList;
@@ -130,9 +133,16 @@ namespace RH_APP.Controller
 
         private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            System.Threading.Thread.Sleep(500);
-            var m = _bike.RecieveData();
-            e.Result = m;
+            //System.Threading.Thread.Sleep(500);
+            while (_queue.Count > 0)
+            {
+                var cmd = _queue.Dequeue();
+                _bike.SendData(cmd);
+                Thread.Sleep(50);
+            }
+
+                var m = _bike.RecieveData();
+                e.Result = m;
         }
 
         private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -144,8 +154,13 @@ namespace RH_APP.Controller
                 var result = e.Result as Measurement;
                 if (result != null)
                 {
-                    _data.Add(result);
-                    OnUpdatedList(new MeasurementEventArgs(result));
+                    var timeSpan = DateTime.Now.Subtract(lastSuccesfullRead);
+                    if (timeSpan.Milliseconds > _readOffsetMillis)
+                    {
+                        lastSuccesfullRead = DateTime.Now;
+                        _data.Add(result);
+                        OnUpdatedList(new MeasurementEventArgs(result));
+                    }
                 }
             }
 

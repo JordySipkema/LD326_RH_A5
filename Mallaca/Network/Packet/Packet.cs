@@ -36,8 +36,7 @@ namespace Mallaca.Network.Packet
             return JObject.Parse(q);
         }
 
-        //TODO: BACK TO PRIVATE
-        public static List<byte> GetPacketBytes(int packetSize, ref List<byte> buffer)
+        private static List<byte> GetPacketBytes(int packetSize, ref List<byte> buffer)
         {
             List<byte> jsonData = buffer.GetRange(4, packetSize);
             buffer.RemoveRange(0, packetSize + 4);
@@ -83,12 +82,32 @@ namespace Mallaca.Network.Packet
                     //only measurements are supported.
                     p = new DataFromClientPacket<Measurement>(json);
                     break;
-
                 case PullResponsePacket<Object>.DefCmd:
                     p = HandlePullResponsePacket(json);
-                break;
+                    break;
+                case PushPacket<Object>.DefCmd:
+                    p = HandlePushPacket(json);
+                    break;
             }
                                 
+
+            return p;
+        }
+
+        private static Packet HandlePushPacket(JObject json)
+        {
+            Packet p = null;
+
+            JToken datatypeToken;
+            if (!json.TryGetValue("Datatype", StringComparison.OrdinalIgnoreCase, out datatypeToken)) return null;
+
+            var type = (PushPacket<Object>.DataType)Enum.Parse(typeof (PushPacket<Object>.DataType), (string) datatypeToken);
+            switch (type)
+            {
+                case PushPacket<Object>.DataType.Configuration:
+                    p = new PushPacket<Configuaration>(json);
+                    break;
+            }
 
             return p;
         }
