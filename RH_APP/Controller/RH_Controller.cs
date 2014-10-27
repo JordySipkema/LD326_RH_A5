@@ -60,7 +60,7 @@ namespace RH_APP.Controller
 
         public event EventHandler UpdatedList;
 
-        private void OnUpdatedList(EventArgs e)
+        private void OnUpdatedList(MeasurementEventArgs e)
         {
             var handler = UpdatedList;
             if (handler != null)
@@ -145,7 +145,7 @@ namespace RH_APP.Controller
                 if (result != null)
                 {
                     _data.Add(result);
-                    OnUpdatedList(EventArgs.Empty);
+                    OnUpdatedList(new MeasurementEventArgs(result));
                 }
             }
 

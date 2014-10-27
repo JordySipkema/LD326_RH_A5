@@ -33,6 +33,7 @@ namespace RH_APP.Controller
         public void SetMeasurement(Measurement m)
         {
             _data.Add(m);
+            OnUpdatedList(new MeasurementEventArgs(m));
         }
 
         public void SetPower(int power)
@@ -42,7 +43,7 @@ namespace RH_APP.Controller
 
         public event EventHandler UpdatedList;
 
-        private void OnUpdatedList(EventArgs e)
+        private void OnUpdatedList(MeasurementEventArgs e)
         {
             var handler = UpdatedList;
             if (handler != null)

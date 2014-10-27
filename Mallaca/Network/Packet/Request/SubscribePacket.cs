@@ -9,7 +9,7 @@ namespace Mallaca.Network.Packet.Request
 
         //Note: Subscribe is true for subscribing, false for unsubscribing.
 
-        public const string DefCmd = "Subscr";
+        public const string DefCmd = "SUBSCR";
 
         public string Client { get; private set; }
         public bool Subscribe { get; private set; }

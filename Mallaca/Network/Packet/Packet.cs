@@ -79,12 +79,12 @@ namespace Mallaca.Network.Packet
                 case SubscribePacket.DefCmd:
                     p = SubscribePacket.GetSubscribePacket(json);
                     break;
-                case DataFromClientPacket<Thread>.dCmd:
+                case DataFromClientPacket<Object>.DefCmd:
                     //only measurements are supported.
                     p = new DataFromClientPacket<Measurement>(json);
                     break;
 
-                case PullResponsePacket<string>.Cmd:
+                case PullResponsePacket<Object>.DefCmd:
                     p = HandlePullResponsePacket(json);
                 break;
             }

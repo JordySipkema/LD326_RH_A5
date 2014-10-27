@@ -10,15 +10,7 @@ using Newtonsoft.Json.Linq;
 using RH_APP.Classes;
 using RH_APP.Controller;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using RH_APP.GUI;
 
 
 namespace RH_APP.GUI
@@ -36,7 +28,6 @@ namespace RH_APP.GUI
         {
 
             TCPController.OnPacketReceived += HandleIncomingPackets;
-           
 
             InitializeComponent();
             _quitButton.Enabled = false;
@@ -46,7 +37,6 @@ namespace RH_APP.GUI
                 menuStrip1.Visible = false;
                 numericUpDown1.Visible = false;
                 setPowerLabel.Visible = false;
-                
             }
 
             // updateGraph();
@@ -61,17 +51,19 @@ namespace RH_APP.GUI
             if (isSpecialist)
             {
                 _spController = new Specialist_Controller();
+                _spController.UpdatedList += UpdateGUI;
             }
             else
             {
-                //var port = getCOMPort();
-                //if (port == null)
-                //{
-                //    MessageBox.Show("No COM port found. Please connect your pc to a Kettler x700");
-                //    return;
-                //}
-                //_controller = new RH_Controller(new COM_Bike(port), true);
-                _controller = new RH_Controller(new STUB_Bike(), true);
+                var port = getCOMPort();
+                if (port == null)
+                {
+                    MessageBox.Show("No COM port found. Please connect your pc to a Kettler x700");
+                    return;
+                }
+                _controller = new RH_Controller(new COM_Bike(port), true);
+
+                //_controller = new RH_Controller(new STUB_Bike(), true);
                 _controller.UpdatedList += UpdateGUI;
             }
             startTrainingButton.Enabled = false;
@@ -84,7 +76,9 @@ namespace RH_APP.GUI
 
             //this.Hide();            
             //_controller.UpdatedList -= updateGUI;
-            _controller.Stop();
+            if (_controller != null)
+                _controller.Stop();
+
             TCPController.Send(new EndTrainingPacket(Settings.GetInstance().authToken));
             _inTraining = false;
                 
@@ -212,7 +206,7 @@ namespace RH_APP.GUI
                 foreach (var m in response.List)
 	            {
 		             _spController.SetMeasurement(m);
-                    Console.WriteLine("Received a measurement.");
+                    //Console.WriteLine("Received a measurement.");
 	            }
             }
             else if (p is ChatPacket)
@@ -248,15 +242,18 @@ namespace RH_APP.GUI
         {
 	        if (!_inTraining) return;
 
+	        var eventargs = args as MeasurementEventArgs;
+	        if (eventargs == null)
+	            return;
 
-	        dataRPM.Text = _controller.LatestMeasurement.RPM + "";
-	        dataSPEED.Text = String.Format("{0:0.0}", _controller.LatestMeasurement.SPEED / 10.0);
-	        dataDISTANCE.Text = String.Format("{0:0.00}", _controller.LatestMeasurement.DISTANCE / 10.0);
-	        dataPOWER.Text = _controller.LatestMeasurement.POWER + "";
-	        dataPOWERPCT.Text = _controller.LatestMeasurement.POWERPCT + "%";
-	        dataENERGY.Text = _controller.LatestMeasurement.ENERGY + "";
-	        dataTIME.Text = _controller.LatestMeasurement.TIME;
-	        dataPULSE.Text = _controller.LatestMeasurement.PULSE + "";
+	        dataRPM.Text = eventargs.Measurement.RPM + "";
+	        dataSPEED.Text = String.Format("{0:0.0}", eventargs.Measurement.SPEED / 10.0);
+	        dataDISTANCE.Text = String.Format("{0:0.00}", eventargs.Measurement.DISTANCE / 10.0);
+	        dataPOWER.Text = eventargs.Measurement.POWER + "";
+	        dataPOWERPCT.Text = eventargs.Measurement.POWERPCT + "%";
+	        dataENERGY.Text = eventargs.Measurement.ENERGY + "";
+	        dataTIME.Text = eventargs.Measurement.TIME;
+	        dataPULSE.Text = eventargs.Measurement.PULSE + "";
 
 	        dataRPM.Refresh();
 	        dataSPEED.Refresh();
@@ -268,7 +265,7 @@ namespace RH_APP.GUI
 	        dataPULSE.Refresh();
 	        numericUpDown1.Refresh();
 
-	        updateGraph();
+	        updateGraph(eventargs);
 
 	        //if (!_writeToFile) return;
                 //var protoLine = _controller.LatestMeasurement.toProtocolString();
@@ -276,13 +273,13 @@ namespace RH_APP.GUI
      
 
         }
-            public void updateGraph()
+            public void updateGraph(MeasurementEventArgs args)
             {
                 try
                 {
-                    _graph.Series["SPEED"].Points.AddXY(_controller.LatestMeasurement.currentAndCycleTime, _controller.LatestMeasurement.SPEED / 10.0);
+                    _graph.Series["SPEED"].Points.AddXY(args.Measurement.currentAndCycleTime, args.Measurement.SPEED / 10.0);
 
-                    _graph.Series["PULSE"].Points.AddXY(_controller.LatestMeasurement.currentAndCycleTime, _controller.LatestMeasurement.PULSE);
+                    _graph.Series["PULSE"].Points.AddXY(args.Measurement.currentAndCycleTime, args.Measurement.PULSE);
                 }
                 catch (NullReferenceException)
                 {

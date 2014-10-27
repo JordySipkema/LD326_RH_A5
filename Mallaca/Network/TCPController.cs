@@ -5,11 +5,9 @@ using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading;
 using Mallaca.Properties;
 using Mallaca.Network.Packet;
-using Newtonsoft.Json.Linq;
 
 namespace Mallaca.Network
 {
@@ -82,7 +80,7 @@ namespace Mallaca.Network
                 return;
             Busy = true;
 
-            byte[] bytes = Packet.Packet.CreateByteData(data);
+            var bytes = Packet.Packet.CreateByteData(data);
             try
             {
                 await _sslStream.WriteAsync(bytes, 0, bytes.Length);
@@ -100,8 +98,8 @@ namespace Mallaca.Network
             
             while (true)
             {
-                byte[] buffer = new byte[1024];
-                int bytesRead = await _sslStream.ReadAsync(buffer, 0, buffer.Length);
+                var buffer = new byte[1024];
+                var bytesRead = await _sslStream.ReadAsync(buffer, 0, buffer.Length);
                 if (bytesRead > 0)
                 {
                     try
@@ -110,10 +108,10 @@ namespace Mallaca.Network
                         Array.Copy(buffer, 0, rawData, 0, bytesRead);
                         _totalBuffer = _totalBuffer.Concat(rawData).ToList();
 
-                        int packetSize = Packet.Packet.GetLengthOfPacket(_totalBuffer);
+                        var packetSize = Packet.Packet.GetLengthOfPacket(_totalBuffer);
                         if (packetSize != -1)
                         {
-
+                            Console.WriteLine("TCP: Packet received");
                             var p = Packet.Packet.RetrievePacket(packetSize, ref _totalBuffer);
                             if (p != null)
                             {

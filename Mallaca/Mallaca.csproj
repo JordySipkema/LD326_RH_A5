@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MeasurementEventArgs.cs" />
     <Compile Include="Network\Chat_Controller.cs" />
     <Compile Include="Network\NetworkSettings.cs" />
     <Compile Include="Network\Packet\Packet.cs" />

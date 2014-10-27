@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mallaca.Usertypes;
 using Newtonsoft.Json.Linq;
 
 namespace Mallaca.Network.Packet.Response
@@ -10,22 +11,26 @@ namespace Mallaca.Network.Packet.Response
     public class DataFromClientPacket<T> : PullResponsePacket<T>
     {
         public int ClientId { get; private set; }
-        public const string dCmd = "HERESAHOTPAPAYA"; 
+        public const string DefCmd = "DFCLIENT"; 
         public DataFromClientPacket(List<T> lsit, string dataType, int clientId)
-            : base(lsit, dataType, dCmd)
+            : base(lsit, dataType, DefCmd)
         {
             ClientId = clientId;
         }
 
         public DataFromClientPacket(JObject json) : base(json)
         {
-            ClientId = int.Parse(json["clientid"].ToString());
+            JToken clientToken;
+            if (json.TryGetValue("clientid", StringComparison.CurrentCultureIgnoreCase, out clientToken))
+            {
+                ClientId = (int) clientToken;
+            }
         }
 
         public override JObject ToJsonObject()
         {
-            JObject json = base.ToJsonObject();
-            json.Add(new JProperty("clientid"));
+            var json = base.ToJsonObject();
+            json.Add("clientid", ClientId);
             return json;
         }
 
