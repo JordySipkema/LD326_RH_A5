@@ -22,7 +22,7 @@ namespace RH_APP.Controller
         private readonly List<Measurement> _data = new List<Measurement>();
         private readonly Queue<String> _queue = new Queue<string>();
 
-        private DateTime lastSuccesfullRead;
+        private DateTime _lastSuccesfullRead;
         public Measurement LatestMeasurement
         {
             get
@@ -45,7 +45,7 @@ namespace RH_APP.Controller
 
         public RH_Controller(IBike b, bool sendToServer = false)
         {
-            lastSuccesfullRead = DateTime.Now;
+            _lastSuccesfullRead = DateTime.Now;
             //bike = new Classes.COM_Bike("COM3");
             //bike = new Classes.STUB_Bike();
             _bike = b;
@@ -154,10 +154,10 @@ namespace RH_APP.Controller
                 var result = e.Result as Measurement;
                 if (result != null)
                 {
-                    var timeSpan = DateTime.Now.Subtract(lastSuccesfullRead);
+                    var timeSpan = DateTime.Now.Subtract(_lastSuccesfullRead);
                     if (timeSpan.Milliseconds > _readOffsetMillis)
                     {
-                        lastSuccesfullRead = DateTime.Now;
+                        _lastSuccesfullRead = DateTime.Now;
                         _data.Add(result);
                         OnUpdatedList(new MeasurementEventArgs(result));
                     }
