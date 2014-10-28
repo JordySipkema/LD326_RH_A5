@@ -24,6 +24,7 @@ namespace RH_APP.GUI
         private bool _inTraining = false;
         private bool isSpecialist;
         private User client;
+        private int currentTraingId = -1;
 
         public MainScreen(Boolean showSpecialistItems)
         {
@@ -38,9 +39,12 @@ namespace RH_APP.GUI
                 menuStrip1.Visible = false;
                 numericUpDown1.Visible = false;
                 setPowerLabel.Visible = false;
+                broadcastCheckbox.Visible = false;
+                startTrainingButton.Visible = false;
+                _quitButton.Visible = false;
             }
 
-            broadcastCheckbox.Enabled = true;
+
             // updateGraph();
         }
 
@@ -52,20 +56,22 @@ namespace RH_APP.GUI
 
             if (isSpecialist)
             {
+                TCPController.Send(new NotifyPacket(NotifyPacket.Subject.StartTraining, client.NonNullId.ToString(),Settings.GetInstance().authToken));
                 _spController = new Specialist_Controller();
                 _spController.UpdatedList += UpdateGUI;
+
             }
             else
             {
-                var port = getCOMPort();
-                if (port == null)
-                {
-                    MessageBox.Show("No COM port found. Please connect your pc to a Kettler x700");
-                    return;
-                }
-                _controller = new RH_Controller(new COM_Bike(port), true);
+                //var port = getCOMPort();
+                //if (port == null)
+                //{
+                //    MessageBox.Show("No COM port found. Please connect your pc to a Kettler x7");
+                //    return;
+                //}
+                //_controller = new RH_Controller(new COM_Bike(port), true);
 
-                //_controller = new RH_Controller(new STUB_Bike(), true);
+                _controller = new RH_Controller(new STUB_Bike(), true);
                 _controller.UpdatedList += UpdateGUI;
             }
             startTrainingButton.Enabled = false;
@@ -81,12 +87,26 @@ namespace RH_APP.GUI
             if (_controller != null)
                 _controller.Stop();
 
-            if(!isSpecialist)
-                TCPController.Send(new EndTrainingPacket(Settings.GetInstance().authToken));
-            else
+            if (isSpecialist)
             {
-                
+                TCPController.Send(new NotifyPacket(NotifyPacket.Subject.StopTraining, client.NonNullId.ToString(),
+                    Settings.GetInstance().authToken));
+                this.Hide();
+
+                DBConnect db = new DBConnect();
+
+                int id;
+                if (isSpecialist)
+                    id = client.NonNullId;
+                else
+                {
+                    id = Settings.GetInstance().CurrentUser.NonNullId;
+                }
+
+                GraphResultUI g = new GraphResultUI(db.getMeasurementsOfUser(id.ToString(), currentTraingId.ToString()));
+                g.Show();
             }
+
             _inTraining = false;
                 
             
@@ -119,15 +139,15 @@ namespace RH_APP.GUI
 
         private void MainScreen_FormClosing(object sender, FormClosingEventArgs e)
         {
-            DialogResult dialog = dialog = MessageBox.Show("Do you really want to close the program?", "Alert", MessageBoxButtons.YesNo);
-            if (dialog == DialogResult.Yes)
-            {
-                Application.ExitThread();
-            }
-            else if (dialog == DialogResult.No)
-            {
-                e.Cancel = true;
-            }
+            //DialogResult dialog = dialog = MessageBox.Show("Do you really want to close the program?", "Alert", MessageBoxButtons.YesNo);
+            //if (dialog == DialogResult.Yes)
+            //{
+            //    Application.ExitThread();
+            //}
+            //else if (dialog == DialogResult.No)
+            //{
+            //    e.Cancel = true;
+            //}
         }
 
         private void userToolStripMenuItem_Click(object sender, EventArgs e)
@@ -245,6 +265,29 @@ namespace RH_APP.GUI
                     _controller.SetPower(config.Power.Value);
                 }
             }
+            else if (p is NotifyPacket)
+            {
+                var traitor = p as NotifyPacket;
+                if (traitor.NotifySubject == NotifyPacket.Subject.NewTrainingId)
+                {
+                    if (isSpecialist && int.Parse(traitor.SecundaryValue) == client.Id)
+                    {
+                         currentTraingId = int.Parse(traitor.PrimaryValue);
+                    }
+                    else
+                        currentTraingId = int.Parse(traitor.PrimaryValue);
+                }
+                else if (traitor.NotifySubject == NotifyPacket.Subject.StartTraining)
+                {
+                    startTraining(this, EventArgs.Empty);
+                }
+                else if(traitor.NotifySubject == NotifyPacket.Subject.StopTraining)
+                {
+                    _quitButton_Click(this, EventArgs.Empty);
+                }
+            }
+
+            string b = "";
         }
 
         private void connectionToolStripMenuItem_Click(object sender, EventArgs e)

@@ -80,7 +80,7 @@ namespace RH_APP.GUI
             }
             else
             {
-                MessageBox.Show("Valid papers are required to open the Specialist Application. The server/inspector gave the following reasons for rejecting your documents: " + Environment.NewLine + resp.Description, "Your application has been reviewed");
+                MessageBox.Show(resp.Description, "Your application has been reviewed");
             }
 
             

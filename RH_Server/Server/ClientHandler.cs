@@ -1,6 +1,8 @@
 ﻿using System.CodeDom;
 using System.Collections;
 using System.Configuration;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using Mallaca;
 using Mallaca.Network;
 using Mallaca.Network.Packet;
@@ -142,6 +144,10 @@ namespace RH_Server.Server
                         case "endtraining":
                             HandleEndTrainingPacket(json);
                             break;
+                        case "notify":
+                            HandleNotifyPacket(json);
+                            break;
+
 
                         default:
                             Console.WriteLine(Resources.ClientHandler_Unknown_packet);
@@ -165,6 +171,27 @@ namespace RH_Server.Server
                     Console.WriteLine(e.Message);
                     //break;
                 }
+            }
+        }
+
+        private void HandleNotifyPacket(JObject json)
+        {
+            NotifyPacket p = new NotifyPacket(json);
+
+            switch (p.NotifySubject)
+            {
+                case NotifyPacket.Subject.StartTraining:
+                case NotifyPacket.Subject.StopTraining:
+                    if (currentUser.IsSpecialist || currentUser.IsAdministrator)
+                    {
+                        var clients = Notifier.Instance.GetListeners((Specialist)currentUser);
+                        Client client = clients.First(x => x.Id == int.Parse(p.PrimaryValue));
+                        Authentication.GetStream(client).Send(p);
+                    }
+                    break;
+                default:
+                    Console.WriteLine("Unsupported notify subject type: {0}", p.NotifySubject);
+                    break;
             }
         }
 
@@ -240,8 +267,14 @@ namespace RH_Server.Server
 
             int id = currentUser.Id ?? -1;
             if (currentSession == -1)
+            {
                 currentSession = _database.getNewTrainingSessionId(id);
-
+                var notifyPacket = new NotifyPacket(NotifyPacket.Subject.NewTrainingId, currentSession.ToString(),
+    currentUser.NonNullId.ToString(), "");
+                Send(notifyPacket);
+                var specs = Notifier.Instance.GetListeners((Client) currentUser).ToList();
+                specs.ForEach(x => Authentication.GetStream(x).Send(notifyPacket));
+            }
 
             if (datatype == "Measurements")
             {

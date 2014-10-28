@@ -54,7 +54,7 @@ namespace RH_APP.GUI
 
         private void _cancelButton_Click(object sender, EventArgs e)
         {
-
+            this.Close();
         }
 
         private void SelectMeasurementScreen_Load(object sender, EventArgs e)
