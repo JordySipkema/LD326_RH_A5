@@ -40,6 +40,7 @@ namespace RH_APP.GUI
                 setPowerLabel.Visible = false;
             }
 
+            broadcastCheckbox.Enabled = true;
             // updateGraph();
         }
 
@@ -107,7 +108,6 @@ namespace RH_APP.GUI
             TCPController.Send(p.ToString());
 
             TCPController.Send(subbie.ToString());
-            broadcastCheckbox.Enabled = false;
 
             // updateGraph();
         }
