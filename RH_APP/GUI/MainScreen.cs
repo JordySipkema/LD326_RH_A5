@@ -107,7 +107,7 @@ namespace RH_APP.GUI
             TCPController.Send(p.ToString());
 
             TCPController.Send(subbie.ToString());
-
+            broadcastCheckbox.Enabled = false;
 
             // updateGraph();
         }

@@ -30,8 +30,9 @@ namespace Mallaca.Network.Packet.Request
         public ChatPacket(JObject json) : base(json, DefCmd)
         {
             JToken b;
-            json.TryGetValue("isbroadcast", StringComparison.InvariantCultureIgnoreCase, out b);
-            Initialize(json["Message"].ToString() ,json["UsernameDestination"].ToString(), b.ToObject<bool>());    
+            bool br = json.TryGetValue("isbroadcast", StringComparison.InvariantCultureIgnoreCase, out b) && b.ToObject<bool>();
+
+            Initialize(json["Message"].ToString(), json["UsernameDestination"].ToString(), br);    
 
         }
 
@@ -40,6 +41,7 @@ namespace Mallaca.Network.Packet.Request
             var json = base.ToJsonObject();
             json.Add("Message", Message);
             json.Add("UsernameDestination", UsernameDestination);
+            json.Add("isbroadcast", IsBroadcast);
             return json;
         }
 

@@ -461,7 +461,7 @@ namespace RH_Server.Server
             else
             {
                 ChatPacket serverToClientMessage = new ChatPacket(String.Format("{0} has deemed you unworthy of his time and has disconnected.", specialist.Fullname), "", "");
-                ChatPacket serverToSpecMessage = new ChatPacket(String.Format("You have sucessfully abandoned {0}'s training.", client.Fullname), "", "");
+                ChatPacket serverToSpecMessage = new ChatPacket(String.Format("You have sucessfully abandoned {0}'s training.", client.Username), "", "");
                 Authentication.GetStream(client).Send(serverToClientMessage);
                 Authentication.GetStream(specialist).Send(serverToSpecMessage);
             }
