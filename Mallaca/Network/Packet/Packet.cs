@@ -65,7 +65,7 @@ namespace Mallaca.Network.Packet
             if (json == null)
                 return null;
 
-            Console.WriteLine("Got " + json["CMD"].ToString().ToUpper() + " packet.");
+            //Console.WriteLine("Got " + json["CMD"].ToString().ToUpper() + " packet.");
 
             switch (json["CMD"].ToString().ToUpper())
             {
@@ -87,6 +87,12 @@ namespace Mallaca.Network.Packet
                     break;
                 case PushPacket<Object>.DefCmd:
                     p = HandlePushPacket(json);
+                    break;
+                case NotifyPacket.Cmd:
+                    p = new NotifyPacket(json);
+                    break;
+                default:
+                    Console.WriteLine("Unsupported packet type: {0}", json["CMD"].ToString());
                     break;
             }
                                 
