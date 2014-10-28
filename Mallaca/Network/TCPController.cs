@@ -20,7 +20,6 @@ namespace Mallaca.Network
         private static string _response = String.Empty;
 
         public delegate void ReceivedPacket(Packet.Packet p);
-
         public static event ReceivedPacket OnPacketReceived;
 
         public static bool IsReading { get; private set; }
