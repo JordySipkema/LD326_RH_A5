@@ -319,14 +319,24 @@ namespace RH_Server.Server
             var newPacket = new ChatPacket(p.Message, currentUser.Username, "SERVER");
             if (currentUser.IsSpecialist || currentUser.IsAdministrator)
             {
-                var spec = currentUser as Specialist;
-                var clients = Notifier.Instance.GetListeners(spec);
-                //get all other specialist subscribed to this client, excluding the sending specialist
-                var specialists = Notifier.Instance.GetListeners((Client) _database.getUser(p.UsernameDestination)).Where(x => x.Username != currentUser.Username);
+                if (p.IsBroadcast)
+                {
+                    var broadcast = new ChatPacket(p.Message, p.UsernameDestination, "", true);
+                    Authentication.GetAllUsers().ForEach(x => x.Send(broadcast));
+                }
+                else
+                {
 
-                var allReceivers = clients.Concat<User>(specialists).Distinct(new User.UserComparer());
-                allReceivers.ToList().ForEach(x => Authentication.GetStream(x).Send(newPacket));
-                
+                    var spec = currentUser as Specialist;
+                    var clients = Notifier.Instance.GetListeners(spec);
+                    //get all other specialist subscribed to this client, excluding the sending specialist
+                    var specialists =
+                        Notifier.Instance.GetListeners((Client) _database.getUser(p.UsernameDestination))
+                            .Where(x => x.Username != currentUser.Username);
+
+                    var allReceivers = clients.Concat<User>(specialists).Distinct(new User.UserComparer());
+                    allReceivers.ToList().ForEach(x => Authentication.GetStream(x).Send(newPacket));
+                }
 
 
             }

@@ -80,7 +80,12 @@ namespace RH_APP.GUI
             if (_controller != null)
                 _controller.Stop();
 
-            TCPController.Send(new EndTrainingPacket(Settings.GetInstance().authToken));
+            if(!isSpecialist)
+                TCPController.Send(new EndTrainingPacket(Settings.GetInstance().authToken));
+            else
+            {
+                
+            }
             _inTraining = false;
                 
             
@@ -148,8 +153,7 @@ namespace RH_APP.GUI
                 else
                     destination = "";
 
-
-                JObject json = new ChatPacket(message, destination, Settings.GetInstance().authToken).ToJsonObject();
+                JObject json = new ChatPacket(message, destination, Settings.GetInstance().authToken,broadcastCheckbox.Checked).ToJsonObject();
                 TCPController.Send(json.ToString());
                 _textBox.Text = "";
             }
@@ -218,6 +222,12 @@ namespace RH_APP.GUI
             else if (p is ChatPacket)
             {
                 var chat = p as ChatPacket;
+
+                if (chat.IsBroadcast)
+                {
+                    AddNewMessage("<Broadcast> " + chat.UsernameDestination, chat.Message);
+                    return;
+                }
                 if (client != null && chat.UsernameDestination != client.Username)
                     return;
                 AddNewMessage(chat.UsernameDestination, chat.Message);

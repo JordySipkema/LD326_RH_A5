@@ -28,10 +28,10 @@ namespace RH_APP.GUI
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createClientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,6 +65,7 @@ namespace RH_APP.GUI
             this._graph = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this._quitButton = new System.Windows.Forms.Button();
             this.startTrainingButton = new System.Windows.Forms.Button();
+            this.broadcastCheckbox = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._graph)).BeginInit();
@@ -370,25 +371,25 @@ namespace RH_APP.GUI
             // 
             // _graph
             // 
-            chartArea2.Name = "ChartArea1";
-            this._graph.ChartAreas.Add(chartArea2);
+            chartArea1.Name = "ChartArea1";
+            this._graph.ChartAreas.Add(chartArea1);
             this._graph.Cursor = System.Windows.Forms.Cursors.Arrow;
             this._graph.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            legend2.Name = "Legend1";
-            this._graph.Legends.Add(legend2);
+            legend1.Name = "Legend1";
+            this._graph.Legends.Add(legend1);
             this._graph.Location = new System.Drawing.Point(34, 371);
             this._graph.Name = "_graph";
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series3.Legend = "Legend1";
-            series3.Name = "SPEED";
-            series3.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Time;
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series4.Legend = "Legend1";
-            series4.Name = "PULSE";
-            this._graph.Series.Add(series3);
-            this._graph.Series.Add(series4);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "SPEED";
+            series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Time;
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series2.Legend = "Legend1";
+            series2.Name = "PULSE";
+            this._graph.Series.Add(series1);
+            this._graph.Series.Add(series2);
             this._graph.Size = new System.Drawing.Size(634, 337);
             this._graph.TabIndex = 36;
             // 
@@ -412,11 +413,22 @@ namespace RH_APP.GUI
             this.startTrainingButton.UseVisualStyleBackColor = true;
             this.startTrainingButton.Click += new System.EventHandler(this.startTraining);
             // 
+            // broadcastCheckbox
+            // 
+            this.broadcastCheckbox.AutoSize = true;
+            this.broadcastCheckbox.Location = new System.Drawing.Point(790, 351);
+            this.broadcastCheckbox.Name = "broadcastCheckbox";
+            this.broadcastCheckbox.Size = new System.Drawing.Size(74, 17);
+            this.broadcastCheckbox.TabIndex = 39;
+            this.broadcastCheckbox.Text = "Broadcast";
+            this.broadcastCheckbox.UseVisualStyleBackColor = true;
+            // 
             // MainScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(882, 742);
+            this.Controls.Add(this.broadcastCheckbox);
             this.Controls.Add(this.startTrainingButton);
             this.Controls.Add(this._quitButton);
             this.Controls.Add(this._graph);
@@ -490,6 +502,7 @@ namespace RH_APP.GUI
         private System.Windows.Forms.DataVisualization.Charting.Chart _graph;
         private System.Windows.Forms.Button _quitButton;
         private System.Windows.Forms.Button startTrainingButton;
+        private System.Windows.Forms.CheckBox broadcastCheckbox;
 
     }
 }

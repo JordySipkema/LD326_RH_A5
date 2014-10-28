@@ -12,22 +12,26 @@ namespace Mallaca.Network.Packet.Request
 
         public String Message { get; private set; }
         public String UsernameDestination { get; private set; }
+        public bool IsBroadcast { get; set; }
 
-        public ChatPacket(string message, string usernameDestination, string authtoken)
+        public ChatPacket(string message, string usernameDestination, string authtoken, bool broadcast = false)
             : base(DefCmd, authtoken)
         {
-            Initialize(message, usernameDestination);
+            Initialize(message, usernameDestination, broadcast);
         }
 
-        private void Initialize(string message, string usernameDestination)
+        private void Initialize(string message, string usernameDestination, bool b )
         {
             Message = message;
             UsernameDestination = usernameDestination;
+            IsBroadcast = b;
         }
 
         public ChatPacket(JObject json) : base(json, DefCmd)
         {
-            Initialize(json["Message"].ToString() ,json["UsernameDestination"].ToString());    
+            JToken b;
+            json.TryGetValue("isbroadcast", StringComparison.InvariantCultureIgnoreCase, out b);
+            Initialize(json["Message"].ToString() ,json["UsernameDestination"].ToString(), b.ToObject<bool>());    
 
         }
 

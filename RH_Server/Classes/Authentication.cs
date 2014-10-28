@@ -63,6 +63,12 @@ namespace RH_Server.Classes
             return true;
         }
 
+        public static List<ClientHandler> GetAllUsers()
+        {
+            return AuthUsers.Values.ToList();
+        }
+
+
 
         public static Boolean Authenticate(String authToken)
         {
