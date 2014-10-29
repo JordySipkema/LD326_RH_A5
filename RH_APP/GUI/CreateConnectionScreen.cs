@@ -67,7 +67,8 @@ namespace RH_APP.GUI
 
             foreach (User u in _clientList.SelectedItems)
             {                
-               var mainScreen = new MainScreen(u);
+               //var mainScreen = new MainScreen(u);
+               var mainScreen = new TrainingScreen(u);
                
                mainScreen.Show();
             }

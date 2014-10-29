@@ -113,6 +113,12 @@
     <Compile Include="GUI\SelectMeasurementScreen.Designer.cs">
       <DependentUpon>SelectMeasurementScreen.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\TrainingScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\TrainingScreen.Designer.cs">
+      <DependentUpon>TrainingScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="GUI\BikeUI.resx">
@@ -141,6 +147,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\SelectMeasurementScreen.resx">
       <DependentUpon>SelectMeasurementScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\TrainingScreen.resx">
+      <DependentUpon>TrainingScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

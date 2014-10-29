@@ -71,7 +71,8 @@ namespace RH_APP.GUI
                 else if (resp.User.IsClient)
                 {
                         this.Hide();
-                        var mainScreen = new MainScreen(false);
+                        //var mainScreen = new MainScreen(false);
+                        var mainScreen = new TrainingScreen(false);
                         TCPController.OnPacketReceived -= LoginPacketResponse;
                         mainScreen.Text = " Remote Healthcare - Client Edition";
                         mainScreen.ShowDialog();
