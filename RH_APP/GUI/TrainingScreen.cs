@@ -62,15 +62,15 @@ namespace RH_APP.GUI
             }
             else
             {
-                //var port = getCOMPort();
-                //if (port == null)
-                //{
-                //    MessageBox.Show("No COM port found. Please connect your pc to a Kettler x7");
-                //    return;
-                //}
-                //_controller = new RH_Controller(new COM_Bike(port), true);
+                var port = getCOMPort();
+                if (port == null)
+                {
+                    MessageBox.Show("No COM port found. Please connect your pc to a Kettler x7");
+                    return;
+                }
+                _controller = new RH_Controller(new COM_Bike(port), true);
 
-                _controller = new RH_Controller(new STUB_Bike(), true);
+                //_controller = new RH_Controller(new STUB_Bike(), true);
                 _controller.UpdatedList += UpdateGUI;
             }
             startTrainingButton.Enabled = false;
